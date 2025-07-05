@@ -1,11 +1,14 @@
 import type { SpeciesJSON } from "chrono-phylo-tree";
 import type { Liked, NotiFunc, Order, Plan, Role, TreeCriteria } from "./enums";
+import type { StringValue } from "ms";
 
 type RequestFunction<REQUEST, RESPONSE> = (request: REQUEST) => Promise<RESPONSE | undefined>;
 
+type Email = `${string}@${string}.${string}`;
+
 export interface UserResponse {
     id: string;
-    email: string;
+    email: Email;
     username: string;
     photo?: string;
     plan: Plan;
@@ -19,12 +22,12 @@ export interface UserResponse {
 
 export interface UserRequest {
     register: RequestFunction<{
-        email: string;
+        email: Email;
         password: string;
         username: string;
     }, UserResponse>;
     login: RequestFunction<{
-        email: string;
+        email: Email;
         password: string;
     }, UserResponse>;
     search: RequestFunction<{
@@ -40,14 +43,14 @@ export interface UserRequest {
         removeAdmin?: boolean;
     }, UserResponse>;
     token: RequestFunction<{
-        expiresIn?: number | string;
+        expiresIn?: number | StringValue;
     }, string>;
     getMe: RequestFunction<{}, UserResponse>;
     updateMe: RequestFunction<{
         username?: string;
         oldPassword?: string;
         password?: string;
-        plan?: string;
+        plan?: Plan;
     }, UserResponse>;
     deleteMe: RequestFunction<{}, void>;
     photoMe: RequestFunction<{
