@@ -44,7 +44,7 @@ export interface UserRequest {
     }, UserResponse>;
     token: RequestFunction<{
         expiresIn?: number | StringValue;
-    }, string>;
+    }, void>;
     getMe: RequestFunction<{}, UserResponse>;
     updateMe: RequestFunction<{
         username?: string;
@@ -84,7 +84,7 @@ export interface FollowRequest {
     }, UserResponse[]>;
     getFollowersCount: RequestFunction<{
         userId: string;
-    }, number>;
+    }, { count: number }>;
 }
 
 export interface PhTreeResponse {
@@ -146,7 +146,7 @@ export interface PhTreeRequest {
     }, PhTreeResponse>;
     viewTree: RequestFunction<{
         id: string;
-    }, number>;
+    }, { views: number }>;
 }
 
 export interface CommentResponse {
