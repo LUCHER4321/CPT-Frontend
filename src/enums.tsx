@@ -7,7 +7,8 @@ export enum NotiFunc {
     FOLLOW = "follow",
     TREE = "tree",
     COMMENT = "comment",
-    LIKE = "like"
+    LIKE = "like",
+    COLLABORATE = "collaborate"
 }
 
 export enum Role {
