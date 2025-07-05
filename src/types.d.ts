@@ -222,12 +222,12 @@ export interface SpeciesRequest {
     createSpecies: RequestFunction<{
         treeId: string;
         ancestorId?: string;
-    } & SpeciesJSON, SpeciesResponse>;
+    } & Omit<SpeciesJSON, "image">, SpeciesResponse>;
     updateSpecies: RequestFunction<{
         treeId: string;
         id: string;
         ancestorId?: string | null;
-    } & Partial<SpeciesJSON>, SpeciesResponse>;
+    } & Partial<Omit<SpeciesJSON, "image">>, SpeciesResponse>;
     deleteSpecies: RequestFunction<{
         treeId: string;
         id: string;
