@@ -1,8 +1,10 @@
 import { API_KEY, API_URL } from "../config";
 
+type Method = "GET" | "POST" | "PATCH" | "DELETE"
+
 const url = (...route: string[]) => `${API_URL}/${route.join("/")}?apiKey=${API_KEY}`;
 
-const initialConfig = <T,>(method: string, body: T) => ({
+const initialConfig = <T,>(method: Method, body: T) => ({
     method,
     headers: new Headers({
         "Content-Type": "application/json"
@@ -11,7 +13,7 @@ const initialConfig = <T,>(method: string, body: T) => ({
 });
 
 interface FetchConfigProps<T> {
-    method?: string;
+    method?: Method;
     body?: T;
     route?: string[];
     queries?: any;
@@ -23,11 +25,15 @@ export const fetchConfig = async <T,>({
     route = [],
     queries = {}
 }: FetchConfigProps<T>) => {
-    const result = await fetch(`${url(...route)}${Object.entries(queries).map((k, v) => `&${k}=${v}`)}`, initialConfig(method, body));
-    const {
-        json,
-    } = result;
-    return await json();
+    try {
+        const result = await fetch(`${url(...route)}${Object.entries(queries).map((k, v) => `&${k}=${v}`)}`, initialConfig(method, body));
+        const {
+            json,
+        } = result;
+        return await json();
+    } catch {
+        return undefined;
+    }
 };
 
 interface FetchImageProps {
@@ -41,12 +47,16 @@ export const fetchImage = async ({
 }: FetchImageProps) => {
     const body = new FormData();
     body.append("image", image);
-    const result = await fetch(url(...route), {
-        method: "POST",
-        body
-    });
-    const {
-        json,
-    } = result;
-    return await json();
+    try{
+        const result = await fetch(url(...route), {
+            method: "POST",
+            body
+        });
+        const {
+            json,
+        } = result;
+        return await json();
+    } catch {
+        return undefined;
+    }
 };
