@@ -103,15 +103,15 @@ export interface PhTreeResponse {
     views: number;
 }
 
-interface SearchProps{
-    page?: number;
-    limit?: number;
-    search?: string;
-    criteria?: TreeCriteria;
-    order?: Order;
-    from?: Date;
-    to?: Date;
-}
+type SearchProps = Partial<{
+    page: number;
+    limit: number;
+    search: string;
+    criteria: TreeCriteria;
+    order: Order;
+    from: Date;
+    to: Date;
+}>
 
 export interface PhTreeRequest {
     createTree: RequestFunction<{
@@ -261,19 +261,12 @@ export interface NotificationResponse {
 }
 
 export interface NotificationRequest {
-    getNotifications: RequestFunction<{
-        from?: string;
-        to?: string;
-        limit?: string;
-    }, NotificationResponse[]>;
+    getNotifications: RequestFunction<Partial<{
+        from: string;
+        to: string;
+        limit: string;
+    }>, NotificationResponse[]>;
     seeNotification: RequestFunction<{
         id: string;
     }, NotificationResponse>;
-    setNotification: RequestFunction<{
-        fun: NotiFunc;
-        followedUserId?: string;
-        treeId?: string;
-        commentId?: string;
-    }, NotificationResponse>;
-    recieveNotification: RequestFunction<{}, NotificationResponse>;
 }
