@@ -6,9 +6,9 @@ const url = (...route: string[]) => `${API_URL}/${route.join("/")}?apiKey=${API_
 
 const initialConfig = <T,>(method: Method, body: T) => ({
     method,
-    headers: new Headers({
+    headers: body ? new Headers({
         "Content-Type": "application/json"
-    }),
+    }) : undefined,
     body: JSON.stringify(body)
 });
 
