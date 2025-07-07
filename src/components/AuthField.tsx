@@ -1,4 +1,5 @@
 import type { HTMLInputTypeAttribute } from "react";
+import { IconInput } from "./IconInput";
 
 interface AuthFieldProps {
     name?: string;
@@ -28,25 +29,18 @@ export const AuthField = ({
     return (
         <div className={"flex flex-col mb-6 " + className}>
             <p className="font-bold mb-2">{name}</p>
-            <div className={setVisiblePassword ? "relative" : "flex flex-row"}>
-                <input
-                    type={type}
-                    id={id}
-                    placeholder={placeholder}
-                    className="pl-[1rem] pr-[2.25rem] py-[0.8rem] border rounded w-full"
-                    value={value}
-                    onChange={e => setValue?.(e.target.value)}
-                    name={name?.toLowerCase()}
-                />
-                {setVisiblePassword &&
-                    <button
-                        type="button"
-                        className="bg-black/0! p-0! absolute right-[1rem] flex items-center top-0 bottom-0 border-0! outline-0!"
-                        onClick={() => setVisiblePassword(!visiblePassword)}>
-                        <i className={"fas " + (visiblePassword ? "fa-eye" : "fa-eye-slash")}/>
-                    </button>
-                }
-            </div>
+            <IconInput
+                setIcon={!!setVisiblePassword}
+                type={type}
+                id={id}
+                placeholder={placeholder}
+                className="pl-[1rem] pr-[2.25rem] py-[0.8rem] border rounded w-full"
+                value={value}
+                setValue={setValue}
+                name={name}
+                onClick={() => setVisiblePassword?.(!visiblePassword)}
+                icon={visiblePassword ? "fa-eye" : "fa-eye-slash"}
+            />
             {children}
         </div>
     )
