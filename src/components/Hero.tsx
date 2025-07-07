@@ -11,7 +11,7 @@ export const Hero = ({
     hrefInfo
 }: HeroProps) => {
     return (
-        <section className="flex flex-col sm:flex-row justify-between px-[2rem] sm:px-[8rem] py-[4rem] bg-lime-100 dark:bg-green-700">
+        <section className="flex flex-col sm:flex-row justify-between px-[2rem] sm:px-[8rem] py-[4rem] bg-[#D8EDD9] dark:bg-[#1B5E20] w-[100vw]">
             <div className="sm:w-1/2 w-full">
                 <h1 className={"mb-3 text-center sm:text-start " + title}>
                     Create and Explore Phylogenetic Trees
@@ -24,7 +24,9 @@ export const Hero = ({
                     <LinkButton className={borderButton} href={hrefInfo}>More Info</LinkButton>
                 </div>
             </div>
-            <img alt="Logo" />
+            <div className="sm:w-1/2 w-full flex justify-center items-center">
+                <img alt="Logo" />
+            </div>
         </section>
     )
 };
