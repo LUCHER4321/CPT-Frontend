@@ -22,11 +22,11 @@ export const HomeNavBar = ({
                         open={open}
                         setOpen={setOpen}
                     >
-                        <input type="text" placeholder="search trees..." className="bg-green-800 dark:bg-lime-300 placeholder-lime-300 dark:placeholder-green-800 px-4 mx-1 rounded-[2rem]"/>
-                        <LinkButton href="#top-trees" className={"m-1 " + blankButton}>Featured Trees</LinkButton>
+                        <input type="text" placeholder="search trees..." className="bg-[#1B5E20] dark:bg-[#D8EDD9] placeholder-[#D8EDD9] dark:placeholder-[#1B5E20] px-4 mx-1 rounded-[2rem]"/>
+                        <LinkButton href="/#top-trees" className={"m-1 " + blankButton}>Featured Trees</LinkButton>
                         <LinkButton className={"m-1 " + blankButton}>Pricing</LinkButton>
-                        <LinkButton className={"m-1 " + borderButton}>Log In</LinkButton>
-                        <LinkButton className={"m-1 " + filledButton}>Register</LinkButton>
+                        <LinkButton href="/auth" className={"m-1 " + borderButton}>Log In</LinkButton>
+                        <LinkButton href="/auth?register=true" className={"m-1 " + filledButton}>Register</LinkButton>
                     </BurgerMenu>
                 </div>
             </NavBar>
