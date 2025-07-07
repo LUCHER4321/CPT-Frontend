@@ -3,7 +3,7 @@ import { fetchConfig, fetchImage } from "../utils/forAPI";
 
 const phTree = "ph-tree"
 
-export const phTreeRequest: PhTreeRequest = {
+const phTreeRequest: PhTreeRequest = {
     createTree: async (body) => await fetchConfig({
         method: "POST",
         route: [phTree],
@@ -40,3 +40,15 @@ export const phTreeRequest: PhTreeRequest = {
         route: [phTree, id, "view"]
     })
 }
+
+export const {
+    createTree,
+    myTrees,
+    updateTree,
+    deleteTree,
+    imageTree,
+    deleteImageTree,
+    searchTrees,
+    getTree,
+    viewTree
+} = phTreeRequest;
