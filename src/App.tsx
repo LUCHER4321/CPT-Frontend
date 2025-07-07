@@ -1,33 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { HomeNavBar } from './components/HomeNavBar'
+import { Hero } from './components/Hero';
+import { Features } from './components/Features';
+import type { PhTreeResponse } from './types';
+import { searchTrees } from './api/phTree';
+import { Order, TreeCriteria } from './enums';
+import { getUser } from './api/user';
+import { exampleTrees, exampleUsers } from './data/exampleTrees';
+import { TopTrees } from './components/TopTrees';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [open, setOpen] = useState(false);
+  const [trees, setTrees] = useState<(PhTreeResponse & { username: string })[]>([]);
+
+  useEffect(() => {
+    const fetchTrees = async () => {
+      try {
+        const remoteTrees = await searchTrees({
+          limit: 3,
+          criteria: TreeCriteria.POPULARITY,
+          order: Order.DESC
+        }).catch(() => {
+          throw new Error("Failed to fetch trees");
+        });
+        if(!remoteTrees) throw new Error("Failed to fetch trees");
+        const remoteUsers = await Promise.all(
+          remoteTrees?.map(t => getUser({ id: t.userId })) ?? []
+        );
+        setTrees(
+          remoteTrees?.map(t => ({
+            ...t,
+            username: remoteUsers.find(u => u?.id === t.userId)?.username ?? ""
+          })) ?? []
+        );
+      } catch {
+        setTrees(
+          exampleTrees.slice(0, 3).map(t => ({
+            ...t,
+            username: exampleUsers.find(u => u.id === t.userId)?.username ?? ""
+          })) ?? []
+        );
+        console.log("Hola");
+      }
+    };
+    fetchTrees();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <HomeNavBar
+        open={open}
+        setOpen={setOpen}
+      />
+      <Hero
+        hrefInfo="#features"
+      />
+      <Features id="features"/>
+      <TopTrees
+        id="top-trees"
+        trees={trees}
+      />
     </>
   )
 }
