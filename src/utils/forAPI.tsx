@@ -9,7 +9,7 @@ const initialConfig = <T,>(method: Method, body: T) => ({
     headers: body ? new Headers({
         "Content-Type": "application/json"
     }) : undefined,
-    body: JSON.stringify(body)
+    body: body ? JSON.stringify(body) : undefined
 });
 
 interface FetchConfigProps<T> {
@@ -26,10 +26,17 @@ export const fetchConfig = async <T,>({
     queries = {}
 }: FetchConfigProps<T>) => {
     try {
-        const result = await fetch(`${url(...route)}${Object.entries(queries).map((k, v) => `&${k}=${v}`)}`, initialConfig(method, body));
+        const result = await fetch(
+            `${url(...route)}${Object.keys(queries).map(k => `&${k}=${queries[k]}`).join("")}`,
+            initialConfig(method, body)
+        ).catch(() => {
+            throw new Error("Connection Failed");
+        });
         const {
             json,
+            ok
         } = result;
+        if(!ok) throw new Error("Connection Failed");
         return await json();
     } catch {
         return undefined;
@@ -51,10 +58,14 @@ export const fetchImage = async ({
         const result = await fetch(url(...route), {
             method: "POST",
             body
+        }).catch(() => {
+            throw new Error("Connection Failed")
         });
         const {
             json,
+            ok
         } = result;
+        if(!ok) throw new Error("Connection Failed");
         return await json();
     } catch {
         return undefined;
