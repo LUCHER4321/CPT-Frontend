@@ -3,7 +3,7 @@ import { fetchConfig, fetchImage } from "../utils/forAPI";
 
 const species = (treeId: string, ...r: string[]) => ["species", treeId, ...r];
 
-export const speciesRequest: SpeciesRequest = {
+const speciesRequest: SpeciesRequest = {
     createSpecies: async ({ treeId, ...body }) => await fetchConfig({
         method: "POST",
         route: species(treeId),
@@ -33,3 +33,13 @@ export const speciesRequest: SpeciesRequest = {
         route: species(treeId, id)
     })
 }
+
+export const {
+    createSpecies,
+    updateSpecies,
+    deleteSpecies,
+    speciesImage,
+    deleteSpeciesImage,
+    treeSpecies,
+    getSpecies
+} = speciesRequest;
