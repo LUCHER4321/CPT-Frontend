@@ -3,7 +3,7 @@ import { fetchConfig } from "../utils/forAPI";
 
 const comment = (treeId: string, ...r: string[]) => ["comment", treeId, ...r];
 
-export const commentRequest: CommentRequest = {
+const commentRequest: CommentRequest = {
     createComment: async ({ treeId, ...body }) => await fetchConfig({
         method: "POST",
         route: comment(treeId),
@@ -25,3 +25,11 @@ export const commentRequest: CommentRequest = {
         route: comment(treeId, id)
     })
 }
+
+export const {
+    createComment,
+    updateComment,
+    deleteComment,
+    treeComments,
+    getComment
+} = commentRequest;
