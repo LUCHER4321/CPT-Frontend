@@ -6,7 +6,7 @@ import type { PhTreeResponse } from './types';
 import { searchTrees } from './api/phTree';
 import { Order, TreeCriteria } from './enums';
 import { getUser } from './api/user';
-import { exampleTrees, exampleUsers } from './data/exampleTrees';
+import { exampleTrees, exampleUsers } from './data/example';
 import { TopTrees } from './components/TopTrees';
 
 function App() {
@@ -40,7 +40,6 @@ function App() {
             username: exampleUsers.find(u => u.id === t.userId)?.username ?? ""
           })) ?? []
         );
-        console.log("Hola");
       }
     };
     fetchTrees();
@@ -53,7 +52,8 @@ function App() {
         setOpen={setOpen}
       />
       <Hero
-        hrefInfo="#features"
+        hrefStart="/auth?register=true"
+        hrefInfo="/#features"
       />
       <Features id="features"/>
       <TopTrees
