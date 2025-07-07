@@ -29,7 +29,8 @@ export enum TreeCriteria {
     LIKES = "likes",
     COMMENTS = "comments",
     VIEWS = "views",
-    NAME = "name"
+    NAME = "name",
+    POPULARITY = "popularity"
 }
 
 export enum Order {
