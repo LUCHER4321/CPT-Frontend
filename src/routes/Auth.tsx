@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { LoginForm, RegisterForm } from "../components/AuthForm";
 import { AuthBanner } from "../components/AuthBanner";
+import { HomeNavBar } from "../components/HomeNavBar";
 
 interface AuthProps {
     initialRegister?: boolean;
@@ -19,39 +20,49 @@ export const Auth = ({
     const [passwordR, setPasswordR] = useState("");
     const [passwordC, setPasswordC] = useState("");
     const [accept, setAccept] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState("");
     useEffect(() => {
         document.title = `Life Tree | ${register ? "Register" : "Log In"}`
     }, [register]);
     return (
-        <div className="flex flex-col sm:flex-row w-screen sm:min-h-[100vh] p-0!">
-            <div className="sm:min-w-125 px-8 py-12">
-                <LoginForm
-                    email={email}
-                    setEmail={setEmail}
-                    password={password}
-                    setPassword={setPassword}
-                    visiblePassword={visiblePassword}
-                    setVisiblePassword={setVisiblePassword}
-                    className={register ? "hidden" : ""}
-                    setRegister={setRegister}
-                />
-                <RegisterForm
-                    username={username}
-                    setUsername={setUsername}
-                    email={emailR}
-                    setEmail={setEmailR}
-                    password={passwordR}
-                    setPassword={setPasswordR}
-                    confirmPassword={passwordC}
-                    setConfirmPassword={setPasswordC}
-                    visiblePassword={visiblePasswordR}
-                    setVisiblePassword={setVisiblePasswordR}
-                    accept={accept}
-                    setAccept={setAccept}
-                    className={register ? "" : "hidden"}
-                />
+        <>
+            <HomeNavBar
+                open={open}
+                setOpen={setOpen}
+                search={search}
+                setSearch={setSearch}
+            />
+            <div className="flex flex-col sm:flex-row w-screen sm:min-h-[100vh] p-0!">
+                <div className="sm:min-w-125 px-8 py-12">
+                    <LoginForm
+                        email={email}
+                        setEmail={setEmail}
+                        password={password}
+                        setPassword={setPassword}
+                        visiblePassword={visiblePassword}
+                        setVisiblePassword={setVisiblePassword}
+                        className={register ? "hidden" : ""}
+                        setRegister={setRegister}
+                    />
+                    <RegisterForm
+                        username={username}
+                        setUsername={setUsername}
+                        email={emailR}
+                        setEmail={setEmailR}
+                        password={passwordR}
+                        setPassword={setPasswordR}
+                        confirmPassword={passwordC}
+                        setConfirmPassword={setPasswordC}
+                        visiblePassword={visiblePasswordR}
+                        setVisiblePassword={setVisiblePasswordR}
+                        accept={accept}
+                        setAccept={setAccept}
+                        className={register ? "" : "hidden"}
+                    />
+                </div>
+                <AuthBanner/>
             </div>
-            <AuthBanner/>
-        </div>
+        </>
     )
 }
