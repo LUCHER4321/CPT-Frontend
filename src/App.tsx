@@ -12,6 +12,7 @@ import { TopTrees } from './components/TopTrees';
 function App() {
   const [open, setOpen] = useState(false);
   const [trees, setTrees] = useState<(PhTreeResponse & { username: string })[]>([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchTrees = async () => {
@@ -50,6 +51,8 @@ function App() {
       <HomeNavBar
         open={open}
         setOpen={setOpen}
+        search={search}
+        setSearch={setSearch}
       />
       <Hero
         hrefStart="/auth?register=true"
