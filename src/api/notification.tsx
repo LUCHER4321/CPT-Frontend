@@ -3,7 +3,7 @@ import { fetchConfig } from "../utils/forAPI";
 
 const notification = "notification";
 
-export const notificationRequest: NotificationRequest = {
+const notificationRequest: NotificationRequest = {
     getNotifications: async (queries) => await fetchConfig({
         route: [notification],
         queries
@@ -13,3 +13,8 @@ export const notificationRequest: NotificationRequest = {
         route: [notification, id]
     })
 }
+
+export const {
+    getNotifications,
+    seeNotification
+} = notificationRequest;
