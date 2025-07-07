@@ -4,7 +4,7 @@ import { fetchConfig, fetchImage } from "../utils/forAPI";
 const user = "user";
 const userMe = ["user", "me"];
 
-export const userRequest: UserRequest = {
+const userRequest: UserRequest = {
     register: async (body) => await fetchConfig({
         method: "POST",
         body,
@@ -66,3 +66,20 @@ export const userRequest: UserRequest = {
         route: [...userMe, "key", keyToDelete]
     })
 };
+
+export const {
+    register,
+    login,
+    search,
+    getUser,
+    logout,
+    admin,
+    token,
+    getMe,
+    updateMe,
+    deleteMe,
+    photoMe,
+    deletePhotoMe,
+    newApiKey,
+    deleteApiKey
+} = userRequest;
