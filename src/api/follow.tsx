@@ -1,24 +1,32 @@
 import type { FollowRequest } from "../types";
 import { fetchConfig } from "../utils/forAPI";
 
-const follow = "follow";
+const followUrl = "follow";
 
-export const followRequest: FollowRequest = {
+const followRequest: FollowRequest = {
     follow: async ({ id }) => await fetchConfig({
         method: "POST",
-        route: [follow, id]
+        route: [followUrl, id]
     }),
     unfollow: async ({ id }) => await fetchConfig({
         method: "DELETE",
-        route: [follow, id]
+        route: [followUrl, id]
     }),
     getFollowers: async ({ userId }) => await fetchConfig({
-        route: [follow, "followers", userId]
+        route: [followUrl, "followers", userId]
     }),
     getFollowing: async ({ userId }) => await fetchConfig({
-        route: [follow, "following", userId]
+        route: [followUrl, "following", userId]
     }),
     getFollowersCount: async ({ userId }) => await fetchConfig({
-        route: [follow, "count", userId]
+        route: [followUrl, "count", userId]
     })
 }
+
+export const {
+    follow,
+    unfollow,
+    getFollowers,
+    getFollowing,
+    getFollowersCount
+} = followRequest;
