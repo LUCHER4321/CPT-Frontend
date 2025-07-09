@@ -1,4 +1,4 @@
-import { API_KEY, API_URL } from "../config";
+import { API_KEY, API_URL, DESIGN_MODE } from "../config";
 
 type Method = "GET" | "POST" | "PATCH" | "DELETE"
 
@@ -26,16 +26,16 @@ export const fetchConfig = async <T,>({
     queries = {}
 }: FetchConfigProps<T>) => {
     try {
-        const result = await fetch(
+        if(DESIGN_MODE) throw new Error("Design Mode");
+        const {
+            ok,
+            json
+        } = await fetch(
             `${url(...route)}${Object.keys(queries).map(k => `&${k}=${queries[k]}`).join("")}`,
             initialConfig(method, body)
         ).catch(() => {
             throw new Error("Connection Failed");
         });
-        const {
-            json,
-            ok
-        } = result;
         if(!ok) throw new Error("Connection Failed");
         return await json();
     } catch {
@@ -52,9 +52,10 @@ export const fetchImage = async ({
     route = [],
     image
 }: FetchImageProps) => {
-    const body = new FormData();
-    body.append("image", image);
     try{
+        if(DESIGN_MODE) throw new Error("Design Mode");
+        const body = new FormData();
+        body.append("image", image);
         const result = await fetch(url(...route), {
             method: "POST",
             body
