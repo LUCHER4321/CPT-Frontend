@@ -1,6 +1,6 @@
 import type { HTMLInputTypeAttribute } from "react";
 
-interface IconInputProps {
+interface IconInputProps<T> {
     setIcon?: boolean;
     type?: HTMLInputTypeAttribute;
     id?: string;
@@ -11,10 +11,13 @@ interface IconInputProps {
     name?: string;
     icon?: string;
     onClick?: () => void;
-    buttonClassName?: string
+    buttonClassName?: string;
+    selected?: T;
+    options?: T[];
+    setSelected?: (s: T) => void;
 }
 
-export const IconInput = ({
+export const IconInput = <T,>({
     setIcon = true,
     type,
     id,
@@ -25,19 +28,36 @@ export const IconInput = ({
     name,
     icon,
     onClick,
-    buttonClassName
-}: IconInputProps) => {
+    buttonClassName,
+    selected,
+    options,
+    setSelected
+}: IconInputProps<T>) => {
     return (
         <div className={setIcon ? "relative" : "flex flex-row"}>
-            <input
+            {setValue && <input
                 type={type}
                 id={id}
                 placeholder={placeholder}
                 className={className}
                 value={value}
-                onChange={e => setValue?.(e.target.value)}
+                onChange={e => setValue(e.target.value)}
                 name={name?.toLowerCase().replace(" ", "-")}
-            />
+            />}
+            {setSelected && <select
+                value={selected as string}
+                onChange={e => setSelected(e.target.value as T)}
+                className={className}
+                id={id}
+            >
+                {options?.map((o, index) => <option
+                    value={o as string}
+                    key={index}
+                    className="dark:bg-black"
+                >
+                    {(o as string).toUpperCase()}
+                </option>)}
+            </select>}
             {setIcon &&
                 <button
                     type="button"
