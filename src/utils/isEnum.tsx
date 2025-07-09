@@ -1,0 +1,1 @@
+export const isEnum = (T: any, t: any) => Object.values(T).includes(t);
