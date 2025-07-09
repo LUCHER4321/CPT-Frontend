@@ -2,13 +2,18 @@ import { useEffect, useState } from "react"
 import { LoginForm, RegisterForm } from "../components/AuthForm";
 import { AuthBanner } from "../components/AuthBanner";
 import { HomeNavBar } from "../components/HomeNavBar";
+import { Billing, Plan } from "../enums";
 
 interface AuthProps {
     initialRegister?: boolean;
+    initialPlan?: Plan;
+    initialBilling?: Billing
 }
 
 export const Auth = ({
-    initialRegister = false
+    initialRegister = false,
+    initialPlan = Plan.FREE,
+    initialBilling = Billing.ANNUAL
 }: AuthProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -22,6 +27,8 @@ export const Auth = ({
     const [accept, setAccept] = useState(false);
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
+    const [plan, setPlan] = useState(initialPlan);
+    const [billing, setBilling] = useState(initialBilling);
     useEffect(() => {
         document.title = `Life Tree | ${register ? "Register" : "Log In"}`
     }, [register]);
@@ -59,6 +66,11 @@ export const Auth = ({
                         accept={accept}
                         setAccept={setAccept}
                         className={register ? "" : "hidden"}
+                        setRegister={setRegister}
+                        plan={plan}
+                        setPlan={setPlan}
+                        billing={billing}
+                        setBilling={setBilling}
                     />
                 </div>
                 <AuthBanner/>
