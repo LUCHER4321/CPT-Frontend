@@ -1,7 +1,7 @@
 import type { HTMLInputTypeAttribute } from "react";
 import { IconInput } from "./IconInput";
 
-interface AuthFieldProps {
+interface AuthFieldProps<T> {
     name?: string;
     type?: HTMLInputTypeAttribute;
     id?: string;
@@ -12,9 +12,12 @@ interface AuthFieldProps {
     setVisiblePassword?: (b: boolean) => void;
     children?: any;
     className?: string;
+    selected?: T;
+    options?: T[];
+    setSelected?: (s: T) => void;
 }
 
-export const AuthField = ({
+export const AuthField = <T,>({
     name,
     type,
     id,
@@ -24,8 +27,11 @@ export const AuthField = ({
     visiblePassword,
     setVisiblePassword,
     children,
-    className
-}: AuthFieldProps) => {
+    className,
+    selected,
+    options,
+    setSelected
+}: AuthFieldProps<T>) => {
     return (
         <div className={"flex flex-col mb-6 " + className}>
             <p className="font-bold mb-2">{name}</p>
@@ -40,6 +46,9 @@ export const AuthField = ({
                 name={name}
                 onClick={() => setVisiblePassword?.(!visiblePassword)}
                 icon={visiblePassword ? "fa-eye" : "fa-eye-slash"}
+                selected={selected}
+                options={options}
+                setSelected={setSelected}
             />
             {children}
         </div>
