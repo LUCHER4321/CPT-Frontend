@@ -1,0 +1,36 @@
+import { title } from "../data/classNames";
+import type { PlanPrice } from "../types"
+
+interface PlansComparisionProps {
+    prices?: PlanPrice[];
+    features?: ({
+        name: string;
+        fun: (p: PlanPrice) => any
+    })[]
+}
+
+const row = "even:bg-neutral-100 dark:even:bg-neutral-900";
+const cell = "border p-[1rem]";
+
+export const PlansComparision = ({
+    prices,
+    features
+}: PlansComparisionProps) => {
+    return (
+        <>
+            <h2 className={"mb-6 text-2xl " + title}>Detailed Plans Comparision</h2>
+            <table className="w-full text-center overflow-x-auto border-collapse mb-[1rem]">
+                <tr className={row}>
+                    <th className={cell}>Feature</th>
+                    {prices?.map((p, index) => <th key={index} className={cell}>{p.name}</th>)}
+                </tr>
+                {features?.map((f, index) =>
+                <tr key={index} className={row}>
+                    <td className={cell}>{f.name}</td>
+                    {prices?.map((p, i) => <td key={i} className={cell}>{f.fun(p)}</td>)}
+                </tr>
+                )}
+            </table>
+        </>
+    )
+}
