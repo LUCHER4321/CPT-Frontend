@@ -15,7 +15,7 @@ export const TopTrees = ({
         <section id={id} className="text-center p-16">
             <h2 className={"text-[2rem] mb-12 " + title}>Featured Trees</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                {trees.map(t => (<TreeCard tree={t}/>))}
+                {trees.map((t, index) => (<TreeCard tree={t} key={index}/>))}
             </div>
         </section>
     )
