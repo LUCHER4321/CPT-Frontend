@@ -1,4 +1,6 @@
 import { aText, filledButton } from "../data/classNames"
+import { plans } from "../data/prices";
+import { Billing, Plan } from "../enums";
 import { AuthField } from "./AuthField"
 import { AuthHeader } from "./AuthHeader";
 import { LinkButton } from "./LinkButton";
@@ -78,6 +80,10 @@ interface RegisterFormProps {
     setAccept?: (b: boolean) => void;
     className?: string;
     setRegister?: (b: boolean) => void;
+    plan?: Plan;
+    setPlan?: (p: Plan) => void;
+    billing?: Billing;
+    setBilling?: (b: Billing) => void;
 }
 
 export const RegisterForm = ({
@@ -94,7 +100,11 @@ export const RegisterForm = ({
     accept,
     setAccept,
     className,
-    setRegister
+    setRegister,
+    plan,
+    setPlan,
+    billing,
+    setBilling
 }: RegisterFormProps) => {
     return (
         <>
@@ -140,6 +150,25 @@ export const RegisterForm = ({
                     visiblePassword={visiblePassword}
                     setVisiblePassword={setVisiblePassword}
                 />
+                <AuthField
+                    name="Choose your plan"
+                    id="plan"
+                    selected={plan}
+                    options={[Plan.FREE, Plan.PRO, Plan.PREMIUM]}
+                    setSelected={setPlan}
+                >
+                    <p className="w-full text-end">Check our <a href="/pricing" className={aText} target="_blank">plans</a> options</p>
+                </AuthField>
+                {plan && plan !== Plan.FREE && <>
+                    <AuthField
+                        name="Billing Method"
+                        id="billing-method"
+                        selected={billing}
+                        options={[Billing.MONTHLY, Billing.ANNUAL]}
+                        setSelected={setBilling}
+                    />
+                    <p className="font-bold mb-2">Total Cost: ${(billing === Billing.MONTHLY ? plans.get(plan)?.month : plans.get(plan)?.year)?.toFixed(2)}/{billing === Billing.MONTHLY ? "month" : "year"}</p>
+                </>}
                 <p className="mb-6"><input
                     type="checkbox"
                     id="register-accept"
@@ -149,7 +178,7 @@ export const RegisterForm = ({
                 /> Accept <a className={aText}>Terms & Conditions</a></p>
                 <LinkButton className={"w-full " + filledButton}>Register</LinkButton>
                 <div className="w-full text-center mt-[1.5rem] pb-[1.5rem]">
-                    <p>Already have an account? <a className={aText} onClick={() => setRegister?.(true)}>Log In</a></p>
+                    <p>Already have an account? <a className={aText} onClick={() => setRegister?.(false)}>Log In</a></p>
                 </div>
             </form>
         </>
