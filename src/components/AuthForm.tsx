@@ -154,7 +154,7 @@ export const RegisterForm = ({
                     name="Choose your plan"
                     id="plan"
                     selected={plan}
-                    options={[Plan.FREE, Plan.PRO, Plan.PREMIUM]}
+                    options={Object.values(Plan).map(p => p as Plan)}
                     setSelected={setPlan}
                 >
                     <p className="w-full text-end">Check our <a href="/pricing" className={aText} target="_blank">plans</a> options</p>
