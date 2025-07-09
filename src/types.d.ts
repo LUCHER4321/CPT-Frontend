@@ -6,6 +6,25 @@ type RequestFunction<REQUEST, RESPONSE> = (request: REQUEST) => Promise<RESPONSE
 
 type Email = `${string}@${string}.${string}`;
 
+type ClassColor = {
+    light: string;
+    dark?: string;
+}
+
+export interface PlanPrice {
+    name: string;
+    color?: ClassColor;
+    button?: ClassColor;
+    description: string;
+    month: number;
+    year: number;
+    constraints: {
+        maxTrees?: number;
+        maxSpecies?: number;
+        maxCollaborators?: number;
+    };
+}
+
 export interface UserResponse {
     id: string;
     email: Email;
