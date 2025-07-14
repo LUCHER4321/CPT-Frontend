@@ -30,7 +30,7 @@ export const HomeNavBar = ({
                         <IconInput
                             type="text"
                             placeholder="search trees..."
-                            className="bg-[#1B5E20] dark:bg-[#D8EDD9] placeholder-white text-white dark:placeholder-black dark:text-black px-4 mx-1 rounded-full h-full"
+                            className="bg-[#1B5E20] dark:bg-[#D8EDD9] placeholder-white text-white dark:placeholder-black dark:text-black px-4 mx-1 rounded-full h-full w-full sm:w-auto"
                             value={search}
                             setValue={setSearch}
                             icon="fa-search text-white dark:text-black"
