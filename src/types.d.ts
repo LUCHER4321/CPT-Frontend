@@ -58,6 +58,14 @@ export interface UserRequest {
     getUser: RequestFunction<{
         id: string;
     }, UserResponse>;
+    recover: RequestFunction<{
+        email: Email;
+        url?: string;
+    }, void>;
+    resetPassword: RequestFunction<{
+        token: string;
+        password: string;
+    }, UserResponse>;
     logout: RequestFunction<{}, void>;
     admin: RequestFunction<{
         adminId: string;
