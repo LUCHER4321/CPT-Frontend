@@ -28,8 +28,8 @@ const pro: PlanPrice = {
         dark: "dark:bg-blue-600!"
     },
     border: {
-        light: "border-[#2196F3]",
-        dark: "dark:border-blue-600"
+        light: "border-t-[#2196F3]",
+        dark: "dark:border-t-blue-600"
     },
     month: 9,
     year: 86.4,
@@ -68,13 +68,14 @@ const institutional: PlanPrice = {
     month: 499,
     year: 4788,
     color: {
-        light: "text-orange-500!",
+        light: "text-orange-600!",
     },
     button: {
-        light: "bg-orange-500!",
+        light: "bg-orange-600!",
+        dark: "dark:bg-orange-400"
     },
     border: {
-        light: "border-t-orange-500",
+        light: "border-t-orange-600",
     },
     constraints: {
         maxCollaborators: 30,
