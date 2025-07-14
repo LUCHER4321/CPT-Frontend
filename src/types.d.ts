@@ -22,6 +22,7 @@ export interface PlanPrice {
         maxTrees?: number;
         maxSpecies?: number;
         maxCollaborators?: number;
+        extraConstraints?: string[];
     };
 }
 
