@@ -22,6 +22,14 @@ const userRequest: UserRequest = {
     getUser: async ({ id }) => await fetchConfig({
         route: [user, id]
     }),
+    recover: async (body) => await fetchConfig({
+        route: [user, "recover"],
+        body
+    }),
+    resetPassword: async ({token, ...body}) => await fetchConfig({
+        route: [user, "reser", token],
+        body
+    }),
     logout: async (body) => await fetchConfig({
         method: "POST",
         body,
