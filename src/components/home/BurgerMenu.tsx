@@ -19,7 +19,7 @@ export const BurgerMenu = ({
             <div className={"sm:hidden fixed top-20 left-1/2 right-0 flex flex-col justify-center text-center bg-[#D8EDD9] dark:bg-[#1B5E20] -z-1 transition-[max-height] duration-300 " + (open ? "p-5! max-h-[50vh]" : "max-h-0! overflow-hidden")}>
                 {children}
             </div>
-            <button className="none flex sm:hidden h-full items-center bg-black/0! p-0! border-black/0! focus:outline-0!" onClick={onClick}>
+            <button className="none flex sm:hidden h-full items-center bg-black/0! p-0! border-black/0! focus:outline-0! focus-visible:outline-0!" onClick={onClick}>
                 <i className={"fas transition-all duration-300 " + (open ? "fa-times" : "fa-bars")}/>
             </button>
         </>
