@@ -24,7 +24,7 @@ export const PlanCard = ({
         dark
     } = button ?? {};
     return (
-        <div className="rounded p-6 pb-21 border relative hover:-translate-y-[5px] transition-all duration-300">
+        <div className={`rounded-xl p-6 pb-21 border border-t-4 relative hover:-translate-y-[5px] transition-all duration-300 ${plan ? `${plans.get(plan)?.border?.light ?? ""} ${plans.get(plan)?.border?.dark ?? ""}` : ""}`}>
             <PlanHeader
                 plan={plan}
                 monthly={monthly}
