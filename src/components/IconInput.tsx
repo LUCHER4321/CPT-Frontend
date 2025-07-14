@@ -49,6 +49,7 @@ export const IconInput = <T,>({
                 onChange={e => setSelected(e.target.value as T)}
                 className={className}
                 id={id}
+                name={name?.toLowerCase().replace(" ", "-")}
             >
                 {options?.map((o, index) => <option
                     value={o as string}
