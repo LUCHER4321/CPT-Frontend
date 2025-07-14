@@ -167,7 +167,7 @@ export const RegisterForm = ({
                         options={[Billing.MONTHLY, Billing.ANNUAL]}
                         setSelected={setBilling}
                     >
-                        <p className="font-bold mb-2">Total Cost: ${(billing === Billing.MONTHLY ? plans.get(plan)?.month : plans.get(plan)?.year)?.toFixed(2)}/{billing === Billing.MONTHLY ? "month" : `year ($${plans.get(plan)?.year.toFixed(2)}/month)`}</p>
+                        <p className="font-bold mb-2">Total Cost: ${(billing === Billing.MONTHLY ? plans.get(plan)?.month : plans.get(plan)?.year)?.toFixed(2)}/{billing === Billing.MONTHLY ? "month" : `year ($${((plans.get(plan)?.year ?? 0)/12).toFixed(2)}/month)`}</p>
                     </AuthField>
                 </>}
                 <p className="mb-6"><input
