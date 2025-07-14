@@ -47,6 +47,7 @@ export enum Plan {
   FREE = "free",
   PRO = "pro",
   PREMIUM = "premium",
+  INSTITUTIONAL = "institutional",
 }
 
 export enum TreeCriteria {
@@ -57,6 +58,13 @@ export enum TreeCriteria {
   VIEWS = "views",
   NAME = "name",
   POPULARITY = "popularity",
+}
+
+export enum TreeChange {
+  NEW = "new",
+  EDIT = "edit",
+  DELETE = "delete",
+  TREE = "tree",
 }
 
 export enum Order {
