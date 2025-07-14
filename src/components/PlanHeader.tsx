@@ -23,7 +23,7 @@ export const PlanHeader = ({
                 <span className="text-[2.5rem] font-bold">${dollars}</span>
                 <span className="text-xl font-bold">.{cents}</span>
                 <span>/month</span>
-                <span className={"w-full block text-[#1B5E20] dark:text-[#D8EDD9] transition-all duration-500 " + (monthly || price.year <= 0 ? "text-black/0!" : "")}>${price.year}/year</span>
+                <span className={"w-full block text-[#1B5E20] dark:text-[#D8EDD9] transition-all duration-500 " + (monthly || price.year <= 0 ? "text-black/0!" : "")}>${price.year.toFixed(2)}/year</span>
             </div>
             <p className="">{children}</p>
         </div>
