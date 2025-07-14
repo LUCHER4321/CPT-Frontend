@@ -15,6 +15,7 @@ function App() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+    document.title = "Life Tree | Create Phylogenetic Trees";
     const fetchTrees = async () => {
       try {
         const remoteTrees = await searchTrees({
