@@ -9,7 +9,9 @@ export const PricingNavBar = () => {
                     <i className={"fas fa-arrow-left " + title}/>
                 </a>
                 <h1 className={"text-[1.5rem]! font-semibold flex items-center " + title}>Plans & Prices</h1>
-                <div></div>
+                <a className="w-10 aspect-square justify-center flex items-center invisible" href="/">
+                    <i className={"fas fa-arrow-left " + title}/>
+                </a>
             </NavBar>
             <div className="h-[4.7rem]"/>
         </>
