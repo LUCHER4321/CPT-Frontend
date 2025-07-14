@@ -23,12 +23,14 @@ const userRequest: UserRequest = {
         route: [user, id]
     }),
     recover: async (body) => await fetchConfig({
-        route: [user, "recover"],
-        body
+        method: "POST",
+        body,
+        route: [user, "recover"]
     }),
     resetPassword: async ({token, ...body}) => await fetchConfig({
-        route: [user, "reser", token],
-        body
+        method: "POST",
+        body,
+        route: [user, "reser", token]
     }),
     logout: async (body) => await fetchConfig({
         method: "POST",
@@ -80,6 +82,8 @@ export const {
     login,
     search,
     getUser,
+    recover,
+    resetPassword,
     logout,
     admin,
     token,
