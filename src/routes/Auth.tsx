@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { LoginForm, RegisterForm } from "../components/AuthForm";
-import { AuthBanner } from "../components/AuthBanner";
-import { HomeNavBar } from "../components/HomeNavBar";
+import { LoginForm, RegisterForm } from "../components/auth/AuthForm";
+import { AuthBanner } from "../components/auth/AuthBanner";
+import { HomeNavBar } from "../components/home/HomeNavBar";
 import { Billing, Plan } from "../enums";
 
 interface AuthProps {

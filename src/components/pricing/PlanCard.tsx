@@ -1,5 +1,5 @@
-import { plans } from "../data/prices";
-import { Billing, type Plan } from "../enums";
+import { plans } from "../../data/prices";
+import { Billing, type Plan } from "../../enums";
 import { PlanHeader } from "./PlanHeader";
 import { PriceFeatures } from "./PriceFeatures";
 

@@ -1,4 +1,4 @@
-import { title } from "../data/classNames";
+import { title } from "../../data/classNames";
 import { PricingQuestion } from "./PricingQuestion";
 
 interface PricingFAQsProps {

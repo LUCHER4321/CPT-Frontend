@@ -1,4 +1,4 @@
-import { title } from "../data/classNames";
+import { title } from "../../data/classNames";
 import { Card } from "./Card";
 
 interface FeaturesProps {

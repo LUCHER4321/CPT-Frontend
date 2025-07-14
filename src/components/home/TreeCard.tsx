@@ -1,5 +1,5 @@
-import { card, title } from "../data/classNames";
-import type { PhTreeResponse } from "../types";
+import { card, title } from "../../data/classNames";
+import type { PhTreeResponse } from "../../types";
 
 interface TreeCardProps {
     tree: PhTreeResponse & { username: string; };

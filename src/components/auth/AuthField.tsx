@@ -1,5 +1,5 @@
 import type { HTMLInputTypeAttribute } from "react";
-import { IconInput } from "./IconInput";
+import { IconInput } from "../IconInput";
 
 interface AuthFieldProps<T> {
     name?: string;

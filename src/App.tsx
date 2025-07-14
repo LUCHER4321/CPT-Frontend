@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { HomeNavBar } from './components/HomeNavBar'
-import { Hero } from './components/Hero';
-import { Features } from './components/Features';
+import { HomeNavBar } from './components/home/HomeNavBar'
+import { Hero } from './components/home/Hero';
+import { Features } from './components/home/Features';
 import type { PhTreeResponse } from './types';
 import { searchTrees } from './api/phTree';
 import { Order, TreeCriteria } from './enums';
 import { getUser } from './api/user';
 import { exampleTrees, exampleUsers } from './data/example';
-import { TopTrees } from './components/TopTrees';
+import { TopTrees } from './components/home/TopTrees';
 
 function App() {
   const [open, setOpen] = useState(false);

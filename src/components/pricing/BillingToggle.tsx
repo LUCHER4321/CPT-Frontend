@@ -1,4 +1,4 @@
-import { selectedBilling, unselectedBilling } from "../data/classNames";
+import { selectedBilling, unselectedBilling } from "../../data/classNames";
 import { ToggleSwitch } from "./ToggleSwitch";
 
 interface BillingToggleProps {

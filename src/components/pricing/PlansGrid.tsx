@@ -1,5 +1,5 @@
-import { plans } from "../data/prices";
-import type { Plan } from "../enums";
+import { plans } from "../../data/prices";
+import type { Plan } from "../../enums";
 import { PlanCard } from "./PlanCard";
 
 interface PlansGridProps {

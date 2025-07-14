@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import { PricingNavBar } from "../components/PricingNavBar"
-import { BillingToggle } from "../components/BillingToggle"
-import { PlansGrid } from "../components/PlansGrid";
-import { PlansComparision } from "../components/PlansComparision";
+import { PricingNavBar } from "../components/pricing/PricingNavBar"
+import { BillingToggle } from "../components/pricing/BillingToggle"
+import { PlansGrid } from "../components/pricing/PlansGrid";
+import { PlansComparision } from "../components/pricing/PlansComparision";
 import { getMe } from "../api/user";
 import type { Plan } from "../enums";
 import { plans } from "../data/prices";
-import { PricingFAQs } from "../components/PricingFAQs";
+import { PricingFAQs } from "../components/pricing/PricingFAQs";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 
 export const Pricing = () => {

@@ -1,5 +1,5 @@
-import { title } from "../data/classNames";
-import type { PhTreeResponse } from "../types";
+import { title } from "../../data/classNames";
+import type { PhTreeResponse } from "../../types";
 import { TreeCard } from "./TreeCard";
 
 interface TopTreesProps {

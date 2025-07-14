@@ -1,4 +1,4 @@
-import { card, title as titleClass } from "../data/classNames";
+import { card, title as titleClass } from "../../data/classNames";
 
 interface CardProps {
     fa?: string;

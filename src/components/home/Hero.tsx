@@ -1,5 +1,5 @@
-import { borderButton, filledButton, title } from "../data/classNames";
-import { LinkButton } from "./LinkButton";
+import { borderButton, filledButton, title } from "../../data/classNames";
+import { LinkButton } from "../LinkButton";
 
 interface HeroProps {
     hrefStart?: string;

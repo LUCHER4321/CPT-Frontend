@@ -1,4 +1,4 @@
-import { title } from "../data/classNames";
+import { title } from "../../data/classNames";
 
 interface AuthHeaderProps {
     title?: string;

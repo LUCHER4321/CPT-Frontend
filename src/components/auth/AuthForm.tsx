@@ -1,9 +1,9 @@
-import { aText, filledButton } from "../data/classNames"
-import { plans } from "../data/prices";
-import { Billing, Plan } from "../enums";
+import { aText, filledButton } from "../../data/classNames"
+import { plans } from "../../data/prices";
+import { Billing, Plan } from "../../enums";
 import { AuthField } from "./AuthField"
 import { AuthHeader } from "./AuthHeader";
-import { LinkButton } from "./LinkButton";
+import { LinkButton } from "../LinkButton";
 
 interface LoginFormProps {
     email?: string;

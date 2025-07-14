@@ -1,5 +1,5 @@
-import { title } from "../data/classNames"
-import { NavBar } from "./NavBar"
+import { title } from "../../data/classNames"
+import { NavBar } from "../NavBar"
 
 export const PricingNavBar = () => {
     return(

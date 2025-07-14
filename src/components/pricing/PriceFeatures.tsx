@@ -1,5 +1,5 @@
-import { plans } from "../data/prices";
-import type { Plan } from "../enums";
+import { plans } from "../../data/prices";
+import type { Plan } from "../../enums";
 import { PlanFeatures } from "./PlanFeatures";
 
 interface PriceFeaturesProps {

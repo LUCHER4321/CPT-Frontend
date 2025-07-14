@@ -1,5 +1,5 @@
-import { title } from "../data/classNames";
-import type { PlanPrice } from "../types"
+import { title } from "../../data/classNames";
+import type { PlanPrice } from "../../types"
 
 interface PlansComparisionProps {
     id?: string;

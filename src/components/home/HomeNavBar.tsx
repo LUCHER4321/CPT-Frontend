@@ -1,9 +1,9 @@
-import { blankButton, borderButton, filledButton } from "../data/classNames";
+import { blankButton, borderButton, filledButton } from "../../data/classNames";
 import { BurgerMenu } from "./BurgerMenu";
 import { HomeButton } from "./HomeButton";
-import { IconInput } from "./IconInput";
-import { LinkButton } from "./LinkButton";
-import { NavBar } from "./NavBar";
+import { IconInput } from "../IconInput";
+import { LinkButton } from "../LinkButton";
+import { NavBar } from "../NavBar";
 
 interface HomeNavBarProps {
     open?: boolean;
