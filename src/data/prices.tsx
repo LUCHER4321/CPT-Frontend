@@ -6,6 +6,10 @@ const free: PlanPrice = {
     description: "Ideal for starting to explore phylogenetics",
     month: 0,
     year: 0,
+    border: {
+        light: "border-t-[#BDBDBD]",
+        dark: "dark:border-t-neutral-600"
+    },
     constraints: {
         maxTrees: 5,
         maxSpecies: 30
@@ -22,6 +26,10 @@ const pro: PlanPrice = {
     button: {
         light: "bg-[#2196F3]!",
         dark: "dark:bg-blue-600!"
+    },
+    border: {
+        light: "border-[#2196F3]",
+        dark: "dark:border-blue-600"
     },
     month: 9,
     year: 86.4,
@@ -43,6 +51,10 @@ const premium: PlanPrice = {
         light: "bg-fuchsia-300!",
         dark: "dark:bg-fuchsia-700!"
     },
+    border: {
+        light: "border-t-fuchsia-300",
+        dark: "dark:border-t-fuchsia-700"
+    },
     month: 19,
     year: 182.4,
     constraints: {
@@ -55,12 +67,21 @@ const institutional: PlanPrice = {
     description: "For institutions that need premium access for all their members",
     month: 499,
     year: 4788,
+    color: {
+        light: "text-orange-500!",
+    },
+    button: {
+        light: "bg-orange-500!",
+    },
+    border: {
+        light: "border-t-orange-500",
+    },
     constraints: {
         maxCollaborators: 30,
         extraConstraints: [
             "Premium accounts for all institiution members",
             "Personalized domain (@your_institution.com)",
-            "SSO (Single Sign-On)"
+            //"SSO (Single Sign-On)"
         ]
     }
 }
