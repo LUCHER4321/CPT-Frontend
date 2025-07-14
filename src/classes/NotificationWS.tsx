@@ -1,6 +1,5 @@
-import { io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import type { NotiFunc } from "../enums";
-import { WS_URL } from "../config";
 import type { NotificationResponse } from "../types";
 
 interface NotificationEmit {
@@ -10,12 +9,22 @@ interface NotificationEmit {
     commentId?: string;
 }
 
-export class NotificationWS {
-    socket = io(WS_URL);
+interface NotificationWSProps {
+    socket: Socket;
+    response: (nr: NotificationResponse) => void;
+    userId: string;
+}
 
-    constructor (response: (nr: NotificationResponse) => void) {
-        const { on } = this.socket;
-        on("set-notification-server", response);
+export class NotificationWS {
+    socket: Socket;
+
+    constructor ({
+        socket,
+        response,
+        userId
+    }: NotificationWSProps) {
+        this.socket = socket;
+        this.socket.on("set-notification-server-" + userId, response);
     }
 
     emit = (data: NotificationEmit) => this.socket.emit("set-notification-client", data);
