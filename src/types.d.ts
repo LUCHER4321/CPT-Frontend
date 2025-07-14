@@ -60,7 +60,7 @@ export interface UserRequest {
     }, UserResponse>;
     recover: RequestFunction<{
         email: Email;
-        url?: string;
+        url: string;
     }, void>;
     resetPassword: RequestFunction<{
         token: string;
