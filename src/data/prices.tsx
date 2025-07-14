@@ -50,8 +50,24 @@ const premium: PlanPrice = {
     }
 }
 
+const institutional: PlanPrice = {
+    name: "Institutional",
+    description: "For institutions that need premium access for all their members",
+    month: 499,
+    year: 4788,
+    constraints: {
+        maxCollaborators: 30,
+        extraConstraints: [
+            "Premium accounts for all institiution members",
+            "Personalized domain (@your_institution.com)",
+            "SSO (Single Sign-On)"
+        ]
+    }
+}
+
 export const plans = new Map([
     [Plan.FREE, free],
     [Plan.PRO, pro],
-    [Plan.PREMIUM, premium]
+    [Plan.PREMIUM, premium],
+    [Plan.INSTITUTIONAL, institutional]
 ]);
