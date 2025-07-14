@@ -13,7 +13,8 @@ export const PriceFeatures = ({
     const {
         maxTrees,
         maxSpecies,
-        maxCollaborators
+        maxCollaborators,
+        extraConstraints
     } = plans.get(plan)?.constraints ?? {};
     return (
         <PlanFeatures>
@@ -22,7 +23,8 @@ export const PriceFeatures = ({
             ${maxCollaborators ? `Up to ${maxCollaborators} collaborators per tree` : ""}
             Upload images many formats (jpg, jpeg, png, gif, svg)
             Professional visualization
-            Access to phylogenetic trees created by the community`}
+            Access to phylogenetic trees created by the community
+            ${extraConstraints?.join("\n") ?? ""}`}
         </PlanFeatures>
     )
 }
