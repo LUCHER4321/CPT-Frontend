@@ -1,9 +1,10 @@
+import { login } from "../../api/user";
 import { aText, filledButton } from "../../data/classNames"
 import { plans } from "../../data/prices";
 import { Billing, Plan } from "../../enums";
+import type { Email } from "../../types";
 import { AuthField } from "./AuthField"
 import { AuthHeader } from "./AuthHeader";
-import { LinkButton } from "../LinkButton";
 
 interface LoginFormProps {
     email?: string;
@@ -56,7 +57,7 @@ export const LoginForm = ({
                         <a className={aText}>Forgot your password?</a>
                     </div>
                 </AuthField>
-                <LinkButton className={"w-full " + filledButton}>Log In</LinkButton>
+                <button className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""})}>Log In</button>
                 <div className="w-full text-center mt-[1.5rem]">
                     <p>No account? <a className={aText} onClick={() => setRegister?.(true)}>Register</a></p>
                 </div>
@@ -177,7 +178,7 @@ export const RegisterForm = ({
                     onChange={e => setAccept?.(e.target.checked)}
                     className="mr-1 cursor-pointer"
                 /> Accept <a className={aText}>Terms & Conditions</a></p>
-                <LinkButton className={"w-full " + filledButton}>Register</LinkButton>
+                <button className={"w-full " + filledButton}>Register</button>
                 <div className="w-full text-center mt-[1.5rem] pb-[1.5rem]">
                     <p>Already have an account? <a className={aText} onClick={() => setRegister?.(false)}>Log In</a></p>
                 </div>
