@@ -7,6 +7,7 @@ import { Auth } from './routes/Auth.tsx'
 import { Pricing } from './routes/Pricing.tsx'
 import { Billing, Plan } from './enums.tsx'
 import { isEnum } from './utils/isEnum.tsx'
+import { Dashboard } from './routes/Dashboard.tsx'
 
 const plan = new URLSearchParams(window.location.search).get("plan") ?? "";
 const billing = new URLSearchParams(window.location.search).get("billing") ?? "";
@@ -22,6 +23,9 @@ createRoot(document.getElementById('root')!).render(
           initialBilling={isEnum(Billing, billing) ? billing as Billing : undefined}
         />}/>
         <Route path="pricing" element={<Pricing/>}/>
+        <Route path="account">
+          <Route index element={<Dashboard/>}/>
+        </Route>
       </Routes>
     </BrowserRouter>
   </StrictMode>,
