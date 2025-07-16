@@ -40,7 +40,7 @@ export const exampleTrees: PhTreeResponse[] = [
 export const exampleUsers: UserResponse[] = [
     {
         id: "0",
-        email: "a@a.c",
+        email: "biologist_user@gmail.com",
         username: "biologist_user",
         plan: Plan.PREMIUM,
         role: Role.USER,
@@ -49,7 +49,7 @@ export const exampleUsers: UserResponse[] = [
     },
     {
         id: "1",
-        email: "a@a.c",
+        email: "ornithologist@gmail.com",
         username: "ornithologist",
         plan: Plan.PREMIUM,
         role: Role.USER,
@@ -58,7 +58,7 @@ export const exampleUsers: UserResponse[] = [
     },
     {
         id: "2",
-        email: "a@a.c",
+        email: "botany@gmail.com",
         username: "botany",
         plan: Plan.PREMIUM,
         role: Role.USER,
