@@ -9,7 +9,7 @@ export const SideHeader = ({
 }: SideHeaderProps) => {
     return (
         <div className="px-4 py-6 border-b">
-            <a href="/" className={`text-xl ${expanded ? "" : "invisible"} ${title}`}>{expanded ? "Life Tree" : "."}</a>
+            <a href="/" className={`text-xl line-clamp-1 ${expanded ? "" : "invisible"} ${title}`}>{expanded ? "Life Tree" : "."}</a>
         </div>
     )
 };
