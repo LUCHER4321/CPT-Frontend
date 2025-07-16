@@ -30,7 +30,7 @@ export const Auth = ({
     const [plan, setPlan] = useState(initialPlan);
     const [billing, setBilling] = useState(initialBilling);
     useEffect(() => {
-        document.title = `Life Tree | ${register ? "Register" : "Log In"}`
+        document.title = `Life Tree | ${register ? "Register" : "Log In"}`;
     }, [register]);
     return (
         <>
