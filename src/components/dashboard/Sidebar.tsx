@@ -5,6 +5,7 @@ import { SideHeader } from "./SideHeader";
 
 interface SidebarProps {
     expanded?: boolean;
+    setExpanded?: (b: boolean) => void
     user?: UserResponse;
     items?: {
         href?: string;
@@ -12,23 +13,20 @@ interface SidebarProps {
         name?: string;
     }[];
     currentPage?: string;
-    onMouseEnter?: () => void;
-    onMouseLeave?: () => void;
 }
 
 export const Sidebar = ({
     expanded,
+    setExpanded,
     user,
     items,
     currentPage,
-    onMouseEnter,
-    onMouseLeave
 }: SidebarProps) => {
     return (
         <aside
             className={`flex flex-col h-screen! justify-between shadow-lg transition-all duration-300 ${expanded ? "w-62.5" : "w-20"}`}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+            onMouseEnter={() => setExpanded?.(true)}
+            onMouseLeave={() => setExpanded?.(false)}
         >
             <SideHeader
                 expanded={expanded}
