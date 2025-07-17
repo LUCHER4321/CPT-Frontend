@@ -25,7 +25,7 @@ export const Hero = ({
                 </div>
             </div>
             <div className="sm:w-1/2 w-full flex justify-center items-center">
-                <img alt="Logo" />
+                <img src="/logo.svg" alt="Logo" className="max-h-70!" />
             </div>
         </section>
     )
