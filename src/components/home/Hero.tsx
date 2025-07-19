@@ -25,8 +25,8 @@ export const Hero = ({
                 </div>
             </div>
             <div className="sm:w-1/2 w-full flex justify-center items-center">
-                <img src="/transparentLogo.svg" alt="Logo" className="max-h-70! hidden dark:flex"/>
-                <img src="/transparentLogoLight.svg" alt="Logo" className="max-h-70! flex dark:hidden"/>
+                <img src="/logo.svg" alt="Logo" className="max-h-70! hidden dark:flex"/>
+                <img src="/logoLight.svg" alt="Logo" className="max-h-70! flex dark:hidden"/>
             </div>
         </section>
     )
