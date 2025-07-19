@@ -7,7 +7,8 @@ export const AuthBanner = () => {
                 <h3 className={"text-[1.8rem] mb-[1rem] " + title}>Explore the tree of life</h3>
                 <p className="mb-8">Create, share and collaborate in phylogenetic trees with the community</p>
             </div>
-            <img src="/logo.svg" alt="Logo" className="max-h-70!"/>
+            <img src="/transparentLogo.svg" alt="Logo" className="max-h-70! hidden dark:flex"/>
+            <img src="/transparentLogoLight.svg" alt="Logo" className="max-h-70! flex dark:hidden"/>
         </div>
     )
 }
