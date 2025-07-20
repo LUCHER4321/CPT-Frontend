@@ -36,11 +36,12 @@ export const Sidebar = ({
                     href,
                     icon,
                     name
-                }) => <NavItem
+                }, index) => <NavItem
                     href={`/account${href}`}
                     icon={icon}
                     expanded={expanded}
                     current={href === currentPage}
+                    key={index}
                 >
                     {name}
                 </NavItem>)}
