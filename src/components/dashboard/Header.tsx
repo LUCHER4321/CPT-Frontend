@@ -5,22 +5,28 @@ import { SearchInput } from "./SearchInput";
 interface HeaderProps {
     search?: string;
     setSearch?: (s: string) => void;
-    count?: number
+    count?: number;
+    active?: boolean;
+    setActive?: (b: boolean) => void;
 }
 
 export const Header = ({
     search,
     setSearch,
-    count
+    count,
+    active,
+    setActive
 }: HeaderProps) => {
     return (
-        <header className="p-6 flex justify-between items-center w-full shadow-lg">
+        <header className="p-6 flex flex-col sm:flex-row justify-between items-center w-full shadow-lg">
             <h1 className={"block text-[2em]! font-bold " + title}>Welcome back</h1>
-            <div className="flex">
+            <div className="flex flex-row justify-between">
                 <Notifications
-                    className="flex items-center p-2 mr-6"
+                    className="flex items-center p-2! bg-black/0! border-black/0! focus:outline-0! focus-visible:outline-0! mr-6"
                     count={count}
-                />
+                    active={active}
+                    setActive={setActive}
+                ></Notifications>
                 <SearchInput
                     search={search}
                     setSearch={setSearch}
