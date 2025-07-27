@@ -4,13 +4,15 @@ import type { UserResponse } from "../../types"
 interface SideFooterProps {
     user?: UserResponse;
     href?: string;
-    expanded?: boolean
+    expanded?: boolean;
+    className?: string;
 }
 
 export const SideFooter = ({
     user,
     href,
-    expanded
+    expanded,
+    className
 }: SideFooterProps) => {
     const {
         photo,
@@ -19,7 +21,7 @@ export const SideFooter = ({
     } = user ?? {};
     const photoClass = "rounded-full aspect-square size-10 flex justify-center"
     return (
-        <div className="border-t p-4 pb-8">
+        <div className={"border-t p-4 pb-8 " + className}>
             <div className={`flex flex-row ${expanded ? "justify-between" : "justify-center"} items-center space-x-[0.75rem] dark:text-[#D8EDD9] text-[#1B5E20]`}>
                 {photo ? <img src={photo} className={photoClass} alt="Profile"/> : <i className={photoClass + " fas fa-user dark:text-[#D8EDD9] text-[#1B5E20] text-center text-4xl"}/>}
                 {expanded && <div className="flex flex-col">
