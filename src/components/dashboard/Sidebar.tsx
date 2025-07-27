@@ -24,14 +24,15 @@ export const Sidebar = ({
 }: SidebarProps) => {
     return (
         <aside
-            className={`flex flex-col h-screen! justify-between shadow-lg transition-all duration-300 ${expanded ? "w-62.5" : "w-20"}`}
+            className={`flex flex-row sm:flex-col w-full sm:h-screen! justify-between shadow-lg transition-all duration-300 ${expanded ? "sm:w-62.5" : "sm:w-20"}`}
             onMouseEnter={() => setExpanded?.(true)}
             onMouseLeave={() => setExpanded?.(false)}
         >
             <SideHeader
                 expanded={expanded}
+                className="hidden sm:block"
             />
-            <ul className="flex flex-col py-3 h-full">
+            <ul className="flex flex-row sm:flex-col sm:py-3 justify-around w-full sm:w-auto sm:h-full">
                 {items?.map(({
                     href,
                     icon,
@@ -43,12 +44,13 @@ export const Sidebar = ({
                     current={href === currentPage}
                     key={index}
                 >
-                    {name}
+                    <p className="hidden sm:inline">{name}</p>
                 </NavItem>)}
             </ul>
             <SideFooter
                 user={user}
                 expanded={expanded}
+                className="hidden sm:block"
             />
         </aside>
     )
