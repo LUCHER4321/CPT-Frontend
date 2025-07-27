@@ -8,7 +8,7 @@ export const SearchInput = ({
     setSearch
 }: SearchInputProps) => {
     return (
-        <>
+        <div className="flex flex-row">
             <input
                 type="text"
                 placeholder="Search trees..."
@@ -19,6 +19,6 @@ export const SearchInput = ({
             <a href={(search?.length ?? 0) > 0 ? `/trees?search=${search}` : undefined} className="px-4 flex items-center text-[#1B5E20]! dark:text-[#D8EDD9]! dark:bg-[#1B5E20] bg-[#D8EDD9] rounded-r">
                 <i className="fas fa-search"/>
             </a>
-        </>
+        </div>
     )
 };
