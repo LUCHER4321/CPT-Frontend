@@ -35,13 +35,13 @@ export const TreesData = ({
                     href="/account/collabs"
                 />
             </> : <>
-                <div/>
+                <div className="hidden sm:block"/>
                 <Card
                     fa="fa-plus"
                     description="New Tree"
                     href="/account/trees"
                 />
-                <div/>
+                <div className="hidden sm:block"/>
             </>}
         </>
     )
