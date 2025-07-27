@@ -5,6 +5,11 @@ export const dashboardItems = [
         name: "Home"
     },
     {
+        href: "/follows",
+        icon: "fa-user-friends",
+        name: "Follows"
+    },
+    {
         href: "/trees",
         icon: "fa-project-diagram",
         name: "My Trees"
