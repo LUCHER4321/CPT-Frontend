@@ -151,6 +151,11 @@ export interface PhTreeRequest {
         collaborators?: string[];
     }, PhTreeResponse>;
     myTrees: RequestFunction<SearchProps, PhTreeResponse[]>;
+    myTreesCount: RequestFunction<{}, {
+        total: number;
+        myTrees: number;
+        collabs: number;
+    }>;
     updateTree: RequestFunction<{
         id: string;
         name?: string;
@@ -291,9 +296,9 @@ export interface NotificationResponse {
 
 export interface NotificationRequest {
     getNotifications: RequestFunction<Partial<{
-        from: string;
-        to: string;
-        limit: string;
+        from: Date;
+        to: Date;
+        limit: number;
     }>, NotificationResponse[]>;
     seeNotification: RequestFunction<{
         id: string;
