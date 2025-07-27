@@ -32,7 +32,7 @@ export const Dashboard = () => {
                 }
             });
             getNotifications({
-                from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365.25), // 1 YO
+                from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365.25),
                 to: new Date(),
                 limit: 10
             }).then(n => {
