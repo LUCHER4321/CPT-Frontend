@@ -14,13 +14,13 @@ export const TreeCard = ({
             <h3 className={"text-start px-4 pt-4 text-[1.17em] " + title}>{tree.name}</h3>
             <p className="text-start px-4 ">By: @{tree.username}</p>
             <div className="flex justify-between flex-row w-full p-4">
-                <div className="flex flex-row">
+                <div className="flex flex-row items-center space-x-1">
                     <i className="fas fa-heart"/>
-                    {tree.likes}
+                    <p>{tree.likes}</p>
                 </div>
-                <div className="flex flex-row">
+                <div className="flex flex-row items-center space-x-1">
                     <i className="fas fa-comment"/>
-                    {tree.comments}
+                    <p>{tree.comments}</p>
                 </div>
             </div>
         </div>
