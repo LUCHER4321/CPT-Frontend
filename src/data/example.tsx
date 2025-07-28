@@ -34,7 +34,29 @@ export const exampleTrees: PhTreeResponse[] = [
         likes: 56,
         comments: 7,
         views: 300
-    }
+    },
+    {
+        id: "3",
+        userId: "0",
+        name: "Apes",
+        isPublic: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        likes: 0,
+        comments: 0,
+        views: 0
+    },
+    {
+        id: "4",
+        userId: "0",
+        name: "Pigs",
+        isPublic: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        likes: 0,
+        comments: 0,
+        views: 0
+    },
 ];
 
 export const exampleUsers: UserResponse[] = [
