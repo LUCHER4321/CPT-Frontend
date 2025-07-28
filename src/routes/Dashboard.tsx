@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { dashboardItems } from "../data/dashboardItems";
 import { Sidebar } from "../components/dashboard/Sidebar";
-import { exampleUsers } from "../data/example";
+import { exampleTrees, exampleUsers } from "../data/example";
 import { getMe } from "../api/user";
 import { Header } from "../components/dashboard/Header";
 import { getMyTrees, myTreesCount } from "../api/phTree";
@@ -39,7 +39,7 @@ export const Dashboard = () => {
                 limit: 3,
                 criteria: TreeCriteria.UPDATED_AT,
                 order: Order.DESC
-            }).then(t => setLastTrees(t ?? []));
+            }).then(t => setLastTrees(t ?? exampleTrees.filter(({userId}) => userId === exampleUsers[0].id).slice(0, 3)));
             getNotifications({
                 from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365.25),
                 to: new Date()
@@ -70,7 +70,7 @@ export const Dashboard = () => {
                     active={active}
                     setActive={setActive}
                 />
-                <div className="w-full h-full content-center grid grid-cols-1 sm:grid-cols-3 gap-5 sm:px-10 sm:gap-10 overflow-y-scroll">
+                <div className="w-full h-full grid grid-cols-1 sm:grid-cols-3 gap-5 p-10 sm:gap-10 overflow-y-scroll">
                     <TreesData
                         trees={trees}
                         myTrees={myTrees}
