@@ -17,7 +17,9 @@ export const LastTrees = ({
                 name,
                 description,
                 image,
-                isPublic
+                isPublic,
+                likes,
+                comments
             }, index) => (
                 <Card
                     key={index}
@@ -27,7 +29,17 @@ export const LastTrees = ({
                     href={`/account/trees/${id}`}
                     image={image}
                 >
-                    <i className={"fas " + isPublic ? "fa-globe" : "fa-lock"}/>
+                    <i className={"absolute text-[1.5rem] right-[0.5rem] top-[0.5rem] fas " + title + " " + (isPublic ? "fa-globe" : "fa-lock")}/>
+                    {isPublic && <div className="flex flex-row w-full justify-between">
+                        <div className={"flex flex-row items-center space-x-1 " + title}>
+                            <i className="fas fa-heart"/>
+                            <p>{likes}</p>
+                        </div>
+                        <div className={"flex flex-row items-center space-x-1 " + title}>
+                            <i className="fas fa-comment"/>
+                            <p>{comments}</p>
+                        </div>
+                    </div>}
                 </Card>
             ))}
         </>
