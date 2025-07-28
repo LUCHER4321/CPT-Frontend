@@ -10,7 +10,7 @@ export const dashboardItems = [
         name: "Follows"
     },
     {
-        href: "/trees",
+        href: "/trees/me",
         icon: "fa-project-diagram",
         name: "My Trees"
     },
