@@ -246,7 +246,6 @@ export interface LikeRequest {
 }
 
 export interface SpeciesResponse extends Omit<SpeciesJSON, "descendants"> {
-    id: string;
     treeId: string;
     ancestorId?: string;
     descendants?: SpeciesResponse[];
