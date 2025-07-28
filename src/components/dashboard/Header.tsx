@@ -26,7 +26,9 @@ export const Header = ({
                     count={count}
                     active={active}
                     setActive={setActive}
-                ></Notifications>
+                >
+                    <button className="bg-black/0! fixed top-0 bottom-0 left-0 right-0 rounded-none! border-black/0! focus:outline-0! focus-visible:outline-0!" onClick={() => setActive?.(false)}/>
+                </Notifications>
                 <SearchInput
                     search={search}
                     setSearch={setSearch}
