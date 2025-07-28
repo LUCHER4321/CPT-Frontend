@@ -9,7 +9,7 @@ const phTreeRequest: PhTreeRequest = {
         route: [phTree],
         body
     }),
-    myTrees: async (queries) => await fetchConfig({
+    getMyTrees: async (queries) => await fetchConfig({
         route: [phTree, "me"],
         queries
     }),
@@ -46,7 +46,7 @@ const phTreeRequest: PhTreeRequest = {
 
 export const {
     createTree,
-    myTrees,
+    getMyTrees,
     myTreesCount,
     updateTree,
     deleteTree,
