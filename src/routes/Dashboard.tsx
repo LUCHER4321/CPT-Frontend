@@ -29,21 +29,16 @@ export const Dashboard = () => {
         getMe({}).then(u => {
             setUser(u ?? exampleUsers[0]);
             myTreesCount({}).then(t => {
-                if(t) {
-                    setTrees(t.total);
-                    setMyTrees(t.myTrees);
-                    setCollabs(t.collabs);
-                }
+                setTrees(t?.total ?? exampleTrees.filter(tr => tr.userId === exampleUsers[0].id || tr.collaborators?.includes(exampleUsers[0].id)).length);
+                setMyTrees(t?.myTrees ?? exampleTrees.filter(tr => tr.userId === exampleUsers[0].id).length);
+                setCollabs(t?.collabs ?? exampleTrees.filter(tr => tr.collaborators?.includes(exampleUsers[0].id)).length);
             });
             getMyTrees({
                 limit: 3,
                 criteria: TreeCriteria.UPDATED_AT,
                 order: Order.DESC
             }).then(t => setLastTrees(t ?? exampleTrees.filter(({userId}) => userId === exampleUsers[0].id).slice(0, 3)));
-            getNotifications({
-                from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365.25),
-                to: new Date()
-            }).then(n => {
+            getNotifications({}).then(n => {
                 setNotifications(n ?? []);
             });
             setNotificationWS(new NotificationWS({
@@ -66,7 +61,7 @@ export const Dashboard = () => {
                 <Header
                     search={search}
                     setSearch={setSearch}
-                    count={notifications.map(n => !n.seen).length}
+                    count={notifications.filter(({seen}) => !seen).length}
                     active={active}
                     setActive={setActive}
                 />
