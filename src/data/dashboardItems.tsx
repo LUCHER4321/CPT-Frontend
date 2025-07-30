@@ -20,7 +20,7 @@ export const dashboardItems = [
         name: "Liked Trees"
     },
     {
-        href: "/collabs",
+        href: "/trees/collabs",
         icon: "fa-users",
         name: "Collaborations"
     },
