@@ -23,7 +23,8 @@ export const exampleTrees: PhTreeResponse[] = [
         updatedAt: new Date(),
         likes: 89,
         comments: 12,
-        views: 400
+        views: 400,
+        collaborators: ["0"]
     },
     {
         id: "2",
