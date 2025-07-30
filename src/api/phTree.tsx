@@ -40,6 +40,7 @@ const phTreeRequest: PhTreeRequest = {
         route: [phTree, id]
     }),
     viewTree: async ({ id }) => await fetchConfig({
+        method: "POST",
         route: [phTree, id, "view"]
     })
 }
