@@ -1,4 +1,4 @@
-import { card, title as titleClass } from "../../data/classNames";
+import { card, title as titleClass, unborder } from "../../data/classNames";
 
 interface CardProps {
     fa?: string;
@@ -31,7 +31,7 @@ export const Card = ({
         <>
             {href ? <a className={"p-[2rem] relative " + card} href={href} onClick={onClick}>
                 {inside}
-            </a> : <button className={"p-[2rem] relative border-black/0! focus:outline-0! focus-visible:outline-0! " + card} onClick={onClick}>
+            </a> : <button className={"p-[2rem] relative " + card + " " + unborder} onClick={onClick}>
                 {inside}
             </button>}
         </>
