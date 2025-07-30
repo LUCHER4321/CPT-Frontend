@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import { title } from "../../data/classNames"
 import { Card } from "../home/Card"
+import { createTree } from "../../api/phTree";
 
 interface TreesDataProps {
     trees?: number;
@@ -12,6 +14,7 @@ export const TreesData = ({
     myTrees,
     collabs
 }: TreesDataProps) => {
+    const history = useNavigate();
     return(
         <>
             <h2 className={"col-span-full text-[2rem] mb-2 " + title}>Trees Data</h2>
@@ -39,7 +42,12 @@ export const TreesData = ({
                 <Card
                     fa="fa-plus"
                     description="New Tree"
-                    href="/account/trees/new"
+                    onClick={() => createTree({
+                        name: "Untitled Phylogenetic Tree",
+                        isPublic: false
+                    }).then(t => {
+                        if(t) history(`/account/tree${t.id}`);
+                    })}
                 />
                 <div className="hidden sm:block"/>
             </>}
