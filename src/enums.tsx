@@ -50,3 +50,9 @@ export enum Order {
     ASC = "asc",
     DESC = "desc"
 }
+
+export enum TreeProp {
+    TREE = "tree",
+    NODE = "node",
+    COLLABORATORS = "collaborators"
+}
