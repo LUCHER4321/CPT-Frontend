@@ -19,27 +19,27 @@ export const TreesData = ({
                 <Card
                     fa="fa-project-diagram"
                     title={trees?.toString()}
-                    description={trees ? "Total Trees" : "New Tree"}
+                    description="Total Trees"
                     href="/account/trees"
                 />
                 <Card
                     fa="fa-user"
                     title={myTrees?.toString()}
-                    description={myTrees ? "My Trees" : "New Tree"}
+                    description="My Trees"
                     href="/account/trees/me"
                 />
-                <Card
+                {(collabs ?? 0) > 0 ? <Card
                     fa="fa-users"
                     title={collabs?.toString()}
-                    description={collabs ? "Collaborations" : "New Tree"}
+                    description="Collaborations"
                     href="/account/collabs"
-                />
+                /> : <div className="hidden sm:block"/>}
             </> : <>
                 <div className="hidden sm:block"/>
                 <Card
                     fa="fa-plus"
                     description="New Tree"
-                    href="/account/trees"
+                    href="/account/trees/new"
                 />
                 <div className="hidden sm:block"/>
             </>}
