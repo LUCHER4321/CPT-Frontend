@@ -1,8 +1,8 @@
-import { login } from "../../api/user";
+import { login, register } from "../../api/user";
 import { aText, filledButton } from "../../data/classNames"
 import { plans } from "../../data/prices";
 import { Billing, Plan } from "../../enums";
-import type { Email } from "../../types";
+import type { Email, UserResponse } from "../../types";
 import { AuthField } from "./AuthField"
 import { AuthHeader } from "./AuthHeader";
 
@@ -15,6 +15,7 @@ interface LoginFormProps {
     setVisiblePassword?: (b: boolean) => void;
     className?: string;
     setRegister?: (b: boolean) => void;
+    goToAccount?: (u?: UserResponse) => void;
 }
 
 export const LoginForm = ({
@@ -25,7 +26,8 @@ export const LoginForm = ({
     visiblePassword,
     setVisiblePassword,
     className,
-    setRegister
+    setRegister,
+    goToAccount
 }: LoginFormProps) => {
     return (
         <>
@@ -57,7 +59,7 @@ export const LoginForm = ({
                         <a className={aText}>Forgot your password?</a>
                     </div>
                 </AuthField>
-                <button className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""})}>Log In</button>
+                <button type="button" className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""}).then(u => goToAccount?.(u))}>Log In</button>
                 <div className="w-full text-center mt-[1.5rem]">
                     <p>No account? <a className={aText} onClick={() => setRegister?.(true)}>Register</a></p>
                 </div>
@@ -85,6 +87,7 @@ interface RegisterFormProps {
     setPlan?: (p: Plan) => void;
     billing?: Billing;
     setBilling?: (b: Billing) => void;
+    goToAccount?: (u?: UserResponse) => void;
 }
 
 export const RegisterForm = ({
@@ -105,7 +108,8 @@ export const RegisterForm = ({
     plan,
     setPlan,
     billing,
-    setBilling
+    setBilling,
+    goToAccount
 }: RegisterFormProps) => {
     return (
         <>
@@ -178,7 +182,11 @@ export const RegisterForm = ({
                     onChange={e => setAccept?.(e.target.checked)}
                     className="mr-1 cursor-pointer"
                 /> Accept <a className={aText}>Terms & Conditions</a></p>
-                <button className={"w-full " + filledButton}>Register</button>
+                <button type="button" className={"w-full " + filledButton} onClick={() => register({
+                    email: email as Email,
+                    password: password!,
+                    username: username!
+                }).then(u => goToAccount?.(u))}>Register</button>
                 <div className="w-full text-center mt-[1.5rem] pb-[1.5rem]">
                     <p>Already have an account? <a className={aText} onClick={() => setRegister?.(false)}>Log In</a></p>
                 </div>
