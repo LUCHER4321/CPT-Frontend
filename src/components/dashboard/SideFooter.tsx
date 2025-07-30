@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../api/user";
 import { plans } from "../../data/prices";
 import type { UserResponse } from "../../types"
+import { nullableInput } from "../../utils/nullableInput";
+import { photoClass } from "../../data/classNames";
 
 interface SideFooterProps {
     user?: UserResponse;
@@ -19,7 +23,7 @@ export const SideFooter = ({
         username,
         plan
     } = user ?? {};
-    const photoClass = "rounded-full aspect-square size-10 flex justify-center"
+    const history = useNavigate();
     return (
         <div className={"border-t p-4 pb-8 " + className}>
             <div className={`flex flex-row ${expanded ? "justify-between" : "justify-center"} items-center space-x-[0.75rem] dark:text-[#D8EDD9] text-[#1B5E20]`}>
@@ -28,9 +32,9 @@ export const SideFooter = ({
                     {username && <p className="block font-medium line-clamp-1">@{username}</p>}
                     {plan && <p className="block text-xs line-clamp-1">{plans.get(plan)?.name} Plan</p>}
                 </div>}
-                {expanded && <a href={href} className="dark:text-[#D8EDD9]! text-[#1B5E20]!">
+                {expanded && <button onClick={() => logout({}).then(() => nullableInput(href, hr => history(hr)))} className="dark:text-[#D8EDD9]! text-[#1B5E20]! flex justify-end p-0! bg-black/0! border-black/0! focus:outline-0! focus-visible:outline-0!">
                     <i className="fas fa-sign-out-alt"/>
-                </a>}
+                </button>}
             </div>
         </div>
     )
