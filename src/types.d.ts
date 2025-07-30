@@ -150,7 +150,7 @@ export interface PhTreeRequest {
         tags?: string[];
         collaborators?: string[];
     }, PhTreeResponse>;
-    getMyTrees: RequestFunction<SearchProps, PhTreeResponse[]>;
+    getMyTrees: RequestFunction<SearchProps & { owner?: boolean }, PhTreeResponse[]>;
     myTreesCount: RequestFunction<{}, {
         total: number;
         myTrees: number;
