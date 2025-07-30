@@ -20,7 +20,7 @@ export const BillingToggle = ({
                 id={"monthly"}
                 checked={monthly}
                 onChange={setMonthly}
-                className={"w-15 " + (monthly ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
+                className={"w-15 h-7.5 " + (monthly ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
                 spanClassName="bg-white"
             />
             <span className={monthly ? selectedBilling : unselectedBilling}>
