@@ -1,0 +1,33 @@
+import { unborder } from "../../../data/classNames";
+import { treeProps } from "../../../data/treeProps";
+import { TreeProp } from "../../../enums";
+
+interface TreePropertiesProps {
+    children?: any;
+    prop?: TreeProp;
+    setProp?: (p: TreeProp) => void;
+}
+
+export const TreeProperties = ({
+    children,
+    prop,
+    setProp
+}: TreePropertiesProps) => {
+    return (
+        <div className="min-w-88 h-full m-2 rounded shadow-lg flex flex-col overflow-hidden">
+            <div className="grid grid-cols-3 border-b">
+                {[...treeProps.entries()].map(([k, { icon, name }], index) => (
+                    <button
+                        className={`flex flex-col space-y-2.5 rounded-none! bg-black/0! transition-all! text-xs! duration-300 ${unborder} ${k === prop ? "text-[#1B5E20]! dark:text-[#D8EDD9]! border-b-2! border-[#1B5E20]! dark:border-[#D8EDD9]!" : ""}`}
+                        key={index}
+                        onClick={() => setProp?.(k)}
+                    >
+                        <i className={"text-lg fas " + icon}/>
+                        <span>{name}</span>
+                    </button>
+                ))}
+            </div>
+            {children}
+        </div>
+    )
+};
