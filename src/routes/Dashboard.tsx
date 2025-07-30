@@ -13,6 +13,8 @@ import { TreesData } from "../components/dashboard/TreesData";
 import { Order, TreeCriteria } from "../enums";
 import { LastTrees } from "../components/dashboard/LastTrees";
 import { title } from "../data/classNames";
+import { DESIGN_MODE } from "../config";
+import { useNavigate } from "react-router-dom";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
@@ -25,9 +27,11 @@ export const Dashboard = () => {
     const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [active, setActive] = useState(false);
     const [lastTrees, setLastTrees] = useState<PhTreeResponse[]>([]);
+    const history = useNavigate();
     useEffect(() => {
         document.title = "Life Tree | Dashboard";
         getMe({}).then(u => {
+            if(!DESIGN_MODE && !u) history("/");
             setUser(u ?? exampleUsers[0]);
             myTreesCount({}).then(t => {
                 setTrees(t?.total ?? exampleTrees.filter(tr => tr.userId === exampleUsers[0].id || tr.collaborators?.includes(exampleUsers[0].id)).length);
