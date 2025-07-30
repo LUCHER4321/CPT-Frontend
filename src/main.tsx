@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
@@ -8,12 +7,12 @@ import { Pricing } from './routes/Pricing.tsx'
 import { Billing, Plan } from './enums.tsx'
 import { isEnum } from './utils/isEnum.tsx'
 import { Dashboard } from './routes/Dashboard.tsx'
+import { TreeEditor } from './routes/account/TreeEditor.tsx'
 
 const plan = new URLSearchParams(window.location.search).get("plan") ?? "";
 const billing = new URLSearchParams(window.location.search).get("billing") ?? "";
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route index element={<App/>}/>
@@ -25,8 +24,10 @@ createRoot(document.getElementById('root')!).render(
         <Route path="pricing" element={<Pricing/>}/>
         <Route path="account">
           <Route index element={<Dashboard/>}/>
+          <Route path="trees">
+            <Route path=":id" element={<TreeEditor/>}/>
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
-  </StrictMode>,
 )
