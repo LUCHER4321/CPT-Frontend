@@ -4,9 +4,13 @@ import { fetchConfig } from "../utils/forAPI";
 const notification = "notification";
 
 const notificationRequest: NotificationRequest = {
-    getNotifications: async (queries) => await fetchConfig({
+    getNotifications: async ({ from, to, ...q }) => await fetchConfig({
         route: [notification],
-        queries
+        queries: {
+            ...from ? { from: from.toISOString() } : {},
+            ...to ? { to: to.toISOString() } : {},
+            ...q
+        }
     }),
     seeNotification: async ({ id }) => await fetchConfig({
         method: "PATCH",
