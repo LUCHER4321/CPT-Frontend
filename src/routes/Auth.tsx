@@ -3,6 +3,7 @@ import { LoginForm, RegisterForm } from "../components/auth/AuthForm";
 import { AuthBanner } from "../components/auth/AuthBanner";
 import { HomeNavBar } from "../components/home/HomeNavBar";
 import { Billing, Plan } from "../enums";
+import { useNavigate } from "react-router-dom";
 
 interface AuthProps {
     initialRegister?: boolean;
@@ -29,6 +30,7 @@ export const Auth = ({
     const [search, setSearch] = useState("");
     const [plan, setPlan] = useState(initialPlan);
     const [billing, setBilling] = useState(initialBilling);
+    const history = useNavigate();
     useEffect(() => {
         document.title = `Life Tree | ${register ? "Register" : "Log In"}`;
     }, [register]);
@@ -51,6 +53,9 @@ export const Auth = ({
                         setVisiblePassword={setVisiblePassword}
                         className={register ? "hidden" : ""}
                         setRegister={setRegister}
+                        goToAccount={(u) => {
+                            if(u) return history("/account");
+                        }}
                     />
                     <RegisterForm
                         username={username}
@@ -71,6 +76,9 @@ export const Auth = ({
                         setPlan={setPlan}
                         billing={billing}
                         setBilling={setBilling}
+                        goToAccount={(u) => {
+                            if(u) return history("/account");
+                        }}
                     />
                 </div>
                 <AuthBanner/>
