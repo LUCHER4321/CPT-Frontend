@@ -17,6 +17,7 @@ const phTreeRequest: PhTreeRequest = {
         route: [phTree, "me", "total"]
     }),
     updateTree: async ({ id, ...body }) => await fetchConfig({
+        method: "PATCH",
         route: [phTree, id],
         body
     }),
