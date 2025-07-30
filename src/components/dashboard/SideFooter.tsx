@@ -3,7 +3,7 @@ import { logout } from "../../api/user";
 import { plans } from "../../data/prices";
 import type { UserResponse } from "../../types"
 import { nullableInput } from "../../utils/nullableInput";
-import { photoClass } from "../../data/classNames";
+import { photoClass, unborder } from "../../data/classNames";
 
 interface SideFooterProps {
     user?: UserResponse;
@@ -32,7 +32,7 @@ export const SideFooter = ({
                     {username && <p className="block font-medium line-clamp-1">@{username}</p>}
                     {plan && <p className="block text-xs line-clamp-1">{plans.get(plan)?.name} Plan</p>}
                 </div>}
-                {expanded && <button onClick={() => logout({}).then(() => nullableInput(href, hr => history(hr)))} className="dark:text-[#D8EDD9]! text-[#1B5E20]! flex justify-end p-0! bg-black/0! border-black/0! focus:outline-0! focus-visible:outline-0!">
+                {expanded && <button onClick={() => logout({}).then(() => nullableInput(href, hr => history(hr)))} className={"dark:text-[#D8EDD9]! text-[#1B5E20]! flex justify-end p-0! bg-black/0! " + unborder}>
                     <i className="fas fa-sign-out-alt"/>
                 </button>}
             </div>
