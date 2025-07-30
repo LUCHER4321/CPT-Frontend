@@ -51,6 +51,7 @@ export const Sidebar = ({
                 user={user}
                 expanded={expanded}
                 className="hidden sm:block"
+                href="/auth"
             />
         </aside>
     )
