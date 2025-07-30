@@ -27,17 +27,17 @@ export const fetchConfig = async <T,>({
 }: FetchConfigProps<T>) => {
     try {
         if(DESIGN_MODE) throw new Error("Design Mode");
-        const {
-            ok,
-            json
-        } = await fetch(
+        const result = await fetch(
             `${url(...route)}${Object.keys(queries).map(k => `&${k}=${queries[k]}`).join("")}`,
-            initialConfig(method, body)
+            {
+                ...initialConfig(method, body),
+                credentials: "include"
+            }
         ).catch(() => {
             throw new Error("Connection Failed");
         });
-        if(!ok) throw new Error("Connection Failed");
-        return await json();
+        if(!result.ok) throw new Error("Connection Failed");
+        return await result.json();
     } catch {
         return undefined;
     }
@@ -68,7 +68,8 @@ export const fetchImage = async ({
         } = result;
         if(!ok) throw new Error("Connection Failed");
         return await json();
-    } catch {
+    } catch(e: any) {
+        alert((e as Error).message);
         return undefined;
     }
 };
