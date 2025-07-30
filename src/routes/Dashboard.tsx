@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { dashboardItems } from "../data/dashboardItems";
 import { Sidebar } from "../components/dashboard/Sidebar";
 import { exampleTrees, exampleUsers } from "../data/example";
-import { getMe } from "../api/user";
+import { getMe, token } from "../api/user";
 import { Header } from "../components/dashboard/Header";
 import { getMyTrees, myTreesCount } from "../api/phTree";
 import { getNotifications } from "../api/notification";
@@ -12,6 +12,7 @@ import { socket } from "../api/socket";
 import { TreesData } from "../components/dashboard/TreesData";
 import { Order, TreeCriteria } from "../enums";
 import { LastTrees } from "../components/dashboard/LastTrees";
+import { title } from "../data/classNames";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
@@ -45,8 +46,9 @@ export const Dashboard = () => {
                 socket,
                 response: nr => setNotifications(prev => prev.concat([nr])),
                 userId: u?.id ?? ""
-            }))
+            }));
         });
+        token({ expiresIn: "7d" });
     }, []);
     return (
         <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start">
@@ -64,7 +66,9 @@ export const Dashboard = () => {
                     count={notifications.filter(({seen}) => !seen).length}
                     active={active}
                     setActive={setActive}
-                />
+                >
+                    <h1 className={"block text-[2em]! font-bold " + title}>Welcome back, {user?.username}</h1>
+                </Header>
                 <div className="w-full h-full grid grid-cols-1 sm:grid-cols-3 gap-5 p-10 sm:gap-10 overflow-y-scroll">
                     <TreesData
                         trees={trees}
