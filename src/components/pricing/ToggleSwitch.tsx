@@ -16,7 +16,7 @@ export const ToggleSwitch = ({
     spanClassName
 }: ToggleSwitchProps) => {
     return (
-        <label htmlFor={id} className={"aspect-2/1 rounded-full relative cursor-pointer transition-all duration-500 " + className}>
+        <label htmlFor={id} className={"rounded-full relative cursor-pointer transition-all duration-500 " + className}>
             <input
                 type="checkbox"
                 id={id}
