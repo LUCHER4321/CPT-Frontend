@@ -14,7 +14,7 @@ const phTreeRequest: PhTreeRequest = {
         queries
     }),
     myTreesCount: async () => await fetchConfig({
-        route: [phTree, "me", "count"]
+        route: [phTree, "me", "total"]
     }),
     updateTree: async ({ id, ...body }) => await fetchConfig({
         route: [phTree, id],
