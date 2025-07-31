@@ -8,6 +8,8 @@ interface IconInputProps<T> {
     className?: string;
     value?: string;
     setValue?: (s: string) => void;
+    checked?: boolean;
+    setChecked?: (b: boolean) => void;
     name?: string;
     icon?: string;
     onClick?: () => void;
@@ -15,6 +17,7 @@ interface IconInputProps<T> {
     selected?: T;
     options?: T[];
     setSelected?: (s: T) => void;
+    textArea?: boolean;
 }
 
 export const IconInput = <T,>({
@@ -25,25 +28,40 @@ export const IconInput = <T,>({
     className,
     value,
     setValue,
+    checked,
+    setChecked,
     name,
     icon,
     onClick,
     buttonClassName,
     selected,
     options,
-    setSelected
+    setSelected,
+    textArea = false
 }: IconInputProps<T>) => {
     return (
         <div className={setIcon ? "relative" : "flex flex-row"}>
-            {setValue && <input
+            {setValue || setChecked ? (textArea ? <textarea
+                id={id}
+                placeholder={placeholder}
+                className={className}
+                value={value}
+                onChange={e => setValue?.(e.target.value)}
+                name={name?.toLowerCase().replace(" ", "-")}
+            /> : <input
                 type={type}
                 id={id}
                 placeholder={placeholder}
                 className={className}
                 value={value}
-                onChange={e => setValue(e.target.value)}
+                checked={checked}
+                onChange={e => {
+                    const { value, checked } = e.target;
+                    setValue?.(value);
+                    setChecked?.(checked)
+                }}
                 name={name?.toLowerCase().replace(" ", "-")}
-            />}
+            />): undefined}
             {setSelected && <select
                 value={selected as string}
                 onChange={e => setSelected(e.target.value as T)}
@@ -62,7 +80,7 @@ export const IconInput = <T,>({
             {setIcon &&
                 <button
                     type="button"
-                    className={"bg-black/0! p-0! absolute right-[1rem] flex items-center top-0 bottom-0 border-0! outline-0! " + buttonClassName}
+                    className={`bg-black/0! p-0! absolute right-[1rem] flex flex-row items-center top-0 bottom-0 border-0! outline-0! ${onClick ? "" : "cursor-not-allowed!"} ${buttonClassName}`}
                     onClick={onClick}>
                     <i className={"fas " + icon}/>
                 </button>}
