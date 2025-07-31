@@ -8,6 +8,8 @@ interface AuthFieldProps<T> {
     placeholder?: string;
     value?: string;
     setValue?: (s: string) => void;
+    checked?: boolean;
+    setChecked?: (b: boolean) => void;
     visiblePassword?: boolean;
     setVisiblePassword?: (b: boolean) => void;
     children?: any;
@@ -15,6 +17,7 @@ interface AuthFieldProps<T> {
     selected?: T;
     options?: T[];
     setSelected?: (s: T) => void;
+    textArea?: boolean;
 }
 
 export const AuthField = <T,>({
@@ -24,13 +27,16 @@ export const AuthField = <T,>({
     placeholder,
     value,
     setValue,
+    checked,
+    setChecked,
     visiblePassword,
     setVisiblePassword,
     children,
     className,
     selected,
     options,
-    setSelected
+    setSelected,
+    textArea
 }: AuthFieldProps<T>) => {
     return (
         <div className={"flex flex-col mb-6 " + className}>
@@ -43,12 +49,15 @@ export const AuthField = <T,>({
                 className="pl-[1rem] pr-[2.25rem] py-[0.8rem] border rounded w-full"
                 value={value}
                 setValue={setValue}
+                checked={checked}
+                setChecked={setChecked}
                 name={name}
                 onClick={() => setVisiblePassword?.(!visiblePassword)}
                 icon={visiblePassword ? "fa-eye" : "fa-eye-slash"}
                 selected={selected}
                 options={options}
                 setSelected={setSelected}
+                textArea={textArea}
             />
             {children}
         </div>
