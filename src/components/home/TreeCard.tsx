@@ -2,19 +2,13 @@ import { card, title } from "../../data/classNames";
 import type { PhTreeResponse } from "../../types";
 
 interface TreeCardProps {
-    tree: PhTreeResponse & { username: string; };
+    tree?: PhTreeResponse & { username: string; };
 }
 
 export const TreeCard = ({
-    tree: {
-        id,
-        image,
-        name,
-        username,
-        likes,
-        comments
-    }
+    tree
 }: TreeCardProps) => {
+    const { id, image, name, username, likes, comments } = tree ?? {};
     return (
         <a className={card + " " + title} href={`/trees/${id}`}>
             <img src={image}/>
