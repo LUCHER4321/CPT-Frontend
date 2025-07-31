@@ -56,3 +56,11 @@ export enum TreeProp {
     NODE = "node",
     COLLABORATORS = "collaborators"
 }
+
+export enum TimeUnit {
+    Y = 1,
+    KY = 1e3,
+    MY = 1e6,
+    BY = 1e9,
+    TY = 1e12
+}
