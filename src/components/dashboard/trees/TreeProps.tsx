@@ -5,6 +5,7 @@ import { TreeChange } from "../../../enums";
 import type { PhTreeResponse } from "../../../types"
 import { AuthField } from "../../auth/AuthField";
 import { IconInput } from "../../IconInput";
+import { ImageProp } from "./ImageProp";
 
 interface TreePropsProps {
     tree?: PhTreeResponse;
@@ -32,7 +33,7 @@ export const TreeProps = ({
             <AuthField
                 name="Tree's Name"
                 type="text"
-                placeholder=""
+                placeholder="Name this phylogenetic tree..."
                 value={tree?.name}
                 setValue={n => {
                     if(tree) {
@@ -51,7 +52,7 @@ export const TreeProps = ({
             />
             <AuthField
                 name="Description"
-                placeholder="Describe this phylogenetic tree"
+                placeholder="Describe this phylogenetic tree..."
                 value={tree?.description}
                 setValue={d => {
                     if(tree) {
@@ -139,15 +140,13 @@ export const TreeProps = ({
                     </div>
                 </div>
             </div>
-            <div className="mb-5 flex flex-col">
-                <p className="font-bold mb-2">Tree's Image</p>
-                {tree?.image && <img src={tree.image} className="aspect-square size-80 object-contain my-5" />}
-                <div { ...getRootProps?.({ className: `border border-dashed rounded transition-all duration-300 ${isDragActive ? "text-[#D8EDD9] dark:text-[#1B5E20] bg-[#1B5E20] dark:bg-[#D8EDD9]" : ""} hover:text-[#D8EDD9] dark:hover:text-[#1B5E20] hover:bg-[#1B5E20] dark:hover:bg-[#D8EDD9] text-xl justify-center p-10 cursor-pointer flex flex-row space-x-2 items-center` }) }>
-                    <input { ...getInputProps?.() }/>
-                    <i className="fas fa-upload"/>
-                    <p>{tree?.image ? "Update Image" : "Upload Image"}</p>
-                </div>
-            </div>
+            <ImageProp
+                title="Tree's Image"
+                image={tree?.image}
+                getRootProps={getRootProps}
+                getInputProps={getInputProps}
+                isDragActive={isDragActive}
+            />
         </>
     )
 };
