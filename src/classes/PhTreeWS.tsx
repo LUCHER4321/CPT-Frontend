@@ -20,12 +20,6 @@ type PhTreeChange = Omit<
     >, "views"
 >;
 
-type DataProps = {
-    change: TreeChange;
-    species?: SpeciesMongo;
-    phTree?: PhTreeChange;
-};
-
 interface PhTreeEmit {
     type?: TreeChange;
     species?: SpeciesMongo;
@@ -34,7 +28,7 @@ interface PhTreeEmit {
 
 interface PhTreeWSProps {
     socket: Socket;
-    response: (ph: DataProps) => void;
+    response: (ph: PhTreeEmit) => void;
     treeId: string;
 }
 
