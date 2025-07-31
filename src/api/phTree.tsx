@@ -26,12 +26,12 @@ const phTreeRequest: PhTreeRequest = {
         route: [phTree, id]
     }),
     imageTree: async ({ id, image }) => await fetchImage({
-        route: [phTree, id],
+        route: [phTree, id, "image"],
         image
     }),
     deleteImageTree: async ({ id }) => await fetchConfig({
         method: "DELETE",
-        route: [phTree, id]
+        route: [phTree, id, "image"]
     }),
     searchTrees: async (queries) => await fetchConfig({
         route: [phTree],
