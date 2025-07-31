@@ -11,15 +11,20 @@ import { dashboardItems } from "../../data/dashboardItems";
 import { NotificationWS } from "../../classes/NotificationWS";
 import { socket } from "../../api/socket";
 import { PhTreeWS } from "../../classes/PhTreeWS";
-import { TreeChange, TreeProp } from "../../enums";
+import { TimeUnit, TreeChange, TreeProp } from "../../enums";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
 import { TreeProperties } from "../../components/dashboard/trees/TreeProperties";
 import { TreeProps } from "../../components/dashboard/trees/TreeProps";
+import { NodeProps } from "../../components/dashboard/trees/NodeProps";
+import type { Species } from "chrono-phylo-tree";
+import { speciesImage } from "../../api/species";
 import { useDropzone } from "react-dropzone";
 
 export const TreeEditor = () => {
     const [expanded, setExpanded] = useState(false);
     const [tree, setTree] = useState<PhTreeResponse | undefined>(undefined);
+    const [species, setSpecies] = useState<Species | undefined>(undefined);
+    const [unit, setUnit] = useState(TimeUnit.Y);
     const [user, setUser] = useState<UserResponse | undefined>(undefined);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [search, setSearch] = useState("");
@@ -31,16 +36,21 @@ export const TreeEditor = () => {
     const [tag, setTag] = useState("");
     const { id } = useParams();
     const history = useNavigate();
+
     const onDrop = useCallback((files?: File[]) => {
         const [image] = files ?? [undefined];
-        if(id && image){
-            imageTree({ id, image }).then(t => {
-                if(t) {
-                    setTree(t);
-                }
-            });
+        if(id && image) switch(prop) {
+            case TreeProp.TREE: imageTree({ id, image }).then(t => {
+                    if(t) setTree(t);
+                });
+                break;
+            case TreeProp.NODE: if(species?.id) speciesImage({ treeId: id, id: species.id.toString(), image });
+                break;
+            case TreeProp.COLLABORATORS:
+                break;
         }
     }, []);
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     useEffect(() => {
@@ -143,6 +153,17 @@ export const TreeEditor = () => {
                             treeSocket={phTreeWS}
                             tag={tag}
                             setTag={setTag}
+                            getRootProps={getRootProps}
+                            getInputProps={getInputProps}
+                            isDragActive={isDragActive}
+                        />}
+                        {prop === TreeProp.NODE && tree && <NodeProps
+                            tree={tree}
+                            treeSocket={phTreeWS}
+                            species={species}
+                            setSpecies={setSpecies}
+                            unit={unit}
+                            setUnit={setUnit}
                             getRootProps={getRootProps}
                             getInputProps={getInputProps}
                             isDragActive={isDragActive}
