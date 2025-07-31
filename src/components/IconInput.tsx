@@ -17,7 +17,10 @@ interface IconInputProps<T> {
     selected?: T;
     options?: T[];
     setSelected?: (s: T) => void;
+    optionsDisplay?: (t: T) => string;
     textArea?: boolean;
+    min?: number;
+    max?: number;
 }
 
 export const IconInput = <T,>({
@@ -37,7 +40,10 @@ export const IconInput = <T,>({
     selected,
     options,
     setSelected,
-    textArea = false
+    optionsDisplay,
+    textArea = false,
+    min,
+    max
 }: IconInputProps<T>) => {
     return (
         <div className={setIcon ? "relative" : "flex flex-row"}>
@@ -61,6 +67,8 @@ export const IconInput = <T,>({
                     setChecked?.(checked)
                 }}
                 name={name?.toLowerCase().replace(" ", "-")}
+                min={min}
+                max={max}
             />): undefined}
             {setSelected && <select
                 value={selected as string}
@@ -74,7 +82,7 @@ export const IconInput = <T,>({
                     key={index}
                     className="dark:bg-black"
                 >
-                    {(o as string).toUpperCase()}
+                    {optionsDisplay?.(o) ?? (o as string).toUpperCase()}
                 </option>)}
             </select>}
             {setIcon &&
