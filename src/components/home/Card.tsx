@@ -31,9 +31,11 @@ export const Card = ({
         <>
             {href ? <a className={"p-[2rem] relative " + card} href={href} onClick={onClick}>
                 {inside}
-            </a> : <button className={"p-[2rem] relative " + card + " " + unborder} onClick={onClick}>
+            </a> : onClick ? <button className={"p-[2rem] relative " + card + " " + unborder} onClick={onClick}>
                 {inside}
-            </button>}
+            </button> : <div className={"p-[2rem] relative " + card}>
+                {inside}
+            </div>}
         </>
     );
 };
