@@ -17,7 +17,10 @@ interface AuthFieldProps<T> {
     selected?: T;
     options?: T[];
     setSelected?: (s: T) => void;
+    optionsDisplay?: (t: T) => string;
     textArea?: boolean;
+    min?: number;
+    max?: number;
 }
 
 export const AuthField = <T,>({
@@ -36,7 +39,10 @@ export const AuthField = <T,>({
     selected,
     options,
     setSelected,
-    textArea
+    optionsDisplay,
+    textArea,
+    min,
+    max
 }: AuthFieldProps<T>) => {
     return (
         <div className={"flex flex-col mb-6 " + className}>
@@ -57,7 +63,10 @@ export const AuthField = <T,>({
                 selected={selected}
                 options={options}
                 setSelected={setSelected}
+                optionsDisplay={optionsDisplay}
                 textArea={textArea}
+                min={min}
+                max={max}
             />
             {children}
         </div>
