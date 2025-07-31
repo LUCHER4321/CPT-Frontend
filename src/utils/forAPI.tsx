@@ -58,9 +58,10 @@ export const fetchImage = async ({
         body.append("image", image);
         const result = await fetch(url(...route), {
             method: "POST",
-            body
+            body,
+            credentials: "include"
         }).catch(() => {
-            throw new Error("Connection Failed")
+            throw new Error("Upload Failed");
         });
         if(!result.ok) throw new Error("Connection Failed");
         return await result.json();
