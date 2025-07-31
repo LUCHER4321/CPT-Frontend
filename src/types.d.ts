@@ -160,6 +160,7 @@ export interface PhTreeRequest {
         id: string;
         name?: string;
         description?: string;
+        isPublic?: boolean;
         tags?: string[];
         newCollaborators?: string[];
         deleteCollaborators?: string[];
