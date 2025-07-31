@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import type { NotificationResponse, PhTreeResponse, UserResponse } from "../../types";
-import { getTree } from "../../api/phTree";
+import { getTree, imageTree, viewTree } from "../../api/phTree";
 import { getMe } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
 import { title } from "../../data/classNames";
@@ -14,6 +14,8 @@ import { PhTreeWS } from "../../classes/PhTreeWS";
 import { TreeChange, TreeProp } from "../../enums";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
 import { TreeProperties } from "../../components/dashboard/trees/TreeProperties";
+import { TreeProps } from "../../components/dashboard/trees/TreeProps";
+import { useDropzone } from "react-dropzone";
 
 export const TreeEditor = () => {
     const [expanded, setExpanded] = useState(false);
@@ -22,24 +24,35 @@ export const TreeEditor = () => {
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [search, setSearch] = useState("");
     const [active, setActive] = useState(false);
-    const [name, setName] = useState("");
     const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
-    const [__, setPhTreeWS] = useState<PhTreeWS | undefined>(undefined);
+    const [phTreeWS, setPhTreeWS] = useState<PhTreeWS | undefined>(undefined);
     const [chronoScale, setChronoScale] = useState(true);
     const [prop, setProp] = useState(TreeProp.TREE);
+    const [tag, setTag] = useState("");
     const { id } = useParams();
     const history = useNavigate();
+    const onDrop = useCallback((files?: File[]) => {
+        const [image] = files ?? [undefined];
+        if(id && image){
+            imageTree({ id, image }).then(t => {
+                if(t) {
+                    setTree(t);
+                }
+            });
+        }
+    }, []);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
     useEffect(() => {
         if(id) getMe({}).then(u => {
             setUser(u);
             getTree({ id }).then(t => {
                 if(t) {
                     setTree(t);
-                    setName(t.name);
                     setPhTreeWS(new PhTreeWS({
                         socket,
-                        response: ({change, phTree, species}) => {
-                            switch (change) {
+                        response: ({type, phTree, species}) => {
+                            switch (type) {
                                 case TreeChange.NEW:
                                     if(!species) return;
                                     break;
@@ -60,6 +73,7 @@ export const TreeEditor = () => {
                         if(u) history("/account");
                         else history("/");
                     };
+                    viewTree({ id: t.id });
                 }
             });
             getNotifications({}).then(n => {
@@ -72,8 +86,9 @@ export const TreeEditor = () => {
             }));
         });
     }, []);
+
     return (
-    <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start">
+    <div className="size-screen flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden">
         <Sidebar
             expanded={expanded}
             setExpanded={setExpanded}
@@ -96,8 +111,16 @@ export const TreeEditor = () => {
                     <input
                         className={title}
                         type="text"
-                        value={name}
-                        onChange={e => setName?.(e.target.value)}
+                        value={tree?.name}
+                        onChange={e => {
+                            if(tree) {
+                                const { name, ...t } = tree;
+                                setTree({
+                                    name: e.target.value,
+                                    ...t
+                                })
+                            }
+                        }}
                         placeholder="Tree Name"
                     />
                 </div>
@@ -113,7 +136,18 @@ export const TreeEditor = () => {
                     prop={prop}
                     setProp={setProp}
                 >
-                    TreeProperties
+                    <div className="p-4 overflow-y-scroll">
+                        {prop === TreeProp.TREE && tree && <TreeProps
+                            tree={tree}
+                            setTree={setTree}
+                            treeSocket={phTreeWS}
+                            tag={tag}
+                            setTag={setTag}
+                            getRootProps={getRootProps}
+                            getInputProps={getInputProps}
+                            isDragActive={isDragActive}
+                        />}
+                    </div>
                 </TreeProperties>
             </div>
         </main>
