@@ -21,7 +21,7 @@ export const Card = ({
 }: CardProps) => {
     const inside = (
         <>
-            {image ? <img className="h-10! rounded-full" src={image}/> : <i className={"text-[2.5rem] mb-[1rem] fas " + fa + " " + titleClass}/>}
+            {image ? <img className="h-10! w-10! rounded-full object-cover mb-[1rem]" src={image}/> : <i className={"text-[2.5rem] mb-[1rem] fas " + fa + " " + titleClass}/>}
             <h3 className={"mb-4 " + titleClass}>{title}</h3>
             <p className="text-[#1B5E20]! dark:text-[#D8EDD9]!">{description}</p>
             {children}
@@ -29,7 +29,7 @@ export const Card = ({
     )
     return (
         <>
-            {href ? <a className={"p-[2rem] relative " + card} href={href} onClick={onClick}>
+            {href ? <a className={"p-[2rem] relative flex flex-col items-center " + card} href={href} onClick={onClick}>
                 {inside}
             </a> : onClick ? <button className={"p-[2rem] relative " + card + " " + unborder} onClick={onClick}>
                 {inside}
