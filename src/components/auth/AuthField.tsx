@@ -19,8 +19,11 @@ interface AuthFieldProps<T> {
     setSelected?: (s: T) => void;
     optionsDisplay?: (t: T) => string;
     textArea?: boolean;
+    setIcon?: boolean;
+    icon?: string;
     min?: number;
     max?: number;
+    onClick?: () => void;
 }
 
 export const AuthField = <T,>({
@@ -41,25 +44,28 @@ export const AuthField = <T,>({
     setSelected,
     optionsDisplay,
     textArea,
+    setIcon,
+    icon,
     min,
-    max
+    max,
+    onClick
 }: AuthFieldProps<T>) => {
     return (
-        <div className={"flex flex-col mb-6 " + className}>
+        <section className={"flex flex-col mb-6 " + className}>
             <p className="font-bold mb-2">{name}</p>
             <IconInput
-                setIcon={!!setVisiblePassword}
+                setIcon={!!setVisiblePassword || setIcon}
                 type={type}
                 id={id}
                 placeholder={placeholder}
-                className="pl-[1rem] pr-[2.25rem] py-[0.8rem] border rounded w-full"
+                className={"pl-[1rem] py-[0.8rem] border rounded w-full " + (setVisiblePassword ? "pr-[2.25rem]" : "pr-[1rem]")}
                 value={value}
                 setValue={setValue}
                 checked={checked}
                 setChecked={setChecked}
                 name={name}
-                onClick={() => setVisiblePassword?.(!visiblePassword)}
-                icon={visiblePassword ? "fa-eye" : "fa-eye-slash"}
+                onClick={icon ? onClick : (() => setVisiblePassword?.(!visiblePassword))}
+                icon={icon ?? (setVisiblePassword ? (visiblePassword ? "fa-eye" : "fa-eye-slash") : undefined)}
                 selected={selected}
                 options={options}
                 setSelected={setSelected}
@@ -69,6 +75,6 @@ export const AuthField = <T,>({
                 max={max}
             />
             {children}
-        </div>
+        </section>
     )
 };
