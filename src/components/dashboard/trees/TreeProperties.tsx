@@ -14,7 +14,7 @@ export const TreeProperties = ({
     setProp
 }: TreePropertiesProps) => {
     return (
-        <div className="min-w-88 h-full m-2 rounded shadow-lg flex flex-col overflow-hidden">
+        <div className="min-w-88 max-w-88 h-full m-2 rounded shadow-lg flex flex-col overflow-hidden">
             <div className="grid grid-cols-3 border-b">
                 {[...treeProps.entries()].map(([k, { icon, name }], index) => (
                     <button
