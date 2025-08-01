@@ -80,7 +80,7 @@ const userRequest: UserRequest = {
 export const {
     register,
     login,
-    search,
+    search: userSearch,
     getUser,
     recover,
     resetPassword,
