@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import type { NotificationResponse, PhTreeResponse, UserResponse } from "../../types";
 import { getTree, imageTree, viewTree } from "../../api/phTree";
-import { getMe } from "../../api/user";
+import { getMe, getUser, userSearch } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
 import { title } from "../../data/classNames";
 import { getNotifications } from "../../api/notification";
@@ -19,6 +19,7 @@ import { NodeProps } from "../../components/dashboard/trees/NodeProps";
 import type { Species } from "chrono-phylo-tree";
 import { speciesImage } from "../../api/species";
 import { useDropzone } from "react-dropzone";
+import { CollabProps } from "../../components/dashboard/trees/CollabProps";
 
 export const TreeEditor = () => {
     const [expanded, setExpanded] = useState(false);
@@ -28,12 +29,15 @@ export const TreeEditor = () => {
     const [user, setUser] = useState<UserResponse | undefined>(undefined);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [search, setSearch] = useState("");
+    const [collabSearch, setCollabSearch] = useState<UserResponse[] | undefined>(undefined);
     const [active, setActive] = useState(false);
     const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [phTreeWS, setPhTreeWS] = useState<PhTreeWS | undefined>(undefined);
     const [chronoScale, setChronoScale] = useState(true);
     const [prop, setProp] = useState(TreeProp.TREE);
     const [tag, setTag] = useState("");
+    const [collab, setCollab] = useState("");
+    const [currentCollab, setCurrentCollab] = useState<UserResponse[] | undefined>(undefined);
     const { id } = useParams();
     const history = useNavigate();
 
@@ -73,7 +77,16 @@ export const TreeEditor = () => {
                                     if(!species) return;
                                     break;
                                 case TreeChange.TREE:
-                                    if(!phTree) return;
+                                    if(!phTree || !tree) return;
+                                    const { createdAt, updatedAt, likes, comments, views } = tree;
+                                    setTree({
+                                        ...phTree,
+                                        createdAt,
+                                        updatedAt,
+                                        likes,
+                                        comments,
+                                        views
+                                    });
                                     break;
                             }
                         },
@@ -84,6 +97,7 @@ export const TreeEditor = () => {
                         else history("/");
                     };
                     viewTree({ id: t.id });
+                    Promise.all(t.collaborators?.map(c => getUser({ id: c })) ?? []).then(cl => cl.filter(c => c !== undefined)).then(setCurrentCollab);
                 }
             });
             getNotifications({}).then(n => {
@@ -146,7 +160,7 @@ export const TreeEditor = () => {
                     prop={prop}
                     setProp={setProp}
                 >
-                    <div className="p-4 overflow-y-scroll">
+                    <div className="p-4 overflow-y-auto h-full">
                         {prop === TreeProp.TREE && tree && <TreeProps
                             tree={tree}
                             setTree={setTree}
@@ -157,7 +171,7 @@ export const TreeEditor = () => {
                             getInputProps={getInputProps}
                             isDragActive={isDragActive}
                         />}
-                        {prop === TreeProp.NODE && tree && <NodeProps
+                        {prop === TreeProp.NODE && tree && (species ? <NodeProps
                             tree={tree}
                             treeSocket={phTreeWS}
                             species={species}
@@ -167,6 +181,17 @@ export const TreeEditor = () => {
                             getRootProps={getRootProps}
                             getInputProps={getInputProps}
                             isDragActive={isDragActive}
+                        /> : <h1 className={"text-center h-full flex items-center " + title}>SELECT A SPECIES TO EDIT IT</h1>)}
+                        {prop === TreeProp.COLLABORATORS && tree && <CollabProps
+                            tree={tree}
+                            collab={collab}
+                            setCollab={c => {
+                                setCollab(c);
+                                userSearch({ search: c, limit: 6 + (tree.collaborators?.length ?? 0) }).then(c => c?.slice(0, 5)).then(setCollabSearch)
+                            }}
+                            search={collabSearch}
+                            currentCollab={currentCollab}
+                            user={user}
                         />}
                     </div>
                 </TreeProperties>
