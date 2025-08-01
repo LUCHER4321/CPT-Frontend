@@ -4,6 +4,7 @@ import type { Socket } from "socket.io-client";
 import type { PhTreeResponse } from "../types";
 
 interface SpeciesMongo extends Omit<SpeciesJSON, "descendants"> {
+    id: string;
     treeId: string;
     descendants?: SpeciesMongo[];
 }
