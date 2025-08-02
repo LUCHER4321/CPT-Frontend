@@ -59,7 +59,7 @@ export const LoginForm = ({
                         <a className={aText}>Forgot your password?</a>
                     </div>
                 </AuthField>
-                <button type="button" className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""}).then(u => goToAccount?.(u))}>Log In</button>
+                <button type="button" className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""}).then(goToAccount)}>Log In</button>
                 <div className="w-full text-center mt-[1.5rem]">
                     <p>No account? <a className={aText} onClick={() => setRegister?.(true)}>Register</a></p>
                 </div>
@@ -186,7 +186,7 @@ export const RegisterForm = ({
                     email: email as Email,
                     password: password!,
                     username: username!
-                }).then(u => goToAccount?.(u))}>Register</button>
+                }).then(goToAccount)}>Register</button>
                 <div className="w-full text-center mt-[1.5rem] pb-[1.5rem]">
                     <p>Already have an account? <a className={aText} onClick={() => setRegister?.(false)}>Log In</a></p>
                 </div>
