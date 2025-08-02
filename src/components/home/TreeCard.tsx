@@ -1,4 +1,4 @@
-import { card, title } from "../../data/classNames";
+import { card, circleImage, title } from "../../data/classNames";
 import type { PhTreeResponse } from "../../types";
 
 interface TreeCardProps {
@@ -16,7 +16,7 @@ export const TreeCard = ({
                     <h3 className={"text-start text-[1.17em] " + title}>{name}</h3>
                     <p className="text-start">By: @{username}</p>
                 </div>
-                <img src={image} className="h-10! w-10! rounded-full object-cover"/>
+                <img src={image} className={"h-10! w-10! " + circleImage}/>
             </div>
             <div className="flex justify-between flex-row w-full p-4">
                 <div className="flex flex-row items-center space-x-1">
