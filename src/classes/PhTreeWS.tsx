@@ -1,13 +1,6 @@
-import type { SpeciesJSON } from "chrono-phylo-tree";
 import type { TreeChange } from "../enums";
 import type { Socket } from "socket.io-client";
-import type { PhTreeResponse } from "../types";
-
-interface SpeciesMongo extends Omit<SpeciesJSON, "descendants"> {
-    id: string;
-    treeId: string;
-    descendants?: SpeciesMongo[];
-}
+import type { PhTreeResponse, SpeciesResponse } from "../types";
 
 type PhTreeChange = Omit<
     Omit<
@@ -23,7 +16,7 @@ type PhTreeChange = Omit<
 
 interface PhTreeEmit {
     type?: TreeChange;
-    species?: SpeciesMongo;
+    species?: SpeciesResponse;
     phTree?: PhTreeChange;
 }
 
