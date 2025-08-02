@@ -5,31 +5,48 @@ import { ToggleSwitch } from "../../pricing/ToggleSwitch";
 interface TreeVisualizationProps {
     children?: any;
     selected?: Species;
+    commonAncerstors?: Species[];
+    setCommonAncerstors?: (sl: Species[]) => void;
     chronoScale?: boolean;
     setChronoScale?: (b: boolean) => void;
+    zoom?: number;
+    setZoom?: (n: number) => void;
+    deltaZoom?: number;
+    baseZoom?: number;
+    minZoom?: number;
+    maxZoom?: number;
 }
 
 export const TreeVisualization = ({
     children,
     selected,
     chronoScale,
-    setChronoScale
+    setChronoScale,
+    zoom = 1,
+    setZoom,
+    deltaZoom = 0.1,
+    baseZoom = 1,
+    minZoom = Number.EPSILON,
+    maxZoom = Number.MAX_SAFE_INTEGER
 }: TreeVisualizationProps) => {
     return (
-        <div className="flex flex-col my-2 ml-2 shadow-lg overflow-hidden size-full">
+        <div className="flex flex-col my-2 ml-2 shadow-lg overflow-hidden h-full! w-full!">
             <header className="flex flex-row p-3 justify-between border-b items-center">
-                <div className="flex flex-row space-x-2">
+                <div className="flex flex-row space-x-3 items-center">
                     <ToolButton
                         title="Zoom In"
                         icon="fa-search-plus"
+                        onClick={() => setZoom?.(Math.min(zoom + baseZoom * deltaZoom, maxZoom * baseZoom))}
                     />
                     <ToolButton
                         title="Zoom Out"
                         icon="fa-search-minus"
+                        onClick={() => setZoom?.(Math.max(zoom - baseZoom * deltaZoom, minZoom * baseZoom))}
                     />
                     <ToolButton
                         title="Center View"
                         icon="fa-crosshairs"
+                        onClick={() => setZoom?.(baseZoom)}
                     />
                     <ToolButton
                         title="Selection Mode"
@@ -44,6 +61,7 @@ export const TreeVisualization = ({
                         icon="fa-minus-circle"
                         enable={selected !== undefined}
                     />
+                    <p>Zoom: {(zoom / baseZoom * 100).toFixed()}%</p>
                 </div>
                 <div className="flex flex-row space-x-2">
                     <ToggleSwitch
@@ -56,7 +74,9 @@ export const TreeVisualization = ({
                     <p className="font-bold">Chronological Scale</p>
                 </div>
             </header>
-            {children}
+            <div className="relative h-full! w-full!">
+                {children}
+            </div>
         </div>
     )
 }
