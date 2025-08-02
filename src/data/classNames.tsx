@@ -8,3 +8,4 @@ export const selectedBilling = "text-[#1B5E20] dark:text-[#D8EDD9] font-semibold
 export const unselectedBilling = "font-medium text-lg transition-all duration-500"
 export const photoClass = "rounded-full aspect-square size-10 flex justify-center";
 export const unborder= "border-0! focus:outline-0! focus-visible:outline-0!";
+export const circleImage = "object-cover rounded-full"
