@@ -1,14 +1,19 @@
-import type { SpeciesJSON } from "chrono-phylo-tree";
+import type { Species, SpeciesJSON } from "chrono-phylo-tree";
 import type { Liked, NotiFunc, Order, Plan, Role, TreeCriteria } from "./enums";
 import type { StringValue } from "ms";
+import type { ReactElement } from "react";
 
-type RequestFunction<REQUEST, RESPONSE> = (request: REQUEST) => Promise<RESPONSE | undefined>;
+type RequestFunction<REQUEST, RESPONSE> = (request: REQUEST) => Promise<RESPONSE & { message?: string; } | undefined>;
 
 type Email = `${string}@${string}.${string}`;
 
 type ClassColor = {
     light: string;
     dark?: string;
+}
+
+export interface NodeTSX extends ReactElement {
+    species?: Species;
 }
 
 export interface PlanPrice {
