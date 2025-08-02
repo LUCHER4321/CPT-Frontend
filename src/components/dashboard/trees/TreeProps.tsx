@@ -1,11 +1,13 @@
 import type { DropzoneInputProps, DropzoneRootProps } from "react-dropzone";
-import { updateTree } from "../../../api/phTree";
+import { deleteTree, updateTree } from "../../../api/phTree";
 import { PhTreeWS } from "../../../classes/PhTreeWS";
 import { TreeChange } from "../../../enums";
 import type { PhTreeResponse } from "../../../types"
 import { AuthField } from "../../auth/AuthField";
 import { IconInput } from "../../IconInput";
 import { ImageProp } from "./ImageProp";
+import { unborder } from "../../../data/classNames";
+import { useNavigate } from "react-router-dom";
 
 interface TreePropsProps {
     tree?: PhTreeResponse;
@@ -28,6 +30,7 @@ export const TreeProps = ({
     getInputProps,
     isDragActive
 }: TreePropsProps) => {
+    const history = useNavigate();
     return (
         <>
             <AuthField
@@ -59,10 +62,10 @@ export const TreeProps = ({
                         const { id, description, ...t } = tree;
                         setTree?.({
                             id,
-                            description: d,
+                            description: d.length > 0 ? d : undefined,
                             ...t
                         });
-                        updateTree({ id, description: d }).then(phTree => treeSocket?.emit({
+                        updateTree({ id, description: d.length > 0 ? d : undefined }).then(phTree => treeSocket?.emit({
                             type: TreeChange.TREE,
                             phTree
                         }));
@@ -147,6 +150,18 @@ export const TreeProps = ({
                 getInputProps={getInputProps}
                 isDragActive={isDragActive}
             />
+            <button
+                className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
+                onClick={() => {
+                    if(tree && confirm(`Are you sure you wanna delete "${tree.name}" permanently?`)) deleteTree({ id: tree.id }).then(() => {
+                        alert(`"${tree.name}" deleted successfully`);
+                        history("/account");
+                    })
+                }}
+            >
+                <i className="fas fa-trash"/>
+                <p>Delete Pylogenetic Tree</p>
+            </button>
         </>
     )
 };
