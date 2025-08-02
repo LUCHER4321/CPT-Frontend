@@ -39,6 +39,7 @@ export const fetchConfig = async <T,>({
         if(!result.ok) throw new Error("Connection Failed");
         return await result.json();
     } catch(e) {
+        console.log(e);
         return undefined;
     }
 };
@@ -65,8 +66,8 @@ export const fetchImage = async ({
         });
         if(!result.ok) throw new Error("Connection Failed");
         return await result.json();
-    } catch(e: any) {
-        alert((e as Error).message);
+    } catch(e) {
+        console.log(e);
         return undefined;
     }
 };
