@@ -1,6 +1,6 @@
 import type { PhTreeResponse } from "../../../types";
 import { AuthField } from "../../auth/AuthField";
-import { updateSpecies } from "../../../api/species";
+import { deleteSpecies, updateSpecies } from "../../../api/species";
 import type { PhTreeWS } from "../../../classes/PhTreeWS";
 import { TimeUnit, TreeChange } from "../../../enums";
 import { Species, type SpeciesJSON } from "chrono-phylo-tree";
@@ -8,12 +8,15 @@ import { nullableInput } from "../../../utils/nullableInput";
 import { IconInput } from "../../IconInput";
 import { ImageProp } from "./ImageProp";
 import type { DropzoneInputProps, DropzoneRootProps } from "react-dropzone";
+import { unborder } from "../../../data/classNames";
 
 interface NodePropsProps {
     tree?: PhTreeResponse;
     treeSocket?: PhTreeWS;
     species?: Species;
-    setSpecies?: (s: Species) => void;
+    setSpecies?: (s?: Species) => void;
+    commonAncestors?: Species[]
+    setCommonAncestors?: (s: Species[]) => void;
     unit?: TimeUnit;
     setUnit?: (tu: TimeUnit) => void;
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps;
@@ -26,6 +29,8 @@ export const NodeProps = ({
     treeSocket,
     species,
     setSpecies,
+    commonAncestors,
+    setCommonAncestors,
     unit = TimeUnit.Y,
     setUnit,
     getRootProps,
@@ -66,7 +71,13 @@ export const NodeProps = ({
             options={[undefined, ...species?.firstAncestor(true).allDescendants(false).filter(sp => sp.display && sp.id !== species.id) ?? []]}
             optionsDisplay={sp => sp?.name ?? "None (root)"}
             setSelected={updateProp(sp => {
-                if(species) species.ancestor = sp;
+                if(species) {
+                    if(!sp) setCommonAncestors?.([...commonAncestors ?? [], ...species.unlinkAncestor() ?? []]);
+                    else {
+                         if(!species.ancestor) setCommonAncestors?.(commonAncestors?.filter(ca => ca.id !== species.id) ?? [])
+                        species.linkAncestor(sp);
+                    }
+                }
             }, sp => ({
                 ancestorId: sp?.id?.toString() ?? null
             }))}
@@ -145,5 +156,27 @@ export const NodeProps = ({
             getInputProps={getInputProps}
             isDragActive={isDragActive}
         />
+        <button
+            className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
+            onClick={() => {
+                if(tree && species && confirm(`Are you sure you wanna delete the species "${species.name}"${species.descendants.length > 0 ? " (and its descendants)" : ""} permanently?`)) deleteSpecies({ treeId: tree.id, id: species.id?.toString()! }).then(() => {
+                    const { id, descendants, ...sp } = species.toJSON();
+                    species.unlinkAncestor();
+                    treeSocket?.emit({
+                        type: TreeChange.DELETE,
+                        species: {
+                            id: id?.toString()!,
+                            treeId: tree.id,
+                            ...sp
+                        }
+                    });
+                    alert(`"${species.name}" deleted successfully`);
+                    setSpecies?.(undefined);
+                })
+            }}
+        >
+            <i className="fas fa-trash"/>
+            <p>Delete Species{(species?.descendants.length ?? 0) > 0 ? " (and its descendants)" : ""}</p>
+        </button>
     </>)
 };
