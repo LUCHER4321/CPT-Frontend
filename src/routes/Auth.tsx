@@ -54,7 +54,7 @@ export const Auth = ({
                         className={register ? "hidden" : ""}
                         setRegister={setRegister}
                         goToAccount={(u) => {
-                            if(u) return history("/account");
+                            if(u) history("/account");
                         }}
                     />
                     <RegisterForm
@@ -77,7 +77,7 @@ export const Auth = ({
                         billing={billing}
                         setBilling={setBilling}
                         goToAccount={(u) => {
-                            if(u) return history("/account");
+                            if(u) history("/account");
                         }}
                     />
                 </div>
