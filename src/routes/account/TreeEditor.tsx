@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
-import type { NotificationResponse, PhTreeResponse, UserResponse } from "../../types";
+import type { NotificationResponse, PhTreeResponse, StrictSpecies, UserResponse } from "../../types";
 import { getTree, imageTree, viewTree } from "../../api/phTree";
 import { getMe, getUser, userSearch } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
@@ -17,11 +17,13 @@ import { TreeProperties } from "../../components/dashboard/trees/TreeProperties"
 import { TreeProps } from "../../components/dashboard/trees/TreeProps";
 import { NodeProps } from "../../components/dashboard/trees/NodeProps";
 import { Species } from "chrono-phylo-tree";
-import { speciesImage, treeSpecies } from "../../api/species";
+import { createSpecies, speciesImage, treeSpecies } from "../../api/species";
 import { useDropzone } from "react-dropzone";
 import { CollabProps } from "../../components/dashboard/trees/CollabProps";
 import { TreeCanvas } from "../../components/dashboard/trees/TreeCanvas";
 import { SpNode } from "../../components/dashboard/trees/Node";
+import { readFileAsJson } from "../../utils/readFileAsJson";
+import { nullableInput } from "../../utils/nullableInput";
 
 export const TreeEditor = () => {
     const [expanded, setExpanded] = useState(false);
@@ -41,9 +43,16 @@ export const TreeEditor = () => {
     const [tag, setTag] = useState("");
     const [collab, setCollab] = useState("");
     const [currentCollab, setCurrentCollab] = useState<UserResponse[] | undefined>(undefined);
+    const [json, setJSON] = useState<StrictSpecies | StrictSpecies[] | undefined>(undefined);
+    const [name, setName] = useState("");
+    const [apparition, setApparition] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [description, setDescription] = useState("");
     const ref = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const baseZoom = 0.9;
+    const minHeight = 100;
+    const minWidth = 175;
     const [zoom, setZoom] = useState(baseZoom);
     const { id } = useParams();
     const history = useNavigate();
@@ -62,7 +71,18 @@ export const TreeEditor = () => {
         }
     }, []);
 
+    const onDropJSON = useCallback((files?: File[]) => {
+        const [file] = files ?? [undefined];
+        console.log({ file })
+        if(file && tree) readFileAsJson({
+            file,
+            setJSON
+        });
+    }, []);
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+    const { getRootProps: grp, getInputProps: gip, isDragActive: ida } = useDropzone({ onDrop: onDropJSON });
 
     useEffect(() => {
         if(id) getMe({}).then(u => {
@@ -76,6 +96,13 @@ export const TreeEditor = () => {
                             switch (type) {
                                 case TreeChange.NEW:
                                     if(!species) return;
+                                    const newSpecies = Species.fromJSON(species);
+                                    if(species.ancestorId) {
+                                        const ancestor = commonAncestors?.flatMap(ca => ca.allDescendants(false)).find(sp => sp.id === species.ancestorId);
+                                        if(ancestor) newSpecies.linkAncestor(ancestor);
+                                    } else {
+                                        setCommonAncestors([...commonAncestors ?? [], newSpecies]);
+                                    }
                                     break;
                                 case TreeChange.EDIT:
                                     if(!species) return;
@@ -134,20 +161,30 @@ export const TreeEditor = () => {
         document.title = `Life Tree | Edit "${tree?.name}"`
     }, [tree]);
 
-    const human = Species.fromJSON({
-        id: "0",
-        name: "Humano",
-        apparition: 0,
-        duration: 1,
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7XK_e3HG0jhOticytH1Dn3tzBEZyRyWc5Mg&s"
-    });
-    const eloi = human.addDescendant({
-        id: "1",
-        name: "Eloi",
-        afterApparition: 1,
-        duration: 1,
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpWm67FEX1fc7lCDwWzwOWRSytyDShuLxvIg&s"
-    })
+    useEffect(() => {
+        if(species){
+            setName(species.name);
+            setApparition(species.apparition);
+            setDuration(species.duration);
+            setDescription(species.description ?? "");
+            setProp(TreeProp.NODE);
+        }
+    }, [species]);
+
+    useEffect(() => {
+        console.log({ json })
+        const array = nullableInput(json, j => Array.isArray(j) ? j : [j]);
+        console.log({ array })
+        if(tree && array) Promise.all(array.map(j => createSpecies({ treeId: tree.id, ...j }))).then(sp => {
+            const filterSP = sp.filter(s => s !== undefined);
+            if(filterSP.length) {
+                setCommonAncestors([...commonAncestors ?? [], ...filterSP.map(s => Species.fromJSON(s))]);
+                setJSON(undefined);
+            }
+        });
+    }, [json]);
+    
+    const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).length ?? 1;
 
     return (
     <div className="w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden">
@@ -170,7 +207,7 @@ export const TreeEditor = () => {
                     <a href="/account">
                         <i className={"fas fa-arrow-left " + title}/>
                     </a>
-                    <input
+                    {tree && <input
                         className={title}
                         type="text"
                         value={tree?.name}
@@ -184,11 +221,17 @@ export const TreeEditor = () => {
                             }
                         }}
                         placeholder="Tree Name"
-                    />
+                    />}
                 </div>
             </Header>
             <div className="flex flex-row h-full! w-full! overflow-hidden">
                 <TreeVisualization
+                    tree={tree}
+                    treeSocket={phTreeWS}
+                    selected={species}
+                    setSelected={setSpecies}
+                    commonAncerstors={commonAncestors}
+                    setCommonAncerstors={setCommonAncestors}
                     chronoScale={chronoScale}
                     setChronoScale={setChronoScale}
                     zoom={zoom}
@@ -199,14 +242,20 @@ export const TreeEditor = () => {
                     deltaZoom={0.1}
                 >
                     <TreeCanvas
-                        className={`bg-green-700 absolute top-0 bottom-0 right-0 left-0 flex justify-center items-center ${zoom > 1 ? "overflow-scroll" : ""}`}
+                        className={`bg-green-700 absolute top-0 bottom-0 right-0 left-0`}
                         ref={ref}
                         zoom={zoom}
                         width={dimensions.width}
                         height={dimensions.height}
+                        onClic={() => {
+                            if(species) setSpecies(undefined);
+                        }}
+                        unit={unit}
+                        chronoScale={chronoScale}
+                        minHeight={minHeight}
+                        minWidth={minWidth}
                     >
-                        {SpNode({ species: human, diameter: dimensions.height * zoom / 2 })}
-                        {SpNode({ species: eloi, diameter: dimensions.height * zoom / 2 })}
+                        {commonAncestors?.flatMap(ca => ca.allDescendants()).map(s => SpNode({ species: s, diameter: Math.max(dimensions.height / total, minHeight ?? 0) * zoom, setSpecies }))}
                     </TreeCanvas>
                 </TreeVisualization>
                 <TreeProperties
@@ -223,14 +272,27 @@ export const TreeEditor = () => {
                             getRootProps={getRootProps}
                             getInputProps={getInputProps}
                             isDragActive={isDragActive}
+                            getRootPropsJSON={grp}
+                            getInputPropsJSON={gip}
+                            isDragActiveJSON={ida}
                         />}
                         {prop === TreeProp.NODE && tree && (species ? <NodeProps
                             tree={tree}
                             treeSocket={phTreeWS}
                             species={species}
                             setSpecies={setSpecies}
+                            commonAncestors={commonAncestors}
+                            setCommonAncestors={setCommonAncestors}
                             unit={unit}
                             setUnit={setUnit}
+                            name={name}
+                            setName={setName}
+                            apparition={apparition}
+                            setApparition={setApparition}
+                            duration={duration}
+                            setDuration={setDuration}
+                            description={description}
+                            setDescription={setDescription}
                             getRootProps={getRootProps}
                             getInputProps={getInputProps}
                             isDragActive={isDragActive}
