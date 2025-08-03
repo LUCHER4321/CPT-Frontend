@@ -19,6 +19,14 @@ interface NodePropsProps {
     setCommonAncestors?: (s: Species[]) => void;
     unit?: TimeUnit;
     setUnit?: (tu: TimeUnit) => void;
+    name?: string;
+    setName?: (s: string) => void;
+    apparition?: number;
+    setApparition?: (n: number) => void;
+    duration?: number;
+    setDuration?: (n: number) => void;
+    description?: string;
+    setDescription?: (s: string) => void;
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps;
     getInputProps?: (props?: DropzoneInputProps) => DropzoneInputProps;
     isDragActive?: boolean;
@@ -33,6 +41,14 @@ export const NodeProps = ({
     setCommonAncestors,
     unit = TimeUnit.Y,
     setUnit,
+    name,
+    setName,
+    apparition,
+    setApparition,
+    duration,
+    setDuration,
+    description,
+    setDescription,
     getRootProps,
     getInputProps,
     isDragActive
@@ -46,7 +62,7 @@ export const NodeProps = ({
             updateSpecies({
                 treeId: tree.id,
                 id: species.id.toString(),
-                ...data
+                ...data(t)
             }).then(sp => treeSocket?.emit({
                 type: TreeChange.EDIT,
                 species: sp
@@ -58,9 +74,12 @@ export const NodeProps = ({
             name="Species' name"
             type="text"
             placeholder="Name this species..."
-            value={species?.name}
+            value={name}
             setValue={updateProp(n => {
-                if(species) species.name = n;
+                if(species) {
+                    setName?.(n);
+                    species.name = n;
+                }
             }, n => ({
                 name: n
             }))}
@@ -105,34 +124,43 @@ export const NodeProps = ({
             min={species?.ancestor?.apparition}
             max={species?.ancestor?.extinction()}
             setValue={updateProp(a => {
-                if(species) species.apparition = +a
+                if(species) setApparition?.(+a);
             }, a => ({
                 apparition: species?.ancestor ? undefined : +a,
                 afterApparition: species?.ancestor ? +a - species.ancestor.apparition : undefined
             }))}
         >
-            <IconInput
+            {species?.ancestor && <IconInput
                 type="range"
                 className="w-full"
-                value={nullableInput(species?.apparition, a => (a / unit).toString())}
-                min={species?.ancestor?.apparition}
-                max={species?.ancestor?.extinction()}
+                value={nullableInput(apparition, a => (a / unit).toString())}
+                min={species?.ancestor?.apparition / unit}
+                max={species?.ancestor?.extinction() / unit}
                 setValue={updateProp(a => {
-                    if(species) species.apparition = +a
+                    if(species) {
+                        setApparition?.(+a * unit);
+                        species.allDescendants(false).filter(sp => sp.id !== species.id).map(sp => sp.apparition += +a * unit - species.apparition);
+                        species.apparition = +a * unit;
+                    }
                 }, a => ({
                     apparition: species?.ancestor ? undefined : +a,
                     afterApparition: species?.ancestor ? +a - species.ancestor.apparition : undefined
                 }))}
-            />
+                step={1 / unit}
+            />}
         </AuthField>
         <AuthField
             name="Duration"
             type="number"
             placeholder="How much time did this species exist?..."
-            value={nullableInput(species?.duration, a => (a / unit).toString())}
-            min={species?.allDescendants(false).filter(s => s !== species).map(s => s.apparition - species.apparition).reduce((a, b) => a > b ? a : b) ?? 0}
+            value={nullableInput(duration, d => (d / unit).toString())}
+            min={0}
             setValue={updateProp(d => {
-                if(species) species.duration = +d;
+                if(species) {
+                    species.allDescendants(false).filter(sp => sp.id !== species.id).map(sp => sp.apparition += +d * unit - species.duration);
+                    setDuration?.(+d * unit);
+                    species.duration = +d * unit;
+                }
             }, d => ({
                 duration: +d
             }))}
@@ -141,9 +169,12 @@ export const NodeProps = ({
             name="Description"
             type="text"
             placeholder="Describe this species"
-            value={species?.description}
+            value={description}
             setValue={updateProp(d => {
-                if(species) species.description = d;
+                if(species) {
+                    setDescription?.(d);
+                    species.description = d;
+                }
             }, d => ({
                 description: d
             }))}
@@ -153,19 +184,26 @@ export const NodeProps = ({
             title="Species' Image"
             image={species?.image}
             getRootProps={getRootProps}
-            getInputProps={getInputProps}
+            getInputProps={nullableInput(getInputProps, g => props => g({
+                accept: [".jpg", ".jpeg", ".png", ".gif", ".svg"].join(),
+                multiple: false,
+                ...props
+            }))}
             isDragActive={isDragActive}
+            text={species?.image ? "Update Image" : "Upload Image"}
         />
         <button
             className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
             onClick={() => {
                 if(tree && species && confirm(`Are you sure you wanna delete the species "${species.name}"${species.descendants.length > 0 ? " (and its descendants)" : ""} permanently?`)) deleteSpecies({ treeId: tree.id, id: species.id?.toString()! }).then(() => {
-                    const { id, descendants, ...sp } = species.toJSON();
+                    const { id, name, duration, descendants, ...sp } = species.toJSON();
                     species.unlinkAncestor();
-                    treeSocket?.emit({
+                    if(id && name && duration !== undefined) treeSocket?.emit({
                         type: TreeChange.DELETE,
                         species: {
-                            id: id?.toString()!,
+                            id,
+                            name,
+                            duration,
                             treeId: tree.id,
                             ...sp
                         }
