@@ -8,6 +8,7 @@ import { IconInput } from "../../IconInput";
 import { ImageProp } from "./ImageProp";
 import { unborder } from "../../../data/classNames";
 import { useNavigate } from "react-router-dom";
+import { nullableInput } from "../../../utils/nullableInput";
 
 interface TreePropsProps {
     tree?: PhTreeResponse;
@@ -18,6 +19,9 @@ interface TreePropsProps {
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps;
     getInputProps?: (props?: DropzoneInputProps) => DropzoneInputProps;
     isDragActive?: boolean;
+    getRootPropsJSON?: (props?: DropzoneRootProps) => DropzoneRootProps;
+    getInputPropsJSON?: (props?: DropzoneInputProps) => DropzoneInputProps;
+    isDragActiveJSON?: boolean;
 }
 
 export const TreeProps = ({
@@ -28,7 +32,10 @@ export const TreeProps = ({
     setTag,
     getRootProps,
     getInputProps,
-    isDragActive
+    isDragActive,
+    getRootPropsJSON,
+    getInputPropsJSON,
+    isDragActiveJSON
 }: TreePropsProps) => {
     const history = useNavigate();
     return (
@@ -147,8 +154,24 @@ export const TreeProps = ({
                 title="Tree's Image"
                 image={tree?.image}
                 getRootProps={getRootProps}
-                getInputProps={getInputProps}
+                getInputProps={nullableInput(getInputProps, g => props => g({
+                    accept: [".jpg", ".jpeg", ".png", ".gif", ".svg"].join(),
+                    multiple: false,
+                    ...props
+                }))}
                 isDragActive={isDragActive}
+                text={tree?.image ? "Update Image" : "Upload Image"}
+            />
+            <ImageProp
+                title="Upload a JSON"
+                getRootProps={getRootPropsJSON}
+                getInputProps={nullableInput(getInputPropsJSON, g => props => g({
+                    accept: ".json",
+                    multiple: false,
+                    ...props
+                }))}
+                isDragActive={isDragActiveJSON}
+                text="Upload a JSON"
             />
             <button
                 className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
