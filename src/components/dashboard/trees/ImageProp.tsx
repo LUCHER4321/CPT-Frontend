@@ -7,11 +7,13 @@ interface ImagePropProps {
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps;
     getInputProps?: (props?: DropzoneInputProps) => DropzoneInputProps;
     isDragActive?: boolean;
+    text?: string
 }
 
 export const ImageProp = ({
     title,
     image,
+    text,
     getRootProps,
     getInputProps,
     isDragActive
@@ -23,7 +25,7 @@ export const ImageProp = ({
             <div { ...getRootProps?.({ className: `border border-dashed rounded transition-all duration-300 ${isDragActive ? "text-[#D8EDD9] dark:text-[#1B5E20] bg-[#1B5E20] dark:bg-[#D8EDD9]" : ""} hover:text-[#D8EDD9] dark:hover:text-[#1B5E20] hover:bg-[#1B5E20] dark:hover:bg-[#D8EDD9] text-xl justify-center p-10 cursor-pointer flex flex-row space-x-2 items-center` }) }>
                 <input { ...getInputProps?.() }/>
                 <i className="fas fa-upload"/>
-                <p>{image ? "Update Image" : "Upload Image"}</p>
+                <p>{text}</p>
             </div>
         </div>
     )
