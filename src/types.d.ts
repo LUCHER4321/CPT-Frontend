@@ -251,7 +251,13 @@ export interface LikeRequest {
     }>;
 }
 
-export interface SpeciesResponse extends Omit<SpeciesJSON, "descendants"> {
+export interface StrictSpecies extends Omit<SpeciesJSON, "descendants"> {
+    name: string;
+    duration: number;
+    descendants?: StrictSpecies[];
+}
+
+export interface SpeciesResponse extends Omit<StrictSpecies, "descendants"> {
     id: string;
     treeId: string;
     ancestorId?: string;
@@ -262,7 +268,7 @@ export interface SpeciesRequest {
     createSpecies: RequestFunction<{
         treeId: string;
         ancestorId?: string;
-    } & Omit<SpeciesJSON, "image">, SpeciesResponse>;
+    } & Omit<StrictSpecies, "image">, SpeciesResponse>;
     updateSpecies: RequestFunction<{
         treeId: string;
         id: string;
