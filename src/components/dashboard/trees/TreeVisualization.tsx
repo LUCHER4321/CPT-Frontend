@@ -1,10 +1,17 @@
-import type { Species } from "chrono-phylo-tree";
+import { Species } from "chrono-phylo-tree";
 import { ToolButton } from "./ToolButton";
 import { ToggleSwitch } from "../../pricing/ToggleSwitch";
+import { createSpecies, deleteSpecies } from "../../../api/species";
+import type { PhTreeResponse } from "../../../types";
+import type { PhTreeWS } from "../../../classes/PhTreeWS";
+import { TreeChange } from "../../../enums";
 
 interface TreeVisualizationProps {
     children?: any;
+    tree?: PhTreeResponse;
+    treeSocket?: PhTreeWS;
     selected?: Species;
+    setSelected?: (sp: Species) => void
     commonAncerstors?: Species[];
     setCommonAncerstors?: (sl: Species[]) => void;
     chronoScale?: boolean;
@@ -19,7 +26,12 @@ interface TreeVisualizationProps {
 
 export const TreeVisualization = ({
     children,
+    tree,
+    treeSocket,
     selected,
+    setSelected,
+    commonAncerstors,
+    setCommonAncerstors,
     chronoScale,
     setChronoScale,
     zoom = 1,
@@ -55,11 +67,49 @@ export const TreeVisualization = ({
                     <ToolButton
                         title={selected ? "Add Descendant" : "Add Species"}
                         icon="fa-plus-circle"
+                        onClick={() => tree ? createSpecies({
+                            treeId: tree.id,
+                            ancestorId: selected?.id?.toString(),
+                            name: "",
+                            ...selected ? {} : {apparition: commonAncerstors?.length ? Math.min(...commonAncerstors.map(ca => ca.apparition)) : 0},
+                            ...selected ? {afterApparition: selected.duration} : {},
+                            duration: selected ? selected.duration : commonAncerstors?.length ? Math.max(...commonAncerstors.map(ca => ca.duration)) : 1
+                        }).then(species => {
+                            if(species) {
+                                const newSpecies = selected ? selected.addDescendant(species) : Species.fromJSON(species)
+                                if(!selected) setCommonAncerstors?.([...commonAncerstors ?? [], newSpecies]);
+                                setSelected?.(newSpecies);
+                                treeSocket?.emit({
+                                    type: TreeChange.NEW,
+                                    species
+                                });
+                            }
+                        }) : undefined}
                     />
                     <ToolButton
-                        title={"Delete Species"}
+                        title="Delete Species"
                         icon="fa-minus-circle"
                         enable={selected !== undefined}
+                        onClick={() => {
+                            if(selected?.id && tree && confirm(`Are you sure you wanna delete the species "${selected.name}"${selected.descendants.length > 0 ? " (and its descendants)" : ""} permanently?`)) deleteSpecies({
+                                treeId: tree.id,
+                                id: selected.id.toString()
+                            }).then(() => {
+                                if(selected.ancestor) selected.unlinkAncestor();
+                                else setCommonAncerstors?.(commonAncerstors?.filter(ca => ca.id !== selected.id) ?? []);
+                                const { id, name, duration, descendants, ...species } = selected.toJSON();
+                                if(id && name && duration !== undefined) treeSocket?.emit({
+                                    type: TreeChange.DELETE,
+                                    species: {
+                                        treeId: tree.id,
+                                        id,
+                                        name,
+                                        duration,
+                                        ...species
+                                    }
+                                });
+                            });
+                        }}
                     />
                     <p>Zoom: {(zoom / baseZoom * 100).toFixed()}%</p>
                 </div>
