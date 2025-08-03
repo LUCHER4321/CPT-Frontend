@@ -21,6 +21,7 @@ interface IconInputProps<T> {
     textArea?: boolean;
     min?: number;
     max?: number;
+    step?: number;
 }
 
 export const IconInput = <T,>({
@@ -43,7 +44,8 @@ export const IconInput = <T,>({
     optionsDisplay,
     textArea = false,
     min,
-    max
+    max,
+    step
 }: IconInputProps<T>) => {
     return (
         <div className={setIcon ? "relative" : "flex flex-row"}>
@@ -69,6 +71,7 @@ export const IconInput = <T,>({
                 name={name?.toLowerCase().replace(" ", "-")}
                 min={min}
                 max={max}
+                step={step}
             />): undefined}
             {setSelected && <select
                 value={selected as string}
