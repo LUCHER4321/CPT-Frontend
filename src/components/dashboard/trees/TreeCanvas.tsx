@@ -1,4 +1,4 @@
-import type { MouseEvent, Ref, UIEvent } from "react";
+import type { MouseEvent, Ref, UIEvent, WheelEvent } from "react";
 import type { NodeTSX } from "../../../types"
 import { nullableInput } from "../../../utils/nullableInput";
 import { TimeUnit } from "../../../enums";
@@ -23,6 +23,8 @@ interface TreeCanvasProps {
     onMouseMove?: (e: MouseEvent, scrollLeft?: number, scrollTop?: number) => void;
     onMouseUp?: (e: MouseEvent) => void;
     onScroll?: (e: UIEvent) => void;
+    onWheel?: (e: WheelEvent) => void;
+    svgId?: string;
 }
 
 export const TreeCanvas = ({
@@ -41,7 +43,9 @@ export const TreeCanvas = ({
     onMouseDown,
     onMouseMove,
     onMouseUp,
-    onScroll
+    onScroll,
+    onWheel,
+    svgId
 }: TreeCanvasProps) => {
     const dMult = 2.5;
     const mult = 10;
@@ -80,6 +84,9 @@ export const TreeCanvas = ({
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseUp}
             onScroll={onScroll}
+            onWheel={onWheel}
+            tabIndex={0}
+            id={svgId}
         >
             <svg
                 width={FINAL_WIDTH}
