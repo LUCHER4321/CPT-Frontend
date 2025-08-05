@@ -1,0 +1,23 @@
+export const downloadSVG = (svgId = "", name = "tree") => {
+    const filename = name + ".svg";
+    const container = document.getElementById(svgId);
+    if(!container) return;
+    const svgElement = container.querySelector("svg") as SVGSVGElement | null;
+    if (!svgElement) return;
+    const clonedSvg = svgElement.cloneNode(true) as SVGSVGElement;
+    clonedSvg.setAttribute("width", svgElement.width.baseVal.value.toString());
+    clonedSvg.setAttribute("height", svgElement.height.baseVal.value.toString());
+    clonedSvg.setAttribute("viewBox", `0 0 ${svgElement.width.baseVal.value} ${svgElement.height.baseVal.value}`);
+    const serializer = new XMLSerializer();
+    let svgString = serializer.serializeToString(clonedSvg);
+    if (!svgString.includes("<?xml")) svgString = '<?xml version="1.0" standalone="no"?>\n' + svgString;
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = filename;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(url);
+};
