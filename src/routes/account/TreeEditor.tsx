@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import type { NotificationResponse, PhTreeResponse, StrictSpecies, UserResponse } from "../../types";
 import { getTree, imageTree, viewTree } from "../../api/phTree";
@@ -50,12 +50,55 @@ export const TreeEditor = () => {
     const [description, setDescription] = useState("");
     const ref = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+    const [isDragging, setIsDragging] = useState(false);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+    const [scrollPos, setScrollPos] = useState({ left: 0, top: 0 });
+    const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+    const [startScroll, setStartScroll] = useState({ left: 0, top: 0 });
+    const [present, setPresent] = useState(false);
+    const [presentTime, setPresentTime] = useState<number | undefined>(undefined);
+    const [showNames, setShowNames] = useState(true);
+    const [selection, setSelection] = useState(true);
     const baseZoom = 0.9;
     const minHeight = 100;
     const minWidth = 175;
     const [zoom, setZoom] = useState(baseZoom);
     const { id } = useParams();
     const history = useNavigate();
+
+    const handleScroll = () => {
+        if (ref.current) {
+            setScrollPos({
+                left: ref.current.scrollLeft,
+                top: ref.current.scrollTop,
+            });
+        }
+    };
+
+    const handleMouseMove = (e: MouseEvent, scrollLeft: number = 0, scrollTop: number = 0) => {
+        const svgRect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - svgRect.left + scrollLeft;
+        const y = e.clientY - svgRect.top + scrollTop;
+        setMousePos({ x, y });
+        if (isDragging && ref.current) {
+            const dx = startPos.x - e.clientX;
+            const dy = startPos.y - e.clientY;
+            ref.current.scrollLeft = startScroll.left + dx;
+            ref.current.scrollTop = startScroll.top + dy;
+        }
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+        setIsDragging(true);
+        const { clientX, clientY } = e;
+        setStartPos({ x: clientX, y: clientY });
+        if(ref.current) {
+            const { scrollLeft, scrollTop } = ref.current;
+            setStartScroll({ left: scrollLeft, top: scrollTop })
+        }
+    }
+
+    const handleMouseUp = () => setIsDragging(false);
 
     const onDrop = useCallback((files?: File[]) => {
         const [image] = files ?? [undefined];
@@ -73,7 +116,6 @@ export const TreeEditor = () => {
 
     const onDropJSON = useCallback((files?: File[]) => {
         const [file] = files ?? [undefined];
-        console.log({ file })
         if(file && tree) readFileAsJson({
             file,
             setJSON
@@ -81,7 +123,6 @@ export const TreeEditor = () => {
     }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
     const { getRootProps: grp, getInputProps: gip, isDragActive: ida } = useDropzone({ onDrop: onDropJSON });
 
     useEffect(() => {
@@ -162,19 +203,7 @@ export const TreeEditor = () => {
     }, [tree]);
 
     useEffect(() => {
-        if(species){
-            setName(species.name);
-            setApparition(species.apparition);
-            setDuration(species.duration);
-            setDescription(species.description ?? "");
-            setProp(TreeProp.NODE);
-        }
-    }, [species]);
-
-    useEffect(() => {
-        console.log({ json })
         const array = nullableInput(json, j => Array.isArray(j) ? j : [j]);
-        console.log({ array })
         if(tree && array) Promise.all(array.map(j => createSpecies({ treeId: tree.id, ...j }))).then(sp => {
             const filterSP = sp.filter(s => s !== undefined);
             if(filterSP.length) {
@@ -183,8 +212,41 @@ export const TreeEditor = () => {
             }
         });
     }, [json]);
+
+    useEffect(() => {
+        setPresentTime(present ? Math.max(...commonAncestors?.map(ca => ca.absoluteExtinction()) ?? []) : undefined);
+    }, [present]);
+
+    useEffect(() => {
+        if(species){
+            setName(species.name);
+            setApparition(species.apparition);
+            setDuration(species.duration);
+            setDescription(species.description ?? "");
+            setProp(TreeProp.NODE);
+        }
+        if(ref.current && commonAncestors) {
+            if(species){
+                const ad = commonAncestors.flatMap(ca => ca.allDescendants());
+                const d = chronoScale ? Math.max(...commonAncestors.map(ca => ca.absoluteExtinction())) - Math.min(...commonAncestors.map(ca => ca.apparition)) : Math.max(...ad.map(sp => sp.firstAncestor().stepsUntil(sp) ?? 0));
+                const i = Math.min(...ad.map((s, index) => s.id === species.id ? index : Number.MAX_SAFE_INTEGER));
+                const { scrollHeight, scrollWidth } = ref.current;
+                const { width, height } = dimensions;
+                const st = (x = 0, s = 1) => scrollHeight * (x + s) / ad.length;
+                ref.current.scrollTop = st(i, 1 / 2) - height / 2;
+                ref.current.scrollLeft = scrollWidth * (chronoScale ? species.extinction() : species.firstAncestor().stepsUntil(species) ?? 0) / d - width / 2 - st();
+            }
+            else {
+                const fa = Math.min(...commonAncestors.map(ca => ca.apparition) ?? []);
+                const ad = commonAncestors.flatMap(ca => ca.allDescendants());
+                const i = Math.min(...ad.map((s, index) => s.apparition === fa ? index : Number.MAX_SAFE_INTEGER));
+                const { scrollHeight } = ref.current;
+                ref.current.scrollTop = scrollHeight * (i - 1) / ad.length;
+            }
+        }
+    }, [species, commonAncestors, ref.current, chronoScale])
     
-    const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).length ?? 1;
+    const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).length ?? 1;
 
     return (
     <div className="w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden">
@@ -196,6 +258,7 @@ export const TreeEditor = () => {
             user={user}
         />
         <main className="flex flex-col w-full">
+            <p>({mousePos.x}, {mousePos.y})</p>
             <Header
                 search={search}
                 setSearch={setSearch}
@@ -230,10 +293,14 @@ export const TreeEditor = () => {
                     treeSocket={phTreeWS}
                     selected={species}
                     setSelected={setSpecies}
+                    selection={selection}
+                    setSelection={setSelection}
                     commonAncerstors={commonAncestors}
                     setCommonAncerstors={setCommonAncestors}
                     chronoScale={chronoScale}
                     setChronoScale={setChronoScale}
+                    showName={showNames}
+                    setShowName={setShowNames}
                     zoom={zoom}
                     setZoom={setZoom}
                     baseZoom={baseZoom}
@@ -242,20 +309,23 @@ export const TreeEditor = () => {
                     deltaZoom={0.1}
                 >
                     <TreeCanvas
-                        className={`bg-green-700 absolute top-0 bottom-0 right-0 left-0`}
+                        className={`bg-green-700 absolute top-0 bottom-0 right-0 left-0 ${selection ? "" : isDragging ? "cursor-grabbing" : "cursor-grab"}`}
                         ref={ref}
                         zoom={zoom}
                         width={dimensions.width}
                         height={dimensions.height}
-                        onClic={() => {
-                            if(species) setSpecies(undefined);
-                        }}
                         unit={unit}
                         chronoScale={chronoScale}
                         minHeight={minHeight}
                         minWidth={minWidth}
+                        scrollLeft={scrollPos.left}
+                        scrollTop={scrollPos.top}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onScroll={handleScroll}
                     >
-                        {commonAncestors?.flatMap(ca => ca.allDescendants()).map(s => SpNode({ species: s, diameter: Math.max(dimensions.height / total, minHeight ?? 0) * zoom, setSpecies }))}
+                        {commonAncestors?.flatMap(ca => ca.allDescendants()).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).map(s => SpNode({ species: s, diameter: Math.max(dimensions.height / total, minHeight ?? 0) * zoom, setSpecies, showNames, selection }))}
                     </TreeCanvas>
                 </TreeVisualization>
                 <TreeProperties
@@ -269,6 +339,14 @@ export const TreeEditor = () => {
                             treeSocket={phTreeWS}
                             tag={tag}
                             setTag={setTag}
+                            unit={unit}
+                            setUnit={setUnit}
+                            chronoScale={chronoScale}
+                            present={present}
+                            setPresent={setPresent}
+                            presentTime={presentTime}
+                            setPresentTime={setPresentTime}
+                            commonAncestors={commonAncestors}
                             getRootProps={getRootProps}
                             getInputProps={getInputProps}
                             isDragActive={isDragActive}
@@ -276,7 +354,7 @@ export const TreeEditor = () => {
                             getInputPropsJSON={gip}
                             isDragActiveJSON={ida}
                         />}
-                        {prop === TreeProp.NODE && tree && (species ? <NodeProps
+                        {prop === TreeProp.NODE && tree && <NodeProps
                             tree={tree}
                             treeSocket={phTreeWS}
                             species={species}
@@ -296,7 +374,7 @@ export const TreeEditor = () => {
                             getRootProps={getRootProps}
                             getInputProps={getInputProps}
                             isDragActive={isDragActive}
-                        /> : <h1 className={"text-center h-full flex items-center " + title}>SELECT A SPECIES TO EDIT IT</h1>)}
+                        />}
                         {prop === TreeProp.COLLABORATORS && tree && <CollabProps
                             tree={tree}
                             collab={collab}
