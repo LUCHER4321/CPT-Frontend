@@ -11,11 +11,15 @@ interface TreeVisualizationProps {
     tree?: PhTreeResponse;
     treeSocket?: PhTreeWS;
     selected?: Species;
-    setSelected?: (sp: Species) => void
+    setSelected?: (sp?: Species) => void;
+    selection?: boolean;
+    setSelection?: (b: boolean) => void;
     commonAncerstors?: Species[];
     setCommonAncerstors?: (sl: Species[]) => void;
     chronoScale?: boolean;
     setChronoScale?: (b: boolean) => void;
+    showName?: boolean;
+    setShowName?: (b: boolean) => void;
     zoom?: number;
     setZoom?: (n: number) => void;
     deltaZoom?: number;
@@ -30,10 +34,14 @@ export const TreeVisualization = ({
     treeSocket,
     selected,
     setSelected,
+    selection,
+    setSelection,
     commonAncerstors,
     setCommonAncerstors,
     chronoScale,
     setChronoScale,
+    showName,
+    setShowName,
     zoom = 1,
     setZoom,
     deltaZoom = 0.1,
@@ -61,8 +69,9 @@ export const TreeVisualization = ({
                         onClick={() => setZoom?.(baseZoom)}
                     />
                     <ToolButton
-                        title="Selection Mode"
-                        icon="fa-mouse-pointer"
+                        title={selection ? "Moving Mode" : "Selection Mode"}
+                        icon={selection ? "fa-hand" : "fa-mouse-pointer"}
+                        onClick={() => setSelection?.(!selection)}
                     />
                     <ToolButton
                         title={selected ? "Add Descendant" : "Add Species"}
@@ -70,7 +79,7 @@ export const TreeVisualization = ({
                         onClick={() => tree ? createSpecies({
                             treeId: tree.id,
                             ancestorId: selected?.id?.toString(),
-                            name: "",
+                            name: "Example Species",
                             ...selected ? {} : {apparition: commonAncerstors?.length ? Math.min(...commonAncerstors.map(ca => ca.apparition)) : 0},
                             ...selected ? {afterApparition: selected.duration} : {},
                             duration: selected ? selected.duration : commonAncerstors?.length ? Math.max(...commonAncerstors.map(ca => ca.duration)) : 1
@@ -98,6 +107,7 @@ export const TreeVisualization = ({
                                 if(selected.ancestor) selected.unlinkAncestor();
                                 else setCommonAncerstors?.(commonAncerstors?.filter(ca => ca.id !== selected.id) ?? []);
                                 const { id, name, duration, descendants, ...species } = selected.toJSON();
+                                setSelected?.();
                                 if(id && name && duration !== undefined) treeSocket?.emit({
                                     type: TreeChange.DELETE,
                                     species: {
@@ -113,15 +123,27 @@ export const TreeVisualization = ({
                     />
                     <p>Zoom: {(zoom / baseZoom * 100).toFixed()}%</p>
                 </div>
-                <div className="flex flex-row space-x-2">
-                    <ToggleSwitch
-                        id="chrono-scale"
-                        className={"w-15 h-7.5 " + (chronoScale ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
-                        spanClassName="bg-white"
-                        checked={chronoScale}
-                        onChange={setChronoScale}
-                    />
-                    <p className="font-bold">Chronological Scale</p>
+                <div className="flex flex-col space-y-2">
+                    <div className="flex flex-row space-x-2">
+                        <ToggleSwitch
+                            id="chrono-scale"
+                            className={"w-15 h-7.5 " + (chronoScale ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
+                            spanClassName="bg-white"
+                            checked={chronoScale}
+                            onChange={setChronoScale}
+                        />
+                        <p className="font-bold">Chronological Scale</p>
+                    </div>
+                    <div className="flex flex-row space-x-2">
+                        <ToggleSwitch
+                            id="show-name"
+                            className={"w-15 h-7.5 " + (showName ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
+                            spanClassName="bg-white"
+                            checked={showName}
+                            onChange={setShowName}
+                        />
+                        <p className="font-bold">Show Names</p>
+                    </div>
                 </div>
             </header>
             <div className="relative h-full! w-full!">
