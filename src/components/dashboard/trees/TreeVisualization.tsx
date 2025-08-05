@@ -5,6 +5,7 @@ import { createSpecies, deleteSpecies } from "../../../api/species";
 import type { PhTreeResponse } from "../../../types";
 import type { PhTreeWS } from "../../../classes/PhTreeWS";
 import { TreeChange } from "../../../enums";
+import { downloadSVG } from "../../../utils/downloadSVG";
 
 interface TreeVisualizationProps {
     children?: any;
@@ -26,6 +27,7 @@ interface TreeVisualizationProps {
     baseZoom?: number;
     minZoom?: number;
     maxZoom?: number;
+    svgId?: string;
 }
 
 export const TreeVisualization = ({
@@ -47,7 +49,8 @@ export const TreeVisualization = ({
     deltaZoom = 0.1,
     baseZoom = 1,
     minZoom = Number.EPSILON,
-    maxZoom = Number.MAX_SAFE_INTEGER
+    maxZoom = Number.MAX_SAFE_INTEGER,
+    svgId
 }: TreeVisualizationProps) => {
     return (
         <div className="flex flex-col my-2 ml-2 shadow-lg overflow-hidden h-full! w-full!">
@@ -121,6 +124,11 @@ export const TreeVisualization = ({
                             });
                         }}
                     />
+                    {false && <ToolButton
+                        title={`Download "${tree?.name}.svg"`}
+                        icon="fa-download"
+                        onClick={() => downloadSVG(svgId, tree?.name)}
+                    />}
                     <p>Zoom: {(zoom / baseZoom * 100).toFixed()}%</p>
                 </div>
                 <div className="flex flex-col space-y-2">
