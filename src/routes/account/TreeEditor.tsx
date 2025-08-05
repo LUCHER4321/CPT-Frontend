@@ -51,8 +51,6 @@ export const TreeEditor = () => {
     const ref = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const [isDragging, setIsDragging] = useState(false);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-    const [scrollPos, setScrollPos] = useState({ left: 0, top: 0 });
     const [startPos, setStartPos] = useState({ x: 0, y: 0 });
     const [startScroll, setStartScroll] = useState({ left: 0, top: 0 });
     const [present, setPresent] = useState(false);
@@ -60,37 +58,26 @@ export const TreeEditor = () => {
     const [showNames, setShowNames] = useState(true);
     const [selection, setSelection] = useState(true);
     const baseZoom = 0.9;
+    const deltaZoom = 0.1;
+    const maxZoom = 10;
+    const minZoom = 0.1;
     const minHeight = 100;
     const minWidth = 175;
     const [zoom, setZoom] = useState(baseZoom);
     const { id } = useParams();
     const history = useNavigate();
 
-    const handleScroll = () => {
-        if (ref.current) {
-            setScrollPos({
-                left: ref.current.scrollLeft,
-                top: ref.current.scrollTop,
-            });
-        }
-    };
-
-    const handleMouseMove = (e: MouseEvent, scrollLeft: number = 0, scrollTop: number = 0) => {
-        const svgRect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - svgRect.left + scrollLeft;
-        const y = e.clientY - svgRect.top + scrollTop;
-        setMousePos({ x, y });
-        if (isDragging && ref.current) {
-            const dx = startPos.x - e.clientX;
-            const dy = startPos.y - e.clientY;
+    const handleMouseMove = ({clientX, clientY}: MouseEvent) => {
+        if (isDragging && ref.current && !selection) {
+            const dx = startPos.x - clientX;
+            const dy = startPos.y - clientY;
             ref.current.scrollLeft = startScroll.left + dx;
             ref.current.scrollTop = startScroll.top + dy;
         }
     };
 
-    const handleMouseDown = (e: MouseEvent) => {
+    const handleMouseDown = ({ clientX, clientY }: MouseEvent) => {
         setIsDragging(true);
-        const { clientX, clientY } = e;
         setStartPos({ x: clientX, y: clientY });
         if(ref.current) {
             const { scrollLeft, scrollTop } = ref.current;
@@ -258,7 +245,6 @@ export const TreeEditor = () => {
             user={user}
         />
         <main className="flex flex-col w-full">
-            <p>({mousePos.x}, {mousePos.y})</p>
             <Header
                 search={search}
                 setSearch={setSearch}
@@ -304,9 +290,10 @@ export const TreeEditor = () => {
                     zoom={zoom}
                     setZoom={setZoom}
                     baseZoom={baseZoom}
-                    minZoom={0.1}
-                    maxZoom={10}
-                    deltaZoom={0.1}
+                    minZoom={minZoom}
+                    maxZoom={maxZoom}
+                    deltaZoom={deltaZoom}
+                    svgId="tree-canvas"
                 >
                     <TreeCanvas
                         className={`bg-green-700 absolute top-0 bottom-0 right-0 left-0 ${selection ? "" : isDragging ? "cursor-grabbing" : "cursor-grab"}`}
@@ -318,12 +305,10 @@ export const TreeEditor = () => {
                         chronoScale={chronoScale}
                         minHeight={minHeight}
                         minWidth={minWidth}
-                        scrollLeft={scrollPos.left}
-                        scrollTop={scrollPos.top}
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
-                        onScroll={handleScroll}
+                        svgId="tree-canvas"
                     >
                         {commonAncestors?.flatMap(ca => ca.allDescendants()).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).map(s => SpNode({ species: s, diameter: Math.max(dimensions.height / total, minHeight ?? 0) * zoom, setSpecies, showNames, selection }))}
                     </TreeCanvas>
