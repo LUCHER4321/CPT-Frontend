@@ -1,9 +1,9 @@
-import type { Ref } from "react";
+import type { MouseEvent, Ref, UIEvent } from "react";
 import type { NodeTSX } from "../../../types"
 import { nullableInput } from "../../../utils/nullableInput";
 import { TimeUnit } from "../../../enums";
-import type { Species } from "chrono-phylo-tree";
-import { percentile } from "../../../utils/average";
+import { Species } from "chrono-phylo-tree";
+import { order, percentile } from "../../../utils/average";
 
 interface TreeCanvasProps {
     children?: NodeTSX | NodeTSX[];
@@ -17,6 +17,12 @@ interface TreeCanvasProps {
     chronoScale?: boolean;
     minHeight?: number;
     minWidth?: number;
+    scrollLeft?: number;
+    scrollTop?: number;
+    onMouseDown?: (e: MouseEvent) => void;
+    onMouseMove?: (e: MouseEvent, scrollLeft?: number, scrollTop?: number) => void;
+    onMouseUp?: (e: MouseEvent) => void;
+    onScroll?: (e: UIEvent) => void;
 }
 
 export const TreeCanvas = ({
@@ -29,17 +35,26 @@ export const TreeCanvas = ({
     height = 1,
     chronoScale,
     minHeight = 0,
-    minWidth = 0
+    minWidth = 0,
+    scrollLeft = 0,
+    scrollTop = 0,
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    onScroll
 }: TreeCanvasProps) => {
-    const WIDTH = (width) * zoom;
-    const HEIGHT = (height) * zoom;
+    const dMult = 2.5;
+    const mult = 10;
+    const WIDTH = width * zoom;
+    const HEIGHT = height * zoom;
     const MIN_HEIGHT = minHeight * zoom;
     const MIN_WIDTH = minWidth * zoom;
     const nodes = nullableInput(children, c => Array.isArray(c) ? c : [c]);
     const diameter = nullableInput(nodes?.length, l => Math.max(HEIGHT / l, MIN_HEIGHT)) ?? 0;
     const FINAL_HEIGHT = diameter * (nodes?.length ?? 0);
-    const kx = Math.max(MIN_WIDTH / (chronoScale ? percentile(0.01, ...nodes?.map(({ species }) => species?.duration) ?? []) : 1), (WIDTH - diameter) / Math.max(...nodes?.map(({ species }) => (chronoScale ? species?.absoluteDuration() : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []));
-    const FINAL_WIDTH = Math.max(WIDTH, diameter + kx * Math.max(...nodes?.map(({ species }) => (chronoScale ? species?.absoluteDuration() : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []));
+    const minDuration = chronoScale ? order(percentile(0.1, ...nodes?.map(({ species }) => species?.duration) ?? [])) : 1;
+    const kx = Math.max(MIN_WIDTH / minDuration, (WIDTH - dMult * diameter) / Math.max(...nodes?.map(({ species }) => (chronoScale ? species?.absoluteDuration() : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []));
+    const FINAL_WIDTH = Math.max(WIDTH, dMult * diameter + kx * Math.max(...nodes?.map(({ species }) => (chronoScale ? nullableInput(species, sp => sp.extinction() - sp.firstAncestor().apparition) : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []));
     const firstApparition =  Math.min(...nodes?.map(({ species }) => species?.apparition).filter(a => a !== undefined) ?? []);
     const x1 = (species: Species) => (chronoScale ? species.apparition - firstApparition : (species.firstAncestor().stepsUntil(species) ?? 0)) * kx;
     const x2 = (species: Species) => (chronoScale ? species.extinction() - firstApparition : ((species.firstAncestor().stepsUntil(species) ?? 0) + 1)) * kx;
@@ -60,12 +75,39 @@ export const TreeCanvas = ({
             className={"flex " + (FINAL_HEIGHT > height ? "overflow-y-scroll items-start " : "items-center ") + (FINAL_WIDTH > width ? "overflow-x-scroll justify-start " : "justify-center ") + className}
             onClick={onClic}
             ref={ref}
+            onMouseDown={onMouseDown}
+            onMouseMove={e => onMouseMove?.(e, scrollLeft, scrollTop)}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            onScroll={onScroll}
         >
             <svg
                 width={FINAL_WIDTH}
                 height={FINAL_HEIGHT}
                 className="flex-shrink-0"
             >
+                {[...Array(Math.ceil(FINAL_WIDTH / MIN_WIDTH) * mult).keys()].map(n => {
+                    const xn = (chronoScale ? (n + Math.ceil(firstApparition * mult / minDuration)) * minDuration / mult - firstApparition : (n / mult)) * kx;
+                    return <line
+                        key={n}
+                        y1={0}
+                        y2={FINAL_HEIGHT}
+                        x1={xn}
+                        x2={xn}
+                        stroke="#7F7F7F"
+                    />
+                })}
+                {[...Array(Math.ceil(FINAL_HEIGHT / MIN_WIDTH) * mult).keys()].map(n => {
+                    const yn = n * minDuration * kx / mult;
+                    return <line
+                        key={n}
+                        y1={yn}
+                        y2={yn}
+                        x1={0}
+                        x2={FINAL_WIDTH}
+                        stroke="#7F7F7F"
+                    />
+                })}
                 {nodes?.map(({ species, ...node }, index) => species && <g key={index}>
                     <line
                         y1={y(index)}
@@ -73,15 +115,34 @@ export const TreeCanvas = ({
                         x1={x1(species)}
                         x2={x2(species)}
                         stroke="black"
+                        className="block dark:hidden"
                     />
-                    {nodes.map(({ species: sp }, index1) => sp && species.descendants.map(d => d.id).includes(sp.id) && <line
-                        key={index1}
+                    <line
                         y1={y(index)}
-                        y2={y(index1)}
-                        x1={x1(sp)}
-                        x2={x1(sp)}
-                        stroke="black"
-                    />)}
+                        y2={y(index)}
+                        x1={x1(species)}
+                        x2={x2(species)}
+                        stroke="white"
+                        className="dark:block hidden"
+                    />
+                    {nodes.map(({ species: sp }, index1) => sp && species.descendants.map(d => d.id).includes(sp.id) && <g key={index1}>
+                        <line
+                            y1={y(index)}
+                            y2={y(index1)}
+                            x1={x1(sp)}
+                            x2={x1(sp)}
+                            stroke="black"
+                            className="block dark:hidden"
+                        />
+                        <line
+                            y1={y(index)}
+                            y2={y(index1)}
+                            x1={x1(sp)}
+                            x2={x1(sp)}
+                            stroke="white"
+                            className="dark:block hidden"
+                        />
+                    </g>)}
                     {chronoScale && <foreignObject
                         x={x1(species)}
                         y={y(index)}
@@ -89,8 +150,8 @@ export const TreeCanvas = ({
                         height={diameter / 2}
                     >
                         <div className="w-full flex flex-row justify-between">
-                            <p className="text-black">{rep(species.apparition)}</p>
-                            <p className="text-black">{rep(species.extinction())}</p>
+                            <p>{rep(species.apparition)}</p>
+                            <p>{rep(species.extinction())}</p>
                         </div>
                     </foreignObject>}
                     <foreignObject
@@ -98,6 +159,7 @@ export const TreeCanvas = ({
                         y={index * diameter}
                         width={diameter}
                         height={diameter}
+                        className="overflow-visible"
                     >
                         {node}
                     </foreignObject>
