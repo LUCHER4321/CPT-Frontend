@@ -7,20 +7,23 @@ interface SpNodeProps {
     species?: Species;
     diameter?: number;
     setSpecies?: (sp: Species) => void;
+    showNames?: boolean;
+    selection?: boolean;
 }
-
-const cursorImage = "cursor-pointer absolute bottom-0 right-0 left-0 " + circleImage;
 
 export const SpNode = ({
     species,
     diameter,
-    setSpecies
+    setSpecies,
+    showNames,
+    selection
 }: SpNodeProps): NodeTSX => {
+    const cursorImage = (selection ? "cursor-pointer" : "") + " absolute bottom-0 right-0 left-0 " + circleImage;
     return {
         species,
         ...(<div
-            className={"relative w-full h-full " + cursorImage}
-            onClick={() => nullableInput(species, setSpecies ?? (() => {}))}
+            className={"relative overflow-visible flex flex-row w-full h-full " + cursorImage}
+            onClick={selection ? () => nullableInput(species, setSpecies ?? (() => {})) : undefined}
             title={species?.name}
         >
             {species?.image ? <img
@@ -29,6 +32,7 @@ export const SpNode = ({
                     height: diameter
                 }}
                 src={species.image}
+                    className={cursorImage}
             /> : species && <>
                 <img
                     style={{
@@ -36,6 +40,7 @@ export const SpNode = ({
                         height: diameter
                     }}
                     src="/logo.svg"
+                    className={"hidden dark:block " + cursorImage}
                 />
                 <img
                     style={{
@@ -43,13 +48,14 @@ export const SpNode = ({
                         height: diameter
                     }}
                     src="/logoLight.svg"
+                    className={"dark:hidden block " + cursorImage}
                 />
             </>}
-            <div className="absolute bottom-0 right-0 left-0 flex justify-center items-end">
-                <p className="px-2 py-1 bg-white dark:bg-black rounded-full text-center">
+            {showNames && <div className="absolute top-0 bottom-0 left-full flex justify-start items-center">
+                <p className="p-1 rounded bg-white dark:bg-black text-center">
                     {species?.name}
                 </p>
-            </div>
+            </div>}
         </div>)
     }
 }
