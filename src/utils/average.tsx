@@ -14,3 +14,5 @@ export const percentile = (per: number, ...numbers: (number | undefined)[]) => {
 };
 
 export const median = (...numbers: (number | undefined)[]) => percentile(1 / 2, ...numbers);
+
+export const order = (n: number, b = 10) => Math.pow(b, Math.floor(Math.log(n) / Math.log(b)));
