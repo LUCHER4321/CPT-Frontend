@@ -1,7 +1,7 @@
 import type { DropzoneInputProps, DropzoneRootProps } from "react-dropzone";
 import { deleteTree, updateTree } from "../../../api/phTree";
 import { PhTreeWS } from "../../../classes/PhTreeWS";
-import { TreeChange } from "../../../enums";
+import { TimeUnit, TreeChange } from "../../../enums";
 import type { PhTreeResponse } from "../../../types"
 import { AuthField } from "../../auth/AuthField";
 import { IconInput } from "../../IconInput";
@@ -9,6 +9,8 @@ import { ImageProp } from "./ImageProp";
 import { unborder } from "../../../data/classNames";
 import { useNavigate } from "react-router-dom";
 import { nullableInput } from "../../../utils/nullableInput";
+import { ToggleSwitch } from "../../pricing/ToggleSwitch";
+import type { Species } from "chrono-phylo-tree";
 
 interface TreePropsProps {
     tree?: PhTreeResponse;
@@ -16,6 +18,14 @@ interface TreePropsProps {
     treeSocket?: PhTreeWS;
     tag?: string;
     setTag?: (t: string) => void;
+    unit?: TimeUnit;
+    setUnit?: (tu: TimeUnit) => void;
+    chronoScale?: boolean;
+    present?: boolean;
+    setPresent?: (b: boolean) => void;
+    presentTime?: number;
+    setPresentTime?: (n: number) => void;
+    commonAncestors?: Species[];
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps;
     getInputProps?: (props?: DropzoneInputProps) => DropzoneInputProps;
     isDragActive?: boolean;
@@ -30,6 +40,14 @@ export const TreeProps = ({
     treeSocket,
     tag,
     setTag,
+    unit = TimeUnit.Y,
+    setUnit,
+    chronoScale,
+    present,
+    setPresent,
+    presentTime,
+    setPresentTime,
+    commonAncestors,
     getRootProps,
     getInputProps,
     isDragActive,
@@ -38,8 +56,53 @@ export const TreeProps = ({
     isDragActiveJSON
 }: TreePropsProps) => {
     const history = useNavigate();
+    const apparition = Math.min(...commonAncestors?.map(ca => ca.apparition) ?? []);
+    const extinction = Math.max(...commonAncestors?.map(ca => ca.absoluteExtinction()) ?? []);
     return (
         <>
+            <AuthField
+                name="Time Unit"
+                selected={unit}
+                setSelected={setUnit}
+                options={[TimeUnit.Y, TimeUnit.KY, TimeUnit.MY, TimeUnit.BY, TimeUnit.TY]}
+                optionsDisplay={tu => {
+                    switch(tu) {
+                        case TimeUnit.Y: return "Years"
+                        case TimeUnit.KY: return "Thousand Years"
+                        case TimeUnit.MY: return "Million Years"
+                        case TimeUnit.BY: return "Billion Years"
+                        case TimeUnit.TY: return "Trillion Years"
+                    }
+                }}
+            />
+            {chronoScale && <div className="flex flex-col">
+                <div className="flex flex-row justify-between mb-2">
+                    <p className="font-bold">Present Time</p>
+                    <ToggleSwitch
+                        id="present-time"
+                        className={"w-15 h-7.5 " + (present ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
+                        spanClassName="bg-white"
+                        checked={present}
+                        onChange={setPresent}
+                    />
+                </div>
+                {present && <IconInput
+                    className="pl-[1rem] py-[0.8rem] border rounded w-full"
+                    type="number"
+                    value={nullableInput(presentTime, pt => pt / unit)?.toString()}
+                    setValue={pt => setPresentTime?.(+pt * unit)}
+                    min={apparition / unit}
+                    max={extinction / unit}
+                />}
+                {present && <IconInput
+                    type="range"
+                    className="w-full"
+                    min={apparition / unit}
+                    max={extinction / unit}
+                    value={nullableInput(presentTime, pt => pt / unit)?.toString()}
+                    setValue={pt => setPresentTime?.(+pt * unit)}
+                />}
+            </div>}
             <AuthField
                 name="Tree's Name"
                 type="text"
@@ -162,7 +225,7 @@ export const TreeProps = ({
                 isDragActive={isDragActive}
                 text={tree?.image ? "Update Image" : "Upload Image"}
             />
-            <ImageProp
+            {false && <ImageProp
                 title="Upload a JSON"
                 getRootProps={getRootPropsJSON}
                 getInputProps={nullableInput(getInputPropsJSON, g => props => g({
@@ -172,7 +235,7 @@ export const TreeProps = ({
                 }))}
                 isDragActive={isDragActiveJSON}
                 text="Upload a JSON"
-            />
+            />}
             <button
                 className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
                 onClick={() => {
