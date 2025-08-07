@@ -57,6 +57,7 @@ export const TreeEditor = () => {
     const [presentTime, setPresentTime] = useState<number | undefined>(undefined);
     const [showNames, setShowNames] = useState(true);
     const [selection, setSelection] = useState(true);
+    const [grids, setGrids] = useState(true);
     const baseZoom = 0.9;
     const deltaZoom = 0.1;
     const maxZoom = 10;
@@ -287,6 +288,8 @@ export const TreeEditor = () => {
                     setChronoScale={setChronoScale}
                     showName={showNames}
                     setShowName={setShowNames}
+                    grids={grids}
+                    setGrids={setGrids}
                     zoom={zoom}
                     setZoom={setZoom}
                     baseZoom={baseZoom}
@@ -296,7 +299,7 @@ export const TreeEditor = () => {
                     svgId="tree-canvas"
                 >
                     <TreeCanvas
-                        className={`bg-green-700 absolute top-0 bottom-0 right-0 left-0 ${selection ? "" : isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+                        className={`absolute top-0 bottom-0 right-0 left-0 ${selection ? "" : isDragging ? "cursor-grabbing" : "cursor-grab"}`}
                         ref={ref}
                         zoom={zoom}
                         width={dimensions.width}
@@ -305,10 +308,11 @@ export const TreeEditor = () => {
                         chronoScale={chronoScale}
                         minHeight={minHeight}
                         minWidth={minWidth}
+                        grids={grids}
+                        svgId="tree-canvas"
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
-                        svgId="tree-canvas"
                     >
                         {commonAncestors?.flatMap(ca => ca.allDescendants()).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).map(s => SpNode({ species: s, diameter: Math.max(dimensions.height / total, minHeight ?? 0) * zoom, setSpecies, showNames, selection }))}
                     </TreeCanvas>
