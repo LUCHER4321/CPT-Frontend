@@ -85,6 +85,7 @@ export interface UserRequest {
         oldPassword?: string;
         password?: string;
         plan?: Plan;
+        planExpiration?: Date;
     }, UserResponse>;
     deleteMe: RequestFunction<{}, void>;
     photoMe: RequestFunction<{
