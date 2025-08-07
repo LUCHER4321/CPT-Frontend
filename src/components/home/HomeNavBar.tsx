@@ -4,19 +4,22 @@ import { HomeButton } from "./HomeButton";
 import { IconInput } from "../IconInput";
 import { LinkButton } from "../LinkButton";
 import { NavBar } from "../NavBar";
+import type { UserResponse } from "../../types";
 
 interface HomeNavBarProps {
     open?: boolean;
     setOpen?: (o: boolean) => void;
     search?: string;
     setSearch?: (s: string) => void;
+    user?: UserResponse;
 }
 
 export const HomeNavBar = ({
     open,
     setOpen,
     search,
-    setSearch
+    setSearch,
+    user
 }: HomeNavBarProps) => {
     return (
         <>
@@ -38,8 +41,8 @@ export const HomeNavBar = ({
                         />
                         <LinkButton href="/#top-trees" className={"m-1 " + blankButton}>Featured Trees</LinkButton>
                         <LinkButton href="/pricing" className={"m-1 " + blankButton}>Pricing</LinkButton>
-                        <LinkButton href="/auth" className={"m-1 " + borderButton}>Log In</LinkButton>
-                        <LinkButton href="/auth?register=true" className={"m-1 " + filledButton}>Register</LinkButton>
+                        <LinkButton href={user ? "/account" : "/auth"} className={"m-1 " + borderButton}>Log In</LinkButton>
+                        {!user && <LinkButton href="/auth?register=true" className={"m-1 " + filledButton}>Register</LinkButton>}
                     </BurgerMenu>
                 </div>
             </NavBar>
