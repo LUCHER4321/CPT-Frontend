@@ -6,15 +6,16 @@ import { getMe, token } from "../api/user";
 import { Header } from "../components/dashboard/Header";
 import { getMyTrees, myTreesCount } from "../api/phTree";
 import { getNotifications } from "../api/notification";
-import type { NotificationResponse, PhTreeResponse } from "../types";
+import type { NotificationResponse, PhTreeResponse, UserResponse } from "../types";
 import { NotificationWS } from "../classes/NotificationWS";
 import { socket } from "../api/socket";
 import { TreesData } from "../components/dashboard/TreesData";
 import { Order, TreeCriteria } from "../enums";
 import { LastTrees } from "../components/dashboard/LastTrees";
-import { title } from "../data/classNames";
+import { aText, title } from "../data/classNames";
 import { DESIGN_MODE } from "../config";
 import { useNavigate } from "react-router-dom";
+import { getFollowersCount, getFollowing } from "../api/follow";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
@@ -27,12 +28,20 @@ export const Dashboard = () => {
     const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [active, setActive] = useState(false);
     const [lastTrees, setLastTrees] = useState<PhTreeResponse[]>([]);
+    const [follows, setFollows] = useState<{
+        following?: UserResponse[];
+        followers?: number;
+    }>({})
     const history = useNavigate();
     useEffect(() => {
-        document.title = "Life Tree | Dashboard";
         getMe({}).then(u => {
             if(!DESIGN_MODE && !u) history("/");
             setUser(u ?? exampleUsers[0]);
+            document.title = `Life Tree | ${u?.username} Dashboard`;
+            if(u) getFollowing({ userId: u.id }).then(fl => getFollowersCount({ userId: u.id }).then(f => setFollows({
+                following: fl,
+                followers: f?.count
+            })));
             myTreesCount({}).then(t => {
                 setTrees(t?.total ?? exampleTrees.filter(tr => tr.userId === exampleUsers[0].id || tr.collaborators?.includes(exampleUsers[0].id)).length);
                 setMyTrees(t?.myTrees ?? exampleTrees.filter(tr => tr.userId === exampleUsers[0].id).length);
@@ -71,7 +80,10 @@ export const Dashboard = () => {
                     active={active}
                     setActive={setActive}
                 >
-                    <h1 className={"block text-[2em]! font-bold " + title}>Welcome back, {user?.username}</h1>
+                    <div className="flex flex-col">
+                        <h1 className={"block text-[2em]! font-bold " + title}>Welcome back, {user?.username}</h1>
+                        <p className={"block font-bold " + title}><a href="/account/follows/following" className={aText}>{follows.following?.length} Following</a>, <a href="/account/follows/followers" className={aText}>{follows.followers} Followers</a></p>
+                    </div>
                 </Header>
                 <div className="w-full h-full grid grid-cols-1 sm:grid-cols-3 gap-5 p-10 sm:gap-10 overflow-y-scroll">
                     <TreesData
