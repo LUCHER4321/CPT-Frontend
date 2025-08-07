@@ -21,6 +21,8 @@ interface TreeVisualizationProps {
     setChronoScale?: (b: boolean) => void;
     showName?: boolean;
     setShowName?: (b: boolean) => void;
+    grids?: boolean;
+    setGrids?: (b: boolean) => void;
     zoom?: number;
     setZoom?: (n: number) => void;
     deltaZoom?: number;
@@ -44,6 +46,8 @@ export const TreeVisualization = ({
     setChronoScale,
     showName,
     setShowName,
+    grids,
+    setGrids,
     zoom = 1,
     setZoom,
     deltaZoom = 0.1,
@@ -70,6 +74,11 @@ export const TreeVisualization = ({
                         title="Center View"
                         icon="fa-crosshairs"
                         onClick={() => setZoom?.(baseZoom)}
+                    />
+                    <ToolButton
+                        title={grids ? "Hide Grids" : "Show Grids"}
+                        icon="fa-grip"
+                        onClick={() => setGrids?.(!grids)}
                     />
                     <ToolButton
                         title={selection ? "Moving Mode" : "Selection Mode"}
@@ -124,11 +133,11 @@ export const TreeVisualization = ({
                             });
                         }}
                     />
-                    {false && <ToolButton
+                    <ToolButton
                         title={`Download "${tree?.name}.svg"`}
                         icon="fa-download"
                         onClick={() => downloadSVG(svgId, tree?.name)}
-                    />}
+                    />
                     <p>Zoom: {(zoom / baseZoom * 100).toFixed()}%</p>
                 </div>
                 <div className="flex flex-col space-y-2">
