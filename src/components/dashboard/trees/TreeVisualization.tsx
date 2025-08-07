@@ -30,6 +30,7 @@ interface TreeVisualizationProps {
     minZoom?: number;
     maxZoom?: number;
     svgId?: string;
+    maxSpecies?: number;
 }
 
 export const TreeVisualization = ({
@@ -54,7 +55,8 @@ export const TreeVisualization = ({
     baseZoom = 1,
     minZoom = Number.EPSILON,
     maxZoom = Number.MAX_SAFE_INTEGER,
-    svgId
+    svgId,
+    maxSpecies
 }: TreeVisualizationProps) => {
     return (
         <div className="flex flex-col my-2 ml-2 shadow-lg overflow-hidden h-full! w-full!">
@@ -88,7 +90,7 @@ export const TreeVisualization = ({
                     <ToolButton
                         title={selected ? "Add Descendant" : "Add Species"}
                         icon="fa-plus-circle"
-                        onClick={() => tree ? createSpecies({
+                        onClick={() => tree && (commonAncerstors?.flatMap(ca => ca.allDescendants(false)).length ?? 0) < (maxSpecies ?? Number.MAX_SAFE_INTEGER) ? createSpecies({
                             treeId: tree.id,
                             ancestorId: selected?.id?.toString(),
                             name: "Example Species",
@@ -105,7 +107,7 @@ export const TreeVisualization = ({
                                     species
                                 });
                             }
-                        }) : undefined}
+                        }) : alert("No more species allowed in this tree, you can upgrade your plan or create another Phylogenetic Tree")}
                     />
                     <ToolButton
                         title="Delete Species"
