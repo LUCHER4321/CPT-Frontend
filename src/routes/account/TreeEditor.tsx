@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react
 import { useNavigate, useParams } from "react-router-dom"
 import type { NotificationResponse, PhTreeResponse, StrictSpecies, UserResponse } from "../../types";
 import { getTree, imageTree, viewTree } from "../../api/phTree";
-import { getMe, getUser, userSearch } from "../../api/user";
+import { getMe, getUser, token, userSearch } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
 import { title } from "../../data/classNames";
 import { getNotifications } from "../../api/notification";
@@ -24,6 +24,7 @@ import { TreeCanvas } from "../../components/dashboard/trees/TreeCanvas";
 import { SpNode } from "../../components/dashboard/trees/Node";
 import { readFileAsJson } from "../../utils/readFileAsJson";
 import { nullableInput } from "../../utils/nullableInput";
+import { plans } from "../../data/prices";
 
 export const TreeEditor = () => {
     const [expanded, setExpanded] = useState(false);
@@ -58,6 +59,7 @@ export const TreeEditor = () => {
     const [showNames, setShowNames] = useState(true);
     const [selection, setSelection] = useState(true);
     const [grids, setGrids] = useState(true);
+    const [maxSpecies, setMaxSpecies] = useState<number | undefined>(undefined);
     const baseZoom = 0.9;
     const deltaZoom = 0.1;
     const maxZoom = 10;
@@ -116,6 +118,7 @@ export const TreeEditor = () => {
     useEffect(() => {
         if(id) getMe({}).then(u => {
             setUser(u);
+            setMaxSpecies(nullableInput(u?.plan, p => plans.get(p)?.constraints.maxSpecies));
             getTree({ id }).then(t => {
                 if(t) {
                     setTree(t);
@@ -135,6 +138,16 @@ export const TreeEditor = () => {
                                     break;
                                 case TreeChange.EDIT:
                                     if(!species) return;
+                                    const find = commonAncestors?.flatMap(ca => ca.allDescendants(false)).find;
+                                    if(!find) return;
+                                    const oldSpecies = find(sp => sp.id === species.id);
+                                    if(!oldSpecies) return;
+                                    oldSpecies.name = species.name;
+                                    oldSpecies.apparition = species.apparition ?? ((oldSpecies.ancestor?.apparition ?? 0) + (species.afterApparition ?? 0));
+                                    oldSpecies.duration = species.duration;
+                                    oldSpecies.ancestor = find(sp => sp.id === species.ancestorId);
+                                    oldSpecies.description = species.description;
+                                    oldSpecies.image = species.image;
                                     break;
                                 case TreeChange.DELETE:
                                     if(!species) return;
@@ -175,6 +188,7 @@ export const TreeEditor = () => {
                 response: nr => setNotifications(prev => prev.concat([nr])),
                 userId: u?.id ?? ""
             }));
+            token({ expiresIn: "7d" });
         });
         const handleResize = () => {
             if (ref.current) {
@@ -297,6 +311,7 @@ export const TreeEditor = () => {
                     maxZoom={maxZoom}
                     deltaZoom={deltaZoom}
                     svgId="tree-canvas"
+                    maxSpecies={maxSpecies}
                 >
                     <TreeCanvas
                         className={`absolute top-0 bottom-0 right-0 left-0 ${selection ? "" : isDragging ? "cursor-grabbing" : "cursor-grab"}`}
