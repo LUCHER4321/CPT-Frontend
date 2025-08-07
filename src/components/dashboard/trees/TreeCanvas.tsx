@@ -17,6 +17,8 @@ interface TreeCanvasProps {
     chronoScale?: boolean;
     minHeight?: number;
     minWidth?: number;
+    grids?: boolean;
+    svgId?: string;
     scrollLeft?: number;
     scrollTop?: number;
     onMouseDown?: (e: MouseEvent) => void;
@@ -24,7 +26,6 @@ interface TreeCanvasProps {
     onMouseUp?: (e: MouseEvent) => void;
     onScroll?: (e: UIEvent) => void;
     onWheel?: (e: WheelEvent) => void;
-    svgId?: string;
 }
 
 export const TreeCanvas = ({
@@ -38,6 +39,8 @@ export const TreeCanvas = ({
     chronoScale,
     minHeight = 0,
     minWidth = 0,
+    grids,
+    svgId,
     scrollLeft = 0,
     scrollTop = 0,
     onMouseDown,
@@ -45,7 +48,6 @@ export const TreeCanvas = ({
     onMouseUp,
     onScroll,
     onWheel,
-    svgId
 }: TreeCanvasProps) => {
     const dMult = 2.5;
     const mult = 10;
@@ -93,7 +95,7 @@ export const TreeCanvas = ({
                 height={FINAL_HEIGHT}
                 className="flex-shrink-0"
             >
-                {[...Array(Math.ceil(FINAL_WIDTH / MIN_WIDTH) * mult).keys()].map(n => {
+                {grids && [...Array(Math.ceil(FINAL_WIDTH / MIN_WIDTH) * mult).keys()].map(n => {
                     const xn = (chronoScale ? (n + Math.ceil(firstApparition * mult / minDuration)) * minDuration / mult - firstApparition : (n / mult)) * kx;
                     return <line
                         key={n}
@@ -104,7 +106,7 @@ export const TreeCanvas = ({
                         stroke="#7F7F7F"
                     />
                 })}
-                {[...Array(Math.ceil(FINAL_HEIGHT / MIN_WIDTH) * mult).keys()].map(n => {
+                {grids && [...Array(Math.ceil(FINAL_HEIGHT / MIN_WIDTH) * mult).keys()].map(n => {
                     const yn = n * minDuration * kx / mult;
                     return <line
                         key={n}
