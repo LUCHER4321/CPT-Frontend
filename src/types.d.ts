@@ -138,7 +138,7 @@ export interface PhTreeResponse {
     views: number;
 }
 
-type SearchProps = Partial<{
+export type SearchProps = Partial<{
     page: number;
     limit: number;
     search: string;
@@ -148,6 +148,11 @@ type SearchProps = Partial<{
     to: Date;
 }>
 
+export type SearchResult = {
+    trees: PhTreeResponse[];
+    count: number;
+}
+
 export interface PhTreeRequest {
     createTree: RequestFunction<{
         name: string;
@@ -156,7 +161,7 @@ export interface PhTreeRequest {
         tags?: string[];
         collaborators?: string[];
     }, PhTreeResponse>;
-    getMyTrees: RequestFunction<SearchProps & { owner?: boolean }, PhTreeResponse[]>;
+    getMyTrees: RequestFunction<SearchProps & { owner?: boolean }, SearchResult>;
     myTreesCount: RequestFunction<{}, {
         total: number;
         myTrees: number;
@@ -181,7 +186,7 @@ export interface PhTreeRequest {
     deleteImageTree: RequestFunction<{
         id: string;
     }, PhTreeResponse>;
-    searchTrees: RequestFunction<SearchProps, PhTreeResponse[]>;
+    searchTrees: RequestFunction<SearchProps, SearchResult>;
     getTree: RequestFunction<{
         id: string;
     }, PhTreeResponse>;
