@@ -26,7 +26,7 @@ export const SearchHeader = ({
                 optionsDisplay={tc => {
                     switch(tc) {
                         case TreeCriteria.CREATED_AT: return "Creation Date"
-                        case TreeCriteria.UPDATED_AT: return "Update Date"
+                        case TreeCriteria.UPDATED_AT: return "Last Update"
                         default: return capitalizeFirstLetter(tc)
                     }
                 }}
