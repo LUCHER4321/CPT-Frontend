@@ -22,6 +22,7 @@ interface IconInputProps<T> {
     min?: number;
     max?: number;
     step?: number;
+    href?: string;
 }
 
 export const IconInput = <T,>({
@@ -45,7 +46,8 @@ export const IconInput = <T,>({
     textArea = false,
     min,
     max,
-    step
+    step,
+    href
 }: IconInputProps<T>) => {
     return (
         <div className={setIcon ? "relative" : "flex flex-row"}>
@@ -89,7 +91,12 @@ export const IconInput = <T,>({
                 </option>)}
             </select>}
             {setIcon &&
-                <button
+                href ? <a
+                    href={href}
+                    className={`bg-black/0! p-0! absolute right-[1rem] flex flex-row items-center top-0 bottom-0 border-0! outline-0! ${onClick ? "" : "cursor-not-allowed!"} ${buttonClassName}`}
+                >
+                    <i className={"fas " + icon}/>
+                </a> : <button
                     type="button"
                     className={`bg-black/0! p-0! absolute right-[1rem] flex flex-row items-center top-0 bottom-0 border-0! outline-0! ${onClick ? "" : "cursor-not-allowed!"} ${buttonClassName}`}
                     onClick={onClick}>
