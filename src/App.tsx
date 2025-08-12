@@ -20,14 +20,15 @@ function App() {
     getMe({}).then(setUser);
     const fetchTrees = async () => {
       try {
-        const remoteTrees = await searchTrees({
+        const remote = await searchTrees({
           limit: 3,
           criteria: TreeCriteria.POPULARITY,
           order: Order.DESC
         }).catch(() => {
           throw new Error("Failed to fetch trees");
         });
-        if(!remoteTrees) throw new Error("Failed to fetch trees");
+        if(!remote) throw new Error("Failed to fetch trees");
+        const remoteTrees = remote.trees;
         const remoteUsers = await Promise.all(
           remoteTrees?.map(t => getUser({ id: t.userId })) ?? []
         );
