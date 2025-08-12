@@ -24,6 +24,7 @@ interface AuthFieldProps<T> {
     min?: number;
     max?: number;
     onClick?: () => void;
+    row?: boolean;
 }
 
 export const AuthField = <T,>({
@@ -48,10 +49,11 @@ export const AuthField = <T,>({
     icon,
     min,
     max,
-    onClick
+    onClick,
+    row
 }: AuthFieldProps<T>) => {
     return (
-        <section className={"flex flex-col mb-6 " + className}>
+        <section className={"flex mb-6 " + (row ? "flex-row " : "flex-col ") + className}>
             <p className="font-bold mb-2">{name}</p>
             <IconInput
                 setIcon={!!setVisiblePassword || setIcon}
