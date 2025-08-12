@@ -37,7 +37,8 @@ export const HomeNavBar = ({
                             value={search}
                             setValue={setSearch}
                             icon="fa-search text-white dark:text-black"
-                            buttonClassName={(search?.length ?? 0) > 0 ? "" : "cursor-not-allowed!"}
+                            href={`/trees?search=${search}`}
+                            buttonClassName={(search?.length ?? 0) > 0 ? "cursor-pointer!" : "cursor-not-allowed!"}
                         />
                         <LinkButton href="/#top-trees" className={"m-1 " + blankButton}>Featured Trees</LinkButton>
                         <LinkButton href="/pricing" className={"m-1 " + blankButton}>Pricing</LinkButton>
