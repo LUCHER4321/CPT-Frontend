@@ -86,7 +86,7 @@ export const TreeEditor = () => {
             const { scrollLeft, scrollTop } = ref.current;
             setStartScroll({ left: scrollLeft, top: scrollTop })
         }
-    }
+    };
 
     const handleMouseUp = () => setIsDragging(false);
 
@@ -95,6 +95,7 @@ export const TreeEditor = () => {
         if(id && image) switch(prop) {
             case TreeProp.TREE: imageTree({ id, image }).then(t => {
                     if(t) setTree(t);
+                    setProp(TreeProp.TREE);
                 });
                 break;
             case TreeProp.NODE: if(species?.id) speciesImage({ treeId: id, id: species.id.toString(), image });
@@ -227,6 +228,9 @@ export const TreeEditor = () => {
             setDescription(species.description ?? "");
             setProp(TreeProp.NODE);
         }
+    }, [species]);
+
+    useEffect(() => {
         if(ref.current && commonAncestors) {
             if(species){
                 const ad = commonAncestors.flatMap(ca => ca.allDescendants());
@@ -246,7 +250,7 @@ export const TreeEditor = () => {
                 ref.current.scrollTop = scrollHeight * (i - 1) / ad.length;
             }
         }
-    }, [species, commonAncestors, ref.current, chronoScale])
+    }, [species, commonAncestors, ref.current, chronoScale]);
     
     const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).length ?? 1;
 
