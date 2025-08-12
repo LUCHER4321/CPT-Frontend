@@ -87,7 +87,7 @@ export const TreeVisualization = ({
                         icon={selection ? "fa-hand" : "fa-mouse-pointer"}
                         onClick={() => setSelection?.(!selection)}
                     />
-                    <ToolButton
+                    {setSelected && <ToolButton
                         title={selected ? "Add Descendant" : "Add Species"}
                         icon="fa-plus-circle"
                         onClick={() => tree && (commonAncerstors?.flatMap(ca => ca.allDescendants(false)).length ?? 0) < (maxSpecies ?? Number.MAX_SAFE_INTEGER) ? createSpecies({
@@ -108,8 +108,8 @@ export const TreeVisualization = ({
                                 });
                             }
                         }) : alert("No more species allowed in this tree, you can upgrade your plan or create another Phylogenetic Tree")}
-                    />
-                    <ToolButton
+                    />}
+                    {setSelected && <ToolButton
                         title="Delete Species"
                         icon="fa-minus-circle"
                         enable={selected !== undefined}
@@ -134,7 +134,7 @@ export const TreeVisualization = ({
                                 });
                             });
                         }}
-                    />
+                    />}
                     <ToolButton
                         title={`Download "${tree?.name}.svg"`}
                         icon="fa-download"
