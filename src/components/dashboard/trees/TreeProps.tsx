@@ -60,7 +60,7 @@ export const TreeProps = ({
     const extinction = Math.max(...commonAncestors?.map(ca => ca.absoluteExtinction()) ?? []);
     return (
         <>
-            <AuthField
+            {chronoScale && <AuthField
                 name="Time Unit"
                 selected={unit}
                 setSelected={setUnit}
@@ -74,7 +74,7 @@ export const TreeProps = ({
                         case TimeUnit.TY: return "Trillion Years"
                     }
                 }}
-            />
+            />}
             {chronoScale && <div className="flex flex-col">
                 <div className="flex flex-row justify-between mb-2">
                     <p className="font-bold">Present Time</p>
