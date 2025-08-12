@@ -8,9 +8,10 @@ import { Billing, Order, Plan, TreeCriteria } from './enums.tsx'
 import { isEnum } from './utils/isEnum.tsx'
 import { Dashboard } from './routes/Dashboard.tsx'
 import { TreeEditor } from './routes/account/TreeEditor.tsx'
-import { SearchTrees } from './routes/SearchTrees.tsx'
+import { SearchTrees } from './routes/trees/SearchTrees.tsx'
 import type { SearchProps } from './types'
 import { nullableInput } from './utils/nullableInput.tsx'
+import { TreeViewer } from './routes/trees/TreeViewer.tsx'
 
 const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
 const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
@@ -59,9 +60,12 @@ createRoot(document.getElementById('root')!).render(
             <Route path=":id" element={<TreeEditor/>}/>
           </Route>
         </Route>
-        <Route path="trees" element={<SearchTrees
-          {...searchProps}
-        />}/>
+        <Route path="trees">
+          <Route index element={<SearchTrees
+            {...searchProps}
+          />}/>
+          <Route path=":id" element={<TreeViewer/>}/>
+        </Route>
       </Routes>
     </BrowserRouter>
 )
