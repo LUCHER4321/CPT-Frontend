@@ -4,20 +4,37 @@ import App from './App.tsx'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Auth } from './routes/Auth.tsx'
 import { Pricing } from './routes/Pricing.tsx'
-import { Billing, Plan } from './enums.tsx'
+import { Billing, Order, Plan, TreeCriteria } from './enums.tsx'
 import { isEnum } from './utils/isEnum.tsx'
 import { Dashboard } from './routes/Dashboard.tsx'
 import { TreeEditor } from './routes/account/TreeEditor.tsx'
+import { SearchTrees } from './routes/SearchTrees.tsx'
+import type { SearchProps } from './types'
+import { nullableInput } from './utils/nullableInput.tsx'
 
-const plan = new URLSearchParams(window.location.search).get("plan") ?? "";
-const billing = new URLSearchParams(window.location.search).get("billing") ?? "";
+const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
+const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
+const plan = param("plan") ?? "";
+const billing = param("billing") ?? "";
+const initialRegister = param("register");
+const criteria = param("criteria") ?? "";
+const order = param("order") ?? "";
+const searchProps: SearchProps = {
+  page: numberParam("page"),
+  limit: numberParam("limit"),
+  search: param("search"),
+  criteria: isEnum(TreeCriteria, criteria) ? criteria as TreeCriteria : undefined,
+  order: isEnum(Order, order) ? order as Order : undefined,
+  from: nullableInput(param("from"), p => new Date(p)),
+  to: nullableInput(param("to"), p => new Date(p))
+};
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route index element={<App/>}/>
         <Route path="auth" element={<Auth
-          initialRegister={new URLSearchParams(window.location.search).get("register") === "true"}
+          initialRegister={initialRegister === "true"}
           initialPlan={isEnum(Plan, plan) ? plan as Plan : undefined}
           initialBilling={isEnum(Billing, billing) ? billing as Billing : undefined}
         />}/>
@@ -25,9 +42,26 @@ createRoot(document.getElementById('root')!).render(
         <Route path="account">
           <Route index element={<Dashboard/>}/>
           <Route path="trees">
+            <Route index element={<SearchTrees
+              {...searchProps}
+              myTrees
+            />}/>
+            <Route path="me" element={<SearchTrees
+              {...searchProps}
+              myTrees
+              owner
+            />}/>
+            <Route path="collabs" element={<SearchTrees
+              {...searchProps}
+              myTrees
+              owner={false}
+            />}/>
             <Route path=":id" element={<TreeEditor/>}/>
           </Route>
         </Route>
+        <Route path="trees" element={<SearchTrees
+          {...searchProps}
+        />}/>
       </Routes>
     </BrowserRouter>
 )
