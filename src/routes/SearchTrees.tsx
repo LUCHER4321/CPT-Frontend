@@ -8,7 +8,7 @@ import { getMe, getUser, token } from "../api/user";
 import { Header } from "../components/dashboard/Header";
 import { getNotifications } from "../api/notification";
 import { title } from "../data/classNames";
-import { SearchHeader } from "../components/trees/searchHeader";
+import { SearchHeader } from "../components/trees/SearchHeader";
 import { TreeCard } from "../components/home/TreeCard";
 
 interface SearchTreesProps extends SearchProps {
