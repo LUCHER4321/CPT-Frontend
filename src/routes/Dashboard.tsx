@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { dashboardItems } from "../data/dashboardItems";
 import { Sidebar } from "../components/dashboard/Sidebar";
 import { exampleTrees, exampleUsers } from "../data/example";
-import { getMe, token } from "../api/user";
+import { getMe, getUser, token } from "../api/user";
 import { Header } from "../components/dashboard/Header";
 import { getMyTrees, myTreesCount } from "../api/phTree";
 import { getNotifications } from "../api/notification";
@@ -27,7 +27,7 @@ export const Dashboard = () => {
     const [search, setSearch] = useState("");
     const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [active, setActive] = useState(false);
-    const [lastTrees, setLastTrees] = useState<PhTreeResponse[]>([]);
+    const [lastTrees, setLastTrees] = useState<(PhTreeResponse & { username: string })[]>([]);
     const [follows, setFollows] = useState<{
         following?: UserResponse[];
         followers?: number;
@@ -51,7 +51,10 @@ export const Dashboard = () => {
                 limit: 3,
                 criteria: TreeCriteria.UPDATED_AT,
                 order: Order.DESC
-            }).then(t => setLastTrees(t ?? exampleTrees.filter(({userId}) => userId === exampleUsers[0].id).slice(0, 3)));
+            }).then(t => Promise.all(t?.trees.map(async (tree) => ({
+                ...tree,
+                username: (await getUser({ id: tree.userId }))?.username ?? ""
+            })) ?? [])).then(setLastTrees);
             getNotifications({}).then(n => {
                 setNotifications(n ?? []);
             });
