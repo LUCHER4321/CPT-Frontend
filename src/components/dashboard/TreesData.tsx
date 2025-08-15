@@ -2,17 +2,20 @@ import { title } from "../../data/classNames"
 import { Card } from "../home/Card"
 import { newPhTree } from "../../utils/newPhTree";
 import { useNavigate } from "react-router-dom";
+import type { NotificationWS } from "../../classes/NotificationWS";
 
 interface TreesDataProps {
     trees?: number;
     myTrees?: number;
     collabs?: number;
+    notificationWS?: NotificationWS;
 }
 
 export const TreesData = ({
     trees,
     myTrees,
-    collabs
+    collabs,
+    notificationWS
 }: TreesDataProps) => {
     const history = useNavigate();
     return(
@@ -42,7 +45,7 @@ export const TreesData = ({
                 <Card
                     fa="fa-plus"
                     description="New Tree"
-                    onClick={newPhTree(history)}
+                    onClick={newPhTree(notificationWS, history)}
                 />
                 <div className="hidden sm:block"/>
             </>}
