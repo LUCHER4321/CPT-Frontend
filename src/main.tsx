@@ -42,6 +42,9 @@ createRoot(document.getElementById('root')!).render(
         <Route path="pricing" element={<Pricing/>}/>
         <Route path="account">
           <Route index element={<Dashboard/>}/>
+          <Route path="liked" element={<SearchTrees
+            liked
+          />}/>
           <Route path="trees">
             <Route index element={<SearchTrees
               {...searchProps}
