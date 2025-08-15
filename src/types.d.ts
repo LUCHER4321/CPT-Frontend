@@ -198,11 +198,11 @@ export interface PhTreeRequest {
 export interface CommentResponse {
     id: string;
     treeId: string;
-    userId: string;
+    userId?: string;
     content?: string;
     createdAt: Date;
     updatedAt: Date;
-    resplies?: CommentResponse[];
+    replies?: CommentResponse[];
 }
 
 export interface CommentRequest {
