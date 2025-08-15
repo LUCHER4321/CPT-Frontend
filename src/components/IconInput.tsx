@@ -1,4 +1,4 @@
-import type { HTMLInputTypeAttribute } from "react";
+import type { FocusEvent, HTMLInputTypeAttribute, RefObject } from "react";
 
 interface IconInputProps<T> {
     setIcon?: boolean;
@@ -23,6 +23,10 @@ interface IconInputProps<T> {
     max?: number;
     step?: number;
     href?: string;
+    autoFocus?: boolean;
+    textareaRef?: RefObject<HTMLTextAreaElement | null>;
+    inputRef?: RefObject<HTMLInputElement | null>;
+    onBlur?: (e: FocusEvent) => void;
 }
 
 export const IconInput = <T,>({
@@ -47,7 +51,11 @@ export const IconInput = <T,>({
     min,
     max,
     step,
-    href
+    href,
+    autoFocus,
+    textareaRef,
+    inputRef,
+    onBlur
 }: IconInputProps<T>) => {
     return (
         <div className={setIcon ? "relative" : "flex flex-row"}>
@@ -58,6 +66,9 @@ export const IconInput = <T,>({
                 value={value}
                 onChange={e => setValue?.(e.target.value)}
                 name={name?.toLowerCase().replace(" ", "-")}
+                autoFocus={autoFocus}
+                ref={textareaRef}
+                onBlur={onBlur}
             /> : <input
                 type={type}
                 id={id}
@@ -74,6 +85,9 @@ export const IconInput = <T,>({
                 min={min}
                 max={max}
                 step={step}
+                autoFocus={autoFocus}
+                ref={inputRef}
+                onBlur={onBlur}
             />): undefined}
             {setSelected && <select
                 value={selected as string}
