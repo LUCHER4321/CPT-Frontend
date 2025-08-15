@@ -162,7 +162,10 @@ export const TreeViewer = () => {
                     setActive={setActive}
                 >
                     <div className="flex flex-row space-x-7 items-center">
-                        <h2 className={"text-2xl " + title}>{tree?.name}</h2>
+                        <div className="flex flex-col">
+                            <h2 className={"text-2xl " + title}>{tree?.name}</h2>
+                            <p>By: @{creator?.username}</p>
+                        </div>
                         {(user?.id === tree?.userId || (user?.id && tree?.collaborators?.includes(user.id))) && <a
                             href={`/account/trees/${id}`}
                             className="size-9 rounded p-0! flex items-center justify-center text-[calc(40px/3)]! bg-[#D8EDD9]! dark:bg-[#1B5E20]! text-[#1B5E20]! dark:text-[#D8EDD9]! hover:bg-[#1B5E20]! hover:text-[#D8EDD9]! hover:dark:bg-[#D8EDD9]! hover:dark:text-[#1B5E20]!"
