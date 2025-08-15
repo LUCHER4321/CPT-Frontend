@@ -54,7 +54,8 @@ export enum Order {
 export enum TreeProp {
     TREE = "tree",
     NODE = "node",
-    COLLABORATORS = "collaborators"
+    COLLABORATORS = "collaborators",
+    COMMENTS = "comments"
 }
 
 export enum TimeUnit {
