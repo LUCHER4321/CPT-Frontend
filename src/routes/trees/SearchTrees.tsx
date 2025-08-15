@@ -10,10 +10,12 @@ import { getNotifications } from "../../api/notification";
 import { title } from "../../data/classNames";
 import { SearchHeader } from "../../components/trees/SearchHeader";
 import { TreeCard } from "../../components/home/TreeCard";
+import { likedTrees } from "../../api/like";
 
 interface SearchTreesProps extends SearchProps {
     myTrees?: boolean;
     owner?:boolean;
+    liked?: boolean;
 }
 
 const omitUndefined = <T,>(obj: Record<string, T>): Record<string, T> => {
@@ -22,7 +24,7 @@ const omitUndefined = <T,>(obj: Record<string, T>): Record<string, T> => {
     );
 };
 
-export const SearchTrees = ({myTrees, owner, ...searchProps}: SearchTreesProps) => {
+export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTreesProps) => {
     const [trees, setTrees] = useState<SearchResult | undefined>(undefined);
     const [treeUsers, setTreeUsers] = useState<Map<string, string>>(new Map());
     const [expanded, setExpanded] = useState(false);
@@ -33,21 +35,30 @@ export const SearchTrees = ({myTrees, owner, ...searchProps}: SearchTreesProps) 
     const [sProps, setSProps] = useState(searchProps);
     const location = useLocation().pathname;
     const history = useNavigate();
+    const searchFunction = myTrees ? getMyTrees : searchTrees;
     const searchHref = (queries: SearchProps = {}) => `${location}?${Object.entries(omitUndefined(queries)).map(([k, v]) => `${k}=${v}`).join("&")}`;
     useEffect(() => {
         getMe({}).then(u => {
             setUser(u);
             getNotifications({}).then(n => setNotifications(n ?? []));
             token({ expiresIn: "7d" });
-            document.title = myTrees ? (owner || owner === undefined) ? `Life Tree | ${u?.username}'s trees` : `Life Tree | ${u?.username}'s collabs` : "Life Tree | Search Trees";
+            document.title = `Life Tree | ${liked ? "Liked Trees" : myTrees ? (owner || owner === undefined) ? `${u?.username}'s Trees` : `${u?.username}'s Collabs` : "Search Trees"}`;
         });
     }, []);
     useEffect(() => {
-        const searchFunction = myTrees ? getMyTrees : searchTrees;
-        searchFunction(omitUndefined({ owner, ...searchProps })).then(t => {
+        if(!liked) searchFunction(omitUndefined({ owner, ...searchProps })).then(t => {
             setTrees(t);
             Promise.all(t?.trees.map(async (tree) => [tree.id, (await getUser({ id: tree.userId }))?.username ?? ""] as [string, string]) ?? []).then(tu => setTreeUsers(new Map(tu)));
         });
+        else likedTrees({}).then(trees => {
+            if(trees) {
+                setTrees({
+                    trees,
+                    count: trees.length
+                });
+                Promise.all(trees.map(async (tree) => [tree.id, (await getUser({ id: tree.userId }))?.username ?? ""] as [string, string]) ?? []).then(tu => setTreeUsers(new Map(tu)));
+            }
+        })
     }, [sProps]);
 
     const setSearchProps = (sp: SearchProps) => {
@@ -61,7 +72,7 @@ export const SearchTrees = ({myTrees, owner, ...searchProps}: SearchTreesProps) 
                     expanded={expanded}
                     setExpanded={setExpanded}
                     items={dashboardItems}
-                    currentPage={myTrees ? `/trees${owner ? "/me" : owner === false ? "/collabs" : ""}` : undefined}
+                    currentPage={liked ? "/liked" : myTrees ? `/trees${owner ? "/me" : owner === false ? "/collabs" : ""}` : undefined}
                     user={user}
                 />}
                 <main className="flex flex-col w-full">
@@ -72,13 +83,13 @@ export const SearchTrees = ({myTrees, owner, ...searchProps}: SearchTreesProps) 
                         active={active}
                         setActive={setActive}
                     >
-                        <h1 className={"block text-[2em]! font-bold " + title}>{myTrees ? `${user?.username}'s ${owner !== false ? "trees" : "collabs"}` : "Tree Search"}</h1>
+                        <h1 className={"block text-[2em]! font-bold " + title}>{liked ? "Liked Trees" : myTrees ? `${user?.username}'s ${owner !== false ? "Trees" : "Collabs"}` : "Tree Search"}</h1>
                     </Header>
-                    <SearchHeader
+                    {!liked && <SearchHeader
                         sProps={sProps}
                         setSearchProps={setSearchProps}
                         treesCount={trees?.count}
-                    />
+                    />}
                     <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5">
                         {trees?.trees.map((tree, index) => <TreeCard
                             key={index}
