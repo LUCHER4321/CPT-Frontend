@@ -2,8 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { createTree, myTreesCount } from "../api/phTree";
 import { getMe } from "../api/user";
 import { plans } from "../data/prices";
+import type { NotificationWS } from "../classes/NotificationWS";
+import { NotiFunc } from "../enums";
 
-export const newPhTree = (history = useNavigate()) => async () => {
+export const newPhTree = (notificationWS?: NotificationWS, history = useNavigate()) => async () => {
     const { myTrees } = await myTreesCount({}) ?? {};
     const { plan } = await getMe({}) ?? {};
     if(!plan || myTrees === undefined) return;
@@ -12,5 +14,9 @@ export const newPhTree = (history = useNavigate()) => async () => {
         name: "Untitled Phylogenetic Tree",
         isPublic: false
     }) ?? {};
+    notificationWS?.emit({
+        fun: NotiFunc.TREE,
+        treeId: id
+    })
     if(id) await history(`/account/trees/${id}`);
 }
