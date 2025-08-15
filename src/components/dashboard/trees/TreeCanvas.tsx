@@ -4,6 +4,7 @@ import { nullableInput } from "../../../utils/nullableInput";
 import { TimeUnit } from "../../../enums";
 import { Species } from "chrono-phylo-tree";
 import { order, percentile } from "../../../utils/average";
+import { timeRep } from "../../../utils/timeRep";
 
 interface TreeCanvasProps {
     children?: NodeTSX | NodeTSX[];
@@ -65,16 +66,6 @@ export const TreeCanvas = ({
     const x1 = (species: Species) => (chronoScale ? species.apparition - firstApparition : (species.firstAncestor().stepsUntil(species) ?? 0)) * kx;
     const x2 = (species: Species) => (chronoScale ? species.extinction() - firstApparition : ((species.firstAncestor().stepsUntil(species) ?? 0) + 1)) * kx;
     const y = (index: number) => (index + 1 / 2) * diameter;
-
-    const rep = (apparition?: number) => {
-        if(apparition === undefined) return "";
-        if(apparition === 0) return "0Y";
-        for(const [k, v] of Object.entries(TimeUnit).reverse()){
-            if(Math.abs(apparition) >= +v) {
-                return (apparition / +v).toFixed(2) + k;
-            }
-        }
-    };
 
     return (
         <div
@@ -159,8 +150,8 @@ export const TreeCanvas = ({
                         height={diameter / 2}
                     >
                         <div className="w-full flex flex-row justify-between">
-                            <p>{rep(species.apparition)}</p>
-                            <p>{rep(species.extinction())}</p>
+                            <p>{timeRep(species.apparition)}</p>
+                            <p>{timeRep(species.extinction())}</p>
                         </div>
                     </foreignObject>}
                     <foreignObject
