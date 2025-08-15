@@ -41,7 +41,7 @@ export const TreeViewProps = ({
             <p className="mb-1">By: @{user?.username}</p>
             <p className="mb-2">{tree?.description}</p>
             <div className="flex flex-wrap space-x-2 w-full mb-6">
-                {tree?.tags?.map(t => (<div className="flex flex-row items-center mt-2 px-2 py-1 space-x-1 rounded-full dark:bg-[#1B5E20] bg-[#D8EDD9]">
+                {tree?.tags?.map((t, index) => (<div key={index} className="flex flex-row items-center mt-2 px-2 py-1 space-x-1 rounded-full dark:bg-[#1B5E20] bg-[#D8EDD9]">
                     <span>{t}</span>
                 </div>))}
             </div>
