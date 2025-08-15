@@ -1,4 +1,4 @@
-import type { HTMLInputTypeAttribute } from "react";
+import type { FocusEvent, HTMLInputTypeAttribute, RefObject } from "react";
 import { IconInput } from "../IconInput";
 
 interface AuthFieldProps<T> {
@@ -25,6 +25,10 @@ interface AuthFieldProps<T> {
     max?: number;
     onClick?: () => void;
     row?: boolean;
+    autoFocus?: boolean;
+    textareaRef?: RefObject<HTMLTextAreaElement | null>;
+    inputRef?: RefObject<HTMLInputElement | null>;
+    onBlur?: (e: FocusEvent) => void;
 }
 
 export const AuthField = <T,>({
@@ -50,7 +54,11 @@ export const AuthField = <T,>({
     min,
     max,
     onClick,
-    row
+    row,
+    autoFocus,
+    textareaRef,
+    inputRef,
+    onBlur
 }: AuthFieldProps<T>) => {
     return (
         <section className={"flex mb-6 " + (row ? "flex-row " : "flex-col ") + className}>
@@ -75,6 +83,10 @@ export const AuthField = <T,>({
                 textArea={textArea}
                 min={min}
                 max={max}
+                autoFocus={autoFocus}
+                textareaRef={textareaRef}
+                inputRef={inputRef}
+                onBlur={onBlur}
             />
             {children}
         </section>
