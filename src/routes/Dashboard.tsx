@@ -25,7 +25,7 @@ export const Dashboard = () => {
     const [collabs, setCollabs] = useState<number | undefined>(undefined);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [search, setSearch] = useState("");
-    const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
+    const [notificationWS, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [active, setActive] = useState(false);
     const [lastTrees, setLastTrees] = useState<(PhTreeResponse & { username: string })[]>([]);
     const [follows, setFollows] = useState<{
@@ -93,6 +93,7 @@ export const Dashboard = () => {
                         trees={trees}
                         myTrees={myTrees}
                         collabs={collabs}
+                        notificationWS={notificationWS}
                     />
                     <LastTrees
                         lastTrees={lastTrees}
