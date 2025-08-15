@@ -275,21 +275,14 @@ export const TreeEditor = () => {
                     <a href="/account">
                         <i className={"fas fa-arrow-left " + title}/>
                     </a>
-                    {tree && <input
-                        className={title}
-                        type="text"
-                        value={tree?.name}
-                        onChange={e => {
-                            if(tree) {
-                                const { name, ...t } = tree;
-                                setTree({
-                                    name: e.target.value,
-                                    ...t
-                                })
-                            }
-                        }}
-                        placeholder="Tree Name"
-                    />}
+                    <h2 className={"text-2xl " + title}>{tree?.name}</h2>
+                    <a
+                        href={`/trees/${id}`}
+                        className="size-9 rounded p-0! flex items-center justify-center text-[calc(40px/3)]! bg-[#D8EDD9]! dark:bg-[#1B5E20]! text-[#1B5E20]! dark:text-[#D8EDD9]! hover:bg-[#1B5E20]! hover:text-[#D8EDD9]! hover:dark:bg-[#D8EDD9]! hover:dark:text-[#1B5E20]!"
+                        title={`Edit "${tree?.name}"`}
+                    >
+                        <i className="fas fa-eye"/>
+                    </a>
                 </div>
             </Header>
             <div className="flex flex-row h-full! w-full! overflow-hidden">
