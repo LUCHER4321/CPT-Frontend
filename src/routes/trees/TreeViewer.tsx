@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Sidebar } from "../../components/dashboard/Sidebar";
 import { dashboardItems } from "../../data/dashboardItems";
-import type { NotificationResponse, PhTreeResponse, UserResponse } from "../../types";
+import type { CommentResponse, NotificationResponse, PhTreeResponse, UserResponse } from "../../types";
 import { useParams } from "react-router-dom";
 import { getMe, getUser, token } from "../../api/user";
 import { getTree } from "../../api/phTree";
@@ -9,21 +9,25 @@ import { getNotifications } from "../../api/notification";
 import { NotificationWS } from "../../classes/NotificationWS";
 import { socket } from "../../api/socket";
 import { Header } from "../../components/dashboard/Header";
-import { borderButton, title } from "../../data/classNames";
+import { borderButton, filledButton, title } from "../../data/classNames";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
 import { TreeCanvas } from "../../components/dashboard/trees/TreeCanvas";
-import { TimeUnit, TreeProp } from "../../enums";
+import { Liked, NotiFunc, TimeUnit, TreeProp } from "../../enums";
 import { Species } from "chrono-phylo-tree";
 import { treeSpecies } from "../../api/species";
 import { SpNode } from "../../components/dashboard/trees/Node";
 import { TreeProperties } from "../../components/dashboard/trees/TreeProperties";
 import { TreeViewProps } from "../../components/trees/TreeViewProps";
+import { getLikes, like, unlike } from "../../api/like";
+import { NodeViewProps } from "../../components/trees/NodeViewProps";
+import { CommentViewProps } from "../../components/trees/CommentViewProps";
+import { treeComments } from "../../api/comment";
 
 export const TreeViewer = () => {
     const [expanded, setExpanded] = useState(false);
     const [tree, setTree] = useState<PhTreeResponse | undefined>(undefined);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
-    const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
+    const [notificationWS, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [search, setSearch] = useState("");
     const [active, setActive] = useState(false);
     const [user, setUser] = useState<UserResponse | undefined>(undefined);
@@ -43,6 +47,9 @@ export const TreeViewer = () => {
     const [presentTime, setPresentTime] = useState<number | undefined>(undefined);
     const [prop, setProp] = useState(TreeProp.TREE);
     const [creator, setCreator] = useState<UserResponse | undefined>(undefined);
+    const [liked, setLiked] = useState(false);
+    const [comment, setComment] = useState("");
+    const [comments, setComments] = useState<CommentResponse[] | undefined>([]);
     const baseZoom = 0.9;
     const [zoom, setZoom] = useState(baseZoom);
     const deltaZoom = 0.1;
@@ -79,6 +86,8 @@ export const TreeViewer = () => {
                 setTree(t);
                 treeSpecies({ treeId: id }).then(sl => sl?.map(s => Species.fromJSON(s)) ?? []).then(setCommonAncestors);
                 getUser({ id: t?.userId ?? "" }).then(setCreator);
+                getLikes({ liked: Liked.TREE, id }).then(t => setLiked(t?.myLike ?? false));
+                treeComments({ treeId: id }).then(setComments)
             });
             getNotifications({}).then(n => {
                 setNotifications(n ?? []);
@@ -141,7 +150,7 @@ export const TreeViewer = () => {
                 expanded={expanded}
                 setExpanded={setExpanded}
                 items={dashboardItems}
-                currentPage={user?.id === tree?.userId ? "/trees/me" : user?.id && tree?.collaborators?.includes(user?.id) ? "/trees/collabs" : "/"}
+                currentPage={user?.id === tree?.userId ? "/trees/me" : user?.id && tree?.collaborators?.includes(user.id) ? "/trees/collabs" : ""}
                 user={user}
             />}
             <main className="flex flex-col w-full">
@@ -154,7 +163,35 @@ export const TreeViewer = () => {
                 >
                     <div className="flex flex-row space-x-7 items-center">
                         <h2 className={"text-2xl " + title}>{tree?.name}</h2>
-                        <button className={"flex flex-row items-center space-x-1 py-2! px-4! " + borderButton}>
+                        {(user?.id === tree?.userId || (user?.id && tree?.collaborators?.includes(user.id))) && <a
+                            href={`/account/trees/${id}`}
+                            className="size-9 rounded p-0! flex items-center justify-center text-[calc(40px/3)]! bg-[#D8EDD9]! dark:bg-[#1B5E20]! text-[#1B5E20]! dark:text-[#D8EDD9]! hover:bg-[#1B5E20]! hover:text-[#D8EDD9]! hover:dark:bg-[#D8EDD9]! hover:dark:text-[#1B5E20]!"
+                            title={`Edit "${tree?.name}"`}
+                        >
+                            <i className="fas fa-edit"/>
+                        </a>}
+                        <button
+                            className={"flex flex-row items-center space-x-1 py-2! px-4! " + (liked ? filledButton : borderButton)}
+                            onClick={() => {
+                                if(user && id) {
+                                    const likeFun = liked ? unlike : like;
+                                    likeFun({ liked: Liked.TREE, id }).then(() => {
+                                        if(tree){
+                                            const { likes = 0, ...t } = tree;
+                                            setTree({
+                                                likes: likes + (liked ? -1 : 1),
+                                                ...t
+                                            });
+                                            notificationWS?.emit({
+                                                fun: NotiFunc.LIKE,
+                                                treeId: tree.id
+                                            })
+                                            setLiked(!liked);
+                                        }
+                                    });
+                                }
+                            }}
+                        >
                             <i className="fas fa-heart"/>
                             <p>{tree?.likes}</p>
                         </button>
@@ -215,6 +252,21 @@ export const TreeViewer = () => {
                                 setPresentTime={setPresentTime}
                                 commonAncestors={commonAncestors}
                                 user={creator}
+                            />}
+                            {prop === TreeProp.NODE && <NodeViewProps
+                                species={species}
+                                setSpecies={setSpecies}
+                                commonAncestors={commonAncestors}
+                            />}
+                            {prop === TreeProp.COMMENTS && <CommentViewProps
+                                tree={tree}
+                                setTree={setTree}
+                                user={user}
+                                comment={comment}
+                                setComment={setComment}
+                                comments={comments}
+                                setComments={setComments}
+                                notificationWS={notificationWS}
                             />}
                         </div>
                     </TreeProperties>
