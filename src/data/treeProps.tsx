@@ -12,5 +12,9 @@ export const treeProps = new Map([
     [TreeProp.COLLABORATORS, {
             icon: "fa-users",
             name: "Collaborators"
+    }],
+    [TreeProp.COMMENTS, {
+        icon: "fa-comment",
+        name: "Comments"
     }]
 ])
