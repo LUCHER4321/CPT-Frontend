@@ -4,7 +4,7 @@ import type { NotificationResponse, PhTreeResponse, StrictSpecies, UserResponse 
 import { getTree, imageTree, viewTree } from "../../api/phTree";
 import { getMe, getUser, token, userSearch } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
-import { title } from "../../data/classNames";
+import { accountContainer, title } from "../../data/classNames";
 import { getNotifications } from "../../api/notification";
 import { Sidebar } from "../../components/dashboard/Sidebar";
 import { dashboardItems } from "../../data/dashboardItems";
@@ -255,7 +255,7 @@ export const TreeEditor = () => {
     const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).length ?? 1;
 
     return (
-    <div className="w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden">
+    <div className={accountContainer}>
         <Sidebar
             expanded={expanded}
             setExpanded={setExpanded}
@@ -272,9 +272,6 @@ export const TreeEditor = () => {
                 setActive={setActive}
             >
                 <div className="flex flex-row space-x-7 text-2xl">
-                    <a href="/account">
-                        <i className={"fas fa-arrow-left " + title}/>
-                    </a>
                     <h2 className={"text-2xl " + title}>{tree?.name}</h2>
                     <a
                         href={`/trees/${id}`}
