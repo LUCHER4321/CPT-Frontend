@@ -20,8 +20,17 @@ export const TreesData = ({
     const history = useNavigate();
     return(
         <>
+            {trees && <>
+                <div className="hidden sm:block"/>
+                <Card
+                    fa="fa-plus"
+                    description="New Tree"
+                    onClick={newPhTree(notificationWS, history)}
+                />
+                <div className="hidden sm:block"/>
+            </>}
             <h2 className={"col-span-full text-[2rem] mb-2 " + title}>Trees Data</h2>
-            {(trees ?? 0) > 0 ? <>
+            {trees ? <>
                 <Card
                     fa="fa-project-diagram"
                     title={trees?.toString()}
