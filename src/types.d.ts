@@ -41,6 +41,7 @@ export interface UserResponse {
     role: Role;
     createdAt: Date;
     lastLogin: Date;
+    description?: string;
     isActive?: boolean;
     apiKeys?: string[];
     token?: string;
@@ -85,6 +86,7 @@ export interface UserRequest {
         oldPassword?: string;
         password?: string;
         plan?: Plan;
+        description?: string;
         planExpiration?: Date;
     }, UserResponse>;
     deleteMe: RequestFunction<{}, void>;
@@ -142,6 +144,7 @@ export type SearchProps = Partial<{
     page: number;
     limit: number;
     search: string;
+    userId: string;
     criteria: TreeCriteria;
     order: Order;
     from: Date;
@@ -163,6 +166,13 @@ export interface PhTreeRequest {
     }, PhTreeResponse>;
     getMyTrees: RequestFunction<SearchProps & { owner?: boolean }, SearchResult>;
     myTreesCount: RequestFunction<{}, {
+        total: number;
+        myTrees: number;
+        collabs: number;
+    }>;
+    treesCount: RequestFunction<{
+        userId: string;
+    }, {
         total: number;
         myTrees: number;
         collabs: number;
