@@ -76,6 +76,7 @@ const institutional: PlanPrice = {
     },
     border: {
         light: "border-t-orange-600",
+        dark: "dark:border-t-orange-400"
     },
     constraints: {
         maxCollaborators: 30,
