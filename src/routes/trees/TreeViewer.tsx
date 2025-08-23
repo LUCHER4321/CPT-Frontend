@@ -9,7 +9,7 @@ import { getNotifications } from "../../api/notification";
 import { NotificationWS } from "../../classes/NotificationWS";
 import { socket } from "../../api/socket";
 import { Header } from "../../components/dashboard/Header";
-import { borderButton, filledButton, title } from "../../data/classNames";
+import { accountContainer, borderButton, filledButton, title } from "../../data/classNames";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
 import { TreeCanvas } from "../../components/dashboard/trees/TreeCanvas";
 import { Liked, NotiFunc, TimeUnit, TreeProp } from "../../enums";
@@ -145,7 +145,7 @@ export const TreeViewer = () => {
 
     const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).length ?? 1;
     return(
-        <div className="w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden">
+        <div className={accountContainer}>
             {user && <Sidebar
                 expanded={expanded}
                 setExpanded={setExpanded}
