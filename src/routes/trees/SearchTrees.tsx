@@ -7,10 +7,14 @@ import { dashboardItems } from "../../data/dashboardItems";
 import { getMe, getUser, token } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
 import { getNotifications } from "../../api/notification";
-import { title } from "../../data/classNames";
+import { accountContainer, title } from "../../data/classNames";
 import { SearchHeader } from "../../components/trees/SearchHeader";
 import { TreeCard } from "../../components/home/TreeCard";
 import { likedTrees } from "../../api/like";
+import { Card } from "../../components/home/Card";
+import { NotificationWS } from "../../classes/NotificationWS";
+import { newPhTree } from "../../utils/newPhTree";
+import { socket } from "../../api/socket";
 
 interface SearchTreesProps extends SearchProps {
     myTrees?: boolean;
@@ -33,6 +37,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [active, setActive] = useState(false);
     const [sProps, setSProps] = useState(searchProps);
+    const [notificationWS, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const location = useLocation().pathname;
     const history = useNavigate();
     const searchFunction = myTrees ? getMyTrees : searchTrees;
@@ -41,6 +46,11 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
         getMe({}).then(u => {
             setUser(u);
             getNotifications({}).then(n => setNotifications(n ?? []));
+            setNotificationWS(new NotificationWS({
+                socket,
+                response: nr => setNotifications(prev => prev.concat([nr])),
+                userId: u?.id ?? ""
+            }));
             token({ expiresIn: "7d" });
             document.title = `Life Tree | ${liked ? "Liked Trees" : myTrees ? (owner || owner === undefined) ? `${u?.username}'s Trees` : `${u?.username}'s Collabs` : "Search Trees"}`;
         });
@@ -67,7 +77,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
     };
     return (
         <>
-            <div className="w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden">
+            <div className={accountContainer}>
                 {user && <Sidebar
                     expanded={expanded}
                     setExpanded={setExpanded}
@@ -90,7 +100,12 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                         setSearchProps={setSearchProps}
                         treesCount={trees?.count}
                     />}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 overflow-y-scroll">
+                        {myTrees && <Card
+                            fa="fa-plus"
+                            description="New Tree"
+                            onClick={newPhTree(notificationWS, history)}
+                        />}
                         {trees?.trees.map((tree, index) => <TreeCard
                             key={index}
                             tree={{
