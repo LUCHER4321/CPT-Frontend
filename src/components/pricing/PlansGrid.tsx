@@ -18,7 +18,7 @@ export const PlansGrid = ({
                 monthly={monthly}
                 key={index}
             >
-                {currentPlan ? currentPlan === p ? "Your current plan" : `${Number(p) > Number(currentPlan) ? "Up" : "Down"}grade to ${plans.get(p)?.name}` : `Start with ${plans.get(p)?.name} Plan`}
+                {currentPlan ? currentPlan === p ? "Your current plan" : `${index > [...plans.keys()].indexOf(currentPlan) ? "Up" : "Down"}grade to ${plans.get(p)?.name}` : `Start with ${plans.get(p)?.name} Plan`}
             </PlanCard>)}
         </div>
     )
