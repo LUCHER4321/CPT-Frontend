@@ -9,7 +9,7 @@ import { getNotifications } from "../../api/notification";
 import { NotificationWS } from "../../classes/NotificationWS";
 import { socket } from "../../api/socket";
 import { Header } from "../../components/dashboard/Header";
-import { accountContainer, borderButton, filledButton, title } from "../../data/classNames";
+import { accountContainer, aText, borderButton, filledButton, title } from "../../data/classNames";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
 import { TreeCanvas } from "../../components/dashboard/trees/TreeCanvas";
 import { Liked, NotiFunc, TimeUnit, TreeProp } from "../../enums";
@@ -164,7 +164,7 @@ export const TreeViewer = () => {
                     <div className="flex flex-row space-x-7 items-center">
                         <div className="flex flex-col">
                             <h2 className={"text-2xl " + title}>{tree?.name}</h2>
-                            <p>By: @{creator?.username}</p>
+                            <p>By: <a href={`/profiles/${creator?.id}`} className={aText}>@{creator?.username}</a></p>
                         </div>
                         {(user?.id === tree?.userId || (user?.id && tree?.collaborators?.includes(user.id))) && <a
                             href={`/account/trees/${id}`}
