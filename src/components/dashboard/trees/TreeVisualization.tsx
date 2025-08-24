@@ -31,6 +31,7 @@ interface TreeVisualizationProps {
     maxZoom?: number;
     svgId?: string;
     maxSpecies?: number;
+    open?: boolean;
 }
 
 export const TreeVisualization = ({
@@ -56,12 +57,13 @@ export const TreeVisualization = ({
     minZoom = Number.EPSILON,
     maxZoom = Number.MAX_SAFE_INTEGER,
     svgId,
-    maxSpecies
+    maxSpecies,
+    open
 }: TreeVisualizationProps) => {
     return (
-        <div className="flex flex-col my-2 ml-2 shadow-lg overflow-hidden h-full! w-full!">
-            <header className="flex flex-row p-3 justify-between border-b items-center">
-                <div className="flex flex-row space-x-3 items-center">
+        <div className="flex flex-col my-2 ml-2 shadow-lg h-full! w-full!">
+            <header className="flex sm:flex-row flex-col p-3 justify-between border-b items-center">
+                <div className="flex flex-wrap space-x-3 space-y-3 items-center mb-2 sm:mb-0">
                     <ToolButton
                         title="Zoom In"
                         icon="fa-search-plus"
@@ -86,6 +88,7 @@ export const TreeVisualization = ({
                         title={selection ? "Moving Mode" : "Selection Mode"}
                         icon={selection ? "fa-hand" : "fa-mouse-pointer"}
                         onClick={() => setSelection?.(!selection)}
+                        className="hidden sm:inline-block"
                     />
                     {setSelected && <ToolButton
                         title={selected ? "Add Descendant" : "Add Species"}
@@ -142,18 +145,18 @@ export const TreeVisualization = ({
                     />
                     <p>Zoom: {(zoom / baseZoom * 100).toFixed()}%</p>
                 </div>
-                <div className="flex flex-col space-y-2">
-                    <div className="flex flex-row space-x-2">
+                <div className="flex sm:flex-col flex-row justify-between space-y-2 w-full sm:w-auto">
+                    <div className="flex sm:flex-row flex-col space-x-2 space-y-2">
                         <ToggleSwitch
                             id="chrono-scale"
-                            className={"w-15 h-7.5 " + (chronoScale ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
+                            className={"w-15! h-7.5 " + (chronoScale ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
                             spanClassName="bg-white"
                             checked={chronoScale}
                             onChange={setChronoScale}
                         />
                         <p className="font-bold">Chronological Scale</p>
                     </div>
-                    <div className="flex flex-row space-x-2">
+                    <div className="flex sm:flex-row flex-col space-x-2 space-y-2">
                         <ToggleSwitch
                             id="show-name"
                             className={"w-15 h-7.5 " + (showName ? "bg-[#D8EDD9] dark:bg-[#1B5E20]" : "bg-neutral-200 dark:bg-neutral-700")}
@@ -165,7 +168,7 @@ export const TreeVisualization = ({
                     </div>
                 </div>
             </header>
-            <div className="relative h-full! w-full!">
+            <div className={"relative h-full! w-full! " + (open ? "hidden sm:flex" : "flex")}>
                 {children}
             </div>
         </div>
