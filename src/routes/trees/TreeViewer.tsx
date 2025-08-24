@@ -9,7 +9,7 @@ import { getNotifications } from "../../api/notification";
 import { NotificationWS } from "../../classes/NotificationWS";
 import { socket } from "../../api/socket";
 import { Header } from "../../components/dashboard/Header";
-import { accountContainer, aText, borderButton, filledButton, title } from "../../data/classNames";
+import { accountContainer, aText, borderButton, filledButton, title, unborder } from "../../data/classNames";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
 import { TreeCanvas } from "../../components/dashboard/trees/TreeCanvas";
 import { Liked, NotiFunc, TimeUnit, TreeProp } from "../../enums";
@@ -50,6 +50,7 @@ export const TreeViewer = () => {
     const [liked, setLiked] = useState(false);
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState<CommentResponse[] | undefined>([]);
+    const [open, setOpen] = useState(false);
     const baseZoom = 0.9;
     const [zoom, setZoom] = useState(baseZoom);
     const deltaZoom = 0.1;
@@ -153,7 +154,7 @@ export const TreeViewer = () => {
                 currentPage={user?.id === tree?.userId ? "/trees/me" : user?.id && tree?.collaborators?.includes(user.id) ? "/trees/collabs" : ""}
                 user={user}
             />}
-            <main className="flex flex-col w-full">
+            <main className="flex flex-col w-full h-full">
                 <Header
                     search={search}
                     setSearch={setSearch}
@@ -198,9 +199,15 @@ export const TreeViewer = () => {
                             <i className="fas fa-heart"/>
                             <p>{tree?.likes}</p>
                         </button>
+                        <button
+                            className={"none flex sm:hidden h-full items-center bg-black/0! p-0! " + unborder}
+                            onClick={() => setOpen(!open)}
+                        >
+                            <i className={`fas ${open ? "fa-times" : "fa-bars"}`}/>
+                        </button>
                     </div>
                 </Header>
-                <div className="flex flex-row h-full! w-full! overflow-hidden">
+                <div className="flex sm:flex-row flex-col h-full! w-full! sm:overflow-hidden relative">
                     <TreeVisualization
                         tree={tree}
                         selection={selection}
@@ -218,6 +225,7 @@ export const TreeViewer = () => {
                         maxZoom={maxZoom}
                         deltaZoom={deltaZoom}
                         svgId="tree-canvas"
+                        open={open}
                     >
                         <TreeCanvas
                             className={`absolute top-0 bottom-0 right-0 left-0 ${selection ? "" : isDragging ? "cursor-grabbing" : "cursor-grab"}`}
@@ -242,6 +250,8 @@ export const TreeViewer = () => {
                         prop={prop}
                         setProp={setProp}
                         view
+                        open={open}
+                        setOpen={setOpen}
                     >
                         <div className="p-4 overflow-y-auto h-full">
                             {prop === TreeProp.TREE && <TreeViewProps
