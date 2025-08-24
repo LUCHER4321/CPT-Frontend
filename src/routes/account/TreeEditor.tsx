@@ -4,7 +4,7 @@ import type { NotificationResponse, PhTreeResponse, StrictSpecies, UserResponse 
 import { getTree, imageTree, viewTree } from "../../api/phTree";
 import { getMe, getUser, token, userSearch } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
-import { accountContainer, title } from "../../data/classNames";
+import { accountContainer, title, unborder } from "../../data/classNames";
 import { getNotifications } from "../../api/notification";
 import { Sidebar } from "../../components/dashboard/Sidebar";
 import { dashboardItems } from "../../data/dashboardItems";
@@ -60,6 +60,7 @@ export const TreeEditor = () => {
     const [selection, setSelection] = useState(true);
     const [grids, setGrids] = useState(true);
     const [maxSpecies, setMaxSpecies] = useState<number | undefined>(undefined);
+    const [open, setOpen] = useState(false);
     const baseZoom = 0.9;
     const deltaZoom = 0.1;
     const maxZoom = 10;
@@ -263,7 +264,7 @@ export const TreeEditor = () => {
             currentPage={user?.id === tree?.userId ? "/trees/me" : user?.id && tree?.collaborators?.includes(user?.id) ? "/trees/collabs" : "/"}
             user={user}
         />
-        <main className="flex flex-col w-full">
+        <main className="flex flex-col w-full h-full">
             <Header
                 search={search}
                 setSearch={setSearch}
@@ -271,7 +272,7 @@ export const TreeEditor = () => {
                 active={active}
                 setActive={setActive}
             >
-                <div className="flex flex-row space-x-7 text-2xl">
+                <div className="flex flex-row space-x-7 text-2xl justify-between">
                     <h2 className={"text-2xl " + title}>{tree?.name}</h2>
                     <a
                         href={`/trees/${id}`}
@@ -280,9 +281,15 @@ export const TreeEditor = () => {
                     >
                         <i className="fas fa-eye"/>
                     </a>
+                    <button
+                        className={"none flex sm:hidden h-full items-center bg-black/0! p-0! " + unborder}
+                        onClick={() => setOpen(!open)}
+                    >
+                        <i className={`fas ${open ? "fa-times" : "fa-bars"}`}/>
+                    </button>
                 </div>
             </Header>
-            <div className="flex flex-row h-full! w-full! overflow-hidden">
+            <div className="flex sm:flex-row flex-col h-full! w-full! sm:overflow-hidden relative">
                 <TreeVisualization
                     tree={tree}
                     treeSocket={phTreeWS}
@@ -306,6 +313,7 @@ export const TreeEditor = () => {
                     deltaZoom={deltaZoom}
                     svgId="tree-canvas"
                     maxSpecies={maxSpecies}
+                    open={open}
                 >
                     <TreeCanvas
                         className={`absolute top-0 bottom-0 right-0 left-0 ${selection ? "" : isDragging ? "cursor-grabbing" : "cursor-grab"}`}
@@ -329,6 +337,8 @@ export const TreeEditor = () => {
                 <TreeProperties
                     prop={prop}
                     setProp={setProp}
+                    open={open}
+                    setOpen={setOpen}
                 >
                     <div className="p-4 overflow-y-auto h-full">
                         {prop === TreeProp.TREE && tree && <TreeProps
