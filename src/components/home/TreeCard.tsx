@@ -1,5 +1,6 @@
 import { card, circleImage, title } from "../../data/classNames";
 import type { PhTreeResponse } from "../../types";
+import { dateToString } from "../../utils/dateToString";
 
 interface TreeCardProps {
     tree?: PhTreeResponse & { username: string | Promise<string>; };
@@ -18,13 +19,14 @@ export const TreeCard = ({
     tree,
     edit
 }: TreeCardProps) => {
-    const { id, image, name, username, likes, comments, views, tags = [] } = tree ?? {};
+    const { id, image, name, username, likes, comments, views, tags = [], updatedAt } = tree ?? {};
     return (
         <a className={card + " " + title} href={`${edit ? "/account" : ""}/trees/${id}`}>
             <div className="flex flex-row justify-between p-4 items-center">
                 <div className="flex flex-col">
                     <h3 className={"text-start text-[1.17em] " + title}>{name}</h3>
                     <p className="text-start">By: @{username}</p>
+                    <p>Last Update: {dateToString("MMn DDth, YYYY", updatedAt)}</p>
                 </div>
                 {image && <img src={image} className={"h-10! w-10! " + circleImage}/>}
             </div>
