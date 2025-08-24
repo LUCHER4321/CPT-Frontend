@@ -7,16 +7,20 @@ interface TreePropertiesProps {
     prop?: TreeProp;
     setProp?: (p: TreeProp) => void;
     view?: boolean;
+    open?: boolean;
+    setOpen?: (o: boolean) => void;
 }
 
 export const TreeProperties = ({
     children,
     prop,
     setProp,
-    view
+    view,
+    open
 }: TreePropertiesProps) => {
     return (
-        <div className="min-w-88 max-w-88 h-full m-2 rounded shadow-lg flex flex-col overflow-hidden">
+        <div className={`sm:min-w-88 sm:max-w-88 sm:h-full m-2 rounded shadow-lg flex flex-col overflow-scroll sm:overflow-hidden ${open ? "absolute sm:relative left-0 right-0 top-45 bottom-0" :
+        "hidden sm:flex"}`}>
             <div className="grid border-b grid-cols-3">
                 {[...treeProps.entries()].filter(([k]) => (!view || k !== TreeProp.COLLABORATORS) && (view || k !== TreeProp.COMMENTS)).map(([k, { icon, name }], index) => (
                     <button
