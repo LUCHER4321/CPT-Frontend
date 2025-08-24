@@ -73,6 +73,9 @@ createRoot(document.getElementById('root')!).render(
           />}/>
           <Route path=":id" element={<TreeViewer/>}/>
         </Route>
+        <Route path="profiles">
+          <Route path=":id" element={<Profile/>}/>
+        </Route>
       </Routes>
     </BrowserRouter>
 )
