@@ -17,7 +17,7 @@ export const SearchHeader = ({
 }: SearchHeaderProps) => {
     const pages = Math.max(Math.ceil(treesCount / (sProps?.limit ?? 10)), 1);
     return (
-        <div className="flex flex-row p-3 space-x-3 w-full justify-between">
+        <div className="flex flex-wrap p-3 space-x-3 w-full justify-between">
             <AuthField
                 name="Sort by:"
                 className="space-x-3 items-center"
@@ -58,7 +58,7 @@ export const SearchHeader = ({
                     }}
                 />
             </AuthField>
-            <div className="flex flex-row space-x-3">
+            <div className="flex flex-wrap space-x-3">
                 <AuthField
                     row
                     name="Since:"
@@ -88,7 +88,7 @@ export const SearchHeader = ({
                     }}
                 />
             </div>
-            <div className="flex flex-row space-x-3">
+            <div className="flex flex-wrap space-x-3">
                 <AuthField
                     row
                     name="Results:"
