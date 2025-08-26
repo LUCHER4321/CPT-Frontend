@@ -67,7 +67,7 @@ export const Dashboard = () => {
         token({ expiresIn: "7d" });
     }, []);
     return (
-        <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start">
+        <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start relative">
             <Sidebar
                 expanded={expanded}
                 setExpanded={setExpanded}
@@ -75,7 +75,7 @@ export const Dashboard = () => {
                 currentPage="/"
                 user={user}
             />
-            <main className="flex flex-col w-full">
+            <main className="flex flex-col w-full h-full top-0 absolute sm:relative">
                 <Header
                     search={search}
                     setSearch={setSearch}
