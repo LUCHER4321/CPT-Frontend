@@ -96,7 +96,7 @@ export const Profile = ({
                     items={dashboardItems}
                     user={user}
                 />}
-                <main className="flex flex-col w-full">
+                <main className="flex flex-col w-full h-full top-0 absolute sm:relative">
                     <Header
                         search={search}
                         setSearch={setSearch}
