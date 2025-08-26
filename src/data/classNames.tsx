@@ -9,4 +9,4 @@ export const unselectedBilling = "font-medium text-lg transition-all duration-50
 export const photoClass = "rounded-full aspect-square w-10! h-10! flex justify-center";
 export const unborder= "border-0! focus:outline-0! focus-visible:outline-0!";
 export const circleImage = "object-cover rounded-full";
-export const accountContainer = "w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden";
+export const accountContainer = "w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden relative";
