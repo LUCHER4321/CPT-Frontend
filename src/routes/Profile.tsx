@@ -11,14 +11,13 @@ import { Plan } from "../enums"
 import { nullableInput } from "../utils/nullableInput"
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter"
 import { dateToString } from "../utils/dateToString"
-import { NotificationWS } from "../classes/NotificationWS"
 import { getNotifications } from "../api/notification"
-import { socket } from "../api/socket"
 import { searchTrees, treesCount } from "../api/phTree"
 import { follow, getFollowersCount, getFollowing, unfollow } from "../api/follow"
 import { DataDisplay } from "../components/profile/DataDisplay"
 import { AuthField } from "../components/auth/AuthField"
 import { TreeCard } from "../components/home/TreeCard"
+import { notificationService } from "../classes/NotificationService"
 
 interface ProfileProps {
     myProfile?: boolean
@@ -33,7 +32,6 @@ export const Profile = ({
     const [user, setUser] = useState<UserResponse | undefined>(undefined);
     const [currentUser, setCurrentUser] = useState<UserResponse | undefined>(undefined);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
-    const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [active, setActive] = useState(false);
     const [search, setSearch] = useState("");
     const [following, setFollowing] = useState(false);
@@ -54,11 +52,10 @@ export const Profile = ({
             getNotifications({}).then(n => {
                 setNotifications(n ?? []);
             });
-            setNotificationWS(new NotificationWS({
-                socket,
-                response: nr => setNotifications(prev => prev.concat([nr])),
+            notificationService.initialize({
+                response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
-            }));
+            });
             token({ expiresIn: "7d" });
         });
     }, []);
