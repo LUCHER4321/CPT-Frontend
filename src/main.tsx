@@ -13,6 +13,7 @@ import type { SearchProps } from './types'
 import { nullableInput } from './utils/nullableInput.tsx'
 import { TreeViewer } from './routes/trees/TreeViewer.tsx'
 import { Profile } from './routes/Profile.tsx'
+import { Follows } from './routes/account/Follows.tsx'
 
 const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
 const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
@@ -49,6 +50,18 @@ createRoot(document.getElementById('root')!).render(
           <Route path="liked" element={<SearchTrees
             liked
           />}/>
+          <Route path="follows">
+            <Route index element={<Follows
+              showFollowers
+              showFollowing
+            />}/>
+            <Route path="followers" element={<Follows
+              showFollowers
+            />}/>
+            <Route path="following" element={<Follows
+              showFollowing
+            />}/>
+          </Route>
           <Route path="trees">
             <Route index element={<SearchTrees
               {...searchProps}
