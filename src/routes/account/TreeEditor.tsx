@@ -8,8 +8,6 @@ import { accountContainer, title, unborder } from "../../data/classNames";
 import { getNotifications } from "../../api/notification";
 import { Sidebar } from "../../components/dashboard/Sidebar";
 import { dashboardItems } from "../../data/dashboardItems";
-import { NotificationWS } from "../../classes/NotificationWS";
-import { socket } from "../../api/socket";
 import { PhTreeWS } from "../../classes/PhTreeWS";
 import { TimeUnit, TreeChange, TreeProp } from "../../enums";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
@@ -25,6 +23,7 @@ import { SpNode } from "../../components/dashboard/trees/Node";
 import { readFileAsJson } from "../../utils/readFileAsJson";
 import { nullableInput } from "../../utils/nullableInput";
 import { plans } from "../../data/prices";
+import { notificationService } from "../../classes/NotificationService";
 
 export const TreeEditor = () => {
     const [expanded, setExpanded] = useState(false);
@@ -37,7 +36,6 @@ export const TreeEditor = () => {
     const [search, setSearch] = useState("");
     const [collabSearch, setCollabSearch] = useState<UserResponse[] | undefined>(undefined);
     const [active, setActive] = useState(false);
-    const [_, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [phTreeWS, setPhTreeWS] = useState<PhTreeWS | undefined>(undefined);
     const [chronoScale, setChronoScale] = useState(true);
     const [prop, setProp] = useState(TreeProp.TREE);
@@ -125,7 +123,6 @@ export const TreeEditor = () => {
                 if(t) {
                     setTree(t);
                     setPhTreeWS(new PhTreeWS({
-                        socket,
                         response: ({type, phTree, species}) => {
                             switch (type) {
                                 case TreeChange.NEW:
@@ -185,11 +182,10 @@ export const TreeEditor = () => {
             getNotifications({}).then(n => {
                 setNotifications(n ?? []);
             });
-            setNotificationWS(new NotificationWS({
-                socket,
-                response: nr => setNotifications(prev => prev.concat([nr])),
+            notificationService.initialize({
+                response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
-            }));
+            });
             token({ expiresIn: "7d" });
         });
         const handleResize = () => {
