@@ -12,9 +12,8 @@ import { SearchHeader } from "../../components/trees/SearchHeader";
 import { TreeCard } from "../../components/home/TreeCard";
 import { likedTrees } from "../../api/like";
 import { Card } from "../../components/home/Card";
-import { NotificationWS } from "../../classes/NotificationWS";
 import { newPhTree } from "../../utils/newPhTree";
-import { socket } from "../../api/socket";
+import { notificationService } from "../../classes/NotificationService";
 
 interface SearchTreesProps extends SearchProps {
     myTrees?: boolean;
@@ -37,7 +36,6 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [active, setActive] = useState(false);
     const [sProps, setSProps] = useState(searchProps);
-    const [notificationWS, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const location = useLocation().pathname;
     const history = useNavigate();
     const searchFunction = myTrees ? getMyTrees : searchTrees;
@@ -46,11 +44,10 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
         getMe({}).then(u => {
             setUser(u);
             getNotifications({}).then(n => setNotifications(n ?? []));
-            setNotificationWS(new NotificationWS({
-                socket,
-                response: nr => setNotifications(prev => prev.concat([nr])),
+            notificationService.initialize({
+                response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
-            }));
+            });
             token({ expiresIn: "7d" });
             document.title = `Life Tree | ${liked ? "Liked Trees" : myTrees ? (owner || owner === undefined) ? `${u?.username}'s Trees` : `${u?.username}'s Collabs` : "Search Trees"}`;
         });
@@ -104,7 +101,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                         {myTrees && <Card
                             fa="fa-plus"
                             description="New Tree"
-                            onClick={newPhTree(notificationWS, history)}
+                            onClick={newPhTree(history)}
                         />}
                         {trees?.trees.map((tree, index) => <TreeCard
                             key={index}
