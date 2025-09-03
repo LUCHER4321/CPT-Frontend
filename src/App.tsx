@@ -5,7 +5,7 @@ import { Features } from './components/home/Features';
 import type { UserResponse, PhTreeResponse } from './types';
 import { searchTrees } from './api/phTree';
 import { Order, TreeCriteria } from './enums';
-import { getMe, getUser } from './api/user';
+import { getMe, getUser, token } from './api/user';
 import { exampleTrees, exampleUsers } from './data/example';
 import { TopTrees } from './components/home/TopTrees';
 
@@ -17,7 +17,10 @@ function App() {
 
   useEffect(() => {
     document.title = "Life Tree | Create Phylogenetic Trees";
-    getMe({}).then(setUser);
+    getMe({}).then(u => {
+      setUser(u);
+      token({ expiresIn: "7d" });
+    });
     const fetchTrees = async () => {
       try {
         const remote = await searchTrees({
