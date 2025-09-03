@@ -6,8 +6,8 @@ import { AuthField } from "../auth/AuthField";
 import { Comment } from "./Comment";
 import { getLikes, like, unlike } from "../../api/like";
 import { Liked, NotiFunc } from "../../enums";
-import type { NotificationWS } from "../../classes/NotificationWS";
 import { CommentClass } from "../../classes/CommentClass";
+import { notificationService } from "../../classes/NotificationService";
 
 interface CommentViewPropsProps{
     tree?: PhTreeResponse;
@@ -17,7 +17,6 @@ interface CommentViewPropsProps{
     setComment?: (s: string) => void;
     comments?: CommentResponse[];
     setComments?: (s?: CommentResponse[]) => void;
-    notificationWS?: NotificationWS;
 }
 
 interface CommentAndRepliesProps {
@@ -36,8 +35,7 @@ export const CommentViewProps = ({
     comment,
     setComment,
     comments,
-    setComments,
-    notificationWS
+    setComments
 }: CommentViewPropsProps) => {
     const [users, setUsers] = useState<Map<string, UserResponse | undefined>>(new Map());
     const [likes, setLikes] = useState<Map<string, number | undefined>>(new Map());
@@ -77,7 +75,6 @@ export const CommentViewProps = ({
                     setLiked(newLiked);
                 });
             }}
-            notificationWS={notificationWS}
             reply={r => {
                 if(!r) return;
                 const ccl = allCClass?.find(c => c.id === comment?.id);
@@ -135,7 +132,7 @@ export const CommentViewProps = ({
                             ...t
                         });
                         setComment?.("");
-                        notificationWS?.emit({
+                        notificationService.emit({
                             fun: NotiFunc.COMMENT,
                             commentId: c.id
                         });
