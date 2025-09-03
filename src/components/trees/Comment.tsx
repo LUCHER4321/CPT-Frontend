@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { NotificationWS } from "../../classes/NotificationWS";
 import { photoClass } from "../../data/classNames";
 import { NotiFunc } from "../../enums";
 import type { CommentResponse, UserResponse } from "../../types"
 import { AuthField } from "../auth/AuthField";
 import { createComment, deleteComment, updateComment } from "../../api/comment";
+import { notificationService } from "../../classes/NotificationService";
 
 interface CommentProps {
     comment?: CommentResponse;
@@ -15,7 +15,6 @@ interface CommentProps {
     setLiked?: (b: boolean) => void;
     editing?: boolean;
     setEditing?: (b: boolean) => void;
-    notificationWS?: NotificationWS;
     edit?: (c?: string) => void;
     reply?: (r?: CommentResponse & { parentId?: string }) => void;
     delComment?: (c?: CommentResponse) => void;
@@ -29,7 +28,6 @@ export const Comment = ({
     likes,
     liked,
     setLiked,
-    notificationWS,
     reply,
     edit,
     delComment,
@@ -63,7 +61,7 @@ export const Comment = ({
                         className={"fas fa-heart cursor-pointer " + (liked ? "text-red-500" : "")}
                         onClick={() => {
                             setLiked?.(!liked);
-                            notificationWS?.emit({
+                            notificationService.emit({
                                 fun: NotiFunc.LIKE,
                                 commentId: comment?.id
                             })
