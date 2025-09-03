@@ -6,8 +6,6 @@ import { useParams } from "react-router-dom";
 import { getMe, getUser, token } from "../../api/user";
 import { getTree } from "../../api/phTree";
 import { getNotifications } from "../../api/notification";
-import { NotificationWS } from "../../classes/NotificationWS";
-import { socket } from "../../api/socket";
 import { Header } from "../../components/dashboard/Header";
 import { accountContainer, aText, borderButton, filledButton, title, unborder } from "../../data/classNames";
 import { TreeVisualization } from "../../components/dashboard/trees/TreeVisualization";
@@ -22,12 +20,12 @@ import { getLikes, like, unlike } from "../../api/like";
 import { NodeViewProps } from "../../components/trees/NodeViewProps";
 import { CommentViewProps } from "../../components/trees/CommentViewProps";
 import { treeComments } from "../../api/comment";
+import { notificationService } from "../../classes/NotificationService";
 
 export const TreeViewer = () => {
     const [expanded, setExpanded] = useState(false);
     const [tree, setTree] = useState<PhTreeResponse | undefined>(undefined);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
-    const [notificationWS, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [search, setSearch] = useState("");
     const [active, setActive] = useState(false);
     const [user, setUser] = useState<UserResponse | undefined>(undefined);
@@ -93,11 +91,10 @@ export const TreeViewer = () => {
             getNotifications({}).then(n => {
                 setNotifications(n ?? []);
             });
-            setNotificationWS(new NotificationWS({
-                socket,
-                response: nr => setNotifications(prev => prev.concat([nr])),
+            notificationService.initialize({
+                response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
-            }));
+            });
             token({ expiresIn: "7d" });
         });
         const handleResize = () => {
@@ -186,10 +183,10 @@ export const TreeViewer = () => {
                                                 likes: likes + (liked ? -1 : 1),
                                                 ...t
                                             });
-                                            notificationWS?.emit({
+                                            if(!liked) notificationService.emit({
                                                 fun: NotiFunc.LIKE,
                                                 treeId: tree.id
-                                            })
+                                            });
                                             setLiked(!liked);
                                         }
                                     });
@@ -279,7 +276,6 @@ export const TreeViewer = () => {
                                 setComment={setComment}
                                 comments={comments}
                                 setComments={setComments}
-                                notificationWS={notificationWS}
                             />}
                         </div>
                     </TreeProperties>
