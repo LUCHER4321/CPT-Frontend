@@ -7,8 +7,6 @@ import { Header } from "../components/dashboard/Header";
 import { getMyTrees, myTreesCount } from "../api/phTree";
 import { getNotifications } from "../api/notification";
 import type { NotificationResponse, PhTreeResponse, UserResponse } from "../types";
-import { NotificationWS } from "../classes/NotificationWS";
-import { socket } from "../api/socket";
 import { TreesData } from "../components/dashboard/TreesData";
 import { Order, TreeCriteria } from "../enums";
 import { LastTrees } from "../components/dashboard/LastTrees";
@@ -16,6 +14,7 @@ import { aText, title } from "../data/classNames";
 import { DESIGN_MODE } from "../config";
 import { useNavigate } from "react-router-dom";
 import { getFollowersCount, getFollowing } from "../api/follow";
+import { notificationService } from "../classes/NotificationService";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
@@ -25,7 +24,6 @@ export const Dashboard = () => {
     const [collabs, setCollabs] = useState<number | undefined>(undefined);
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [search, setSearch] = useState("");
-    const [notificationWS, setNotificationWS] = useState<NotificationWS | undefined>(undefined);
     const [active, setActive] = useState(false);
     const [lastTrees, setLastTrees] = useState<(PhTreeResponse & { username: string })[]>([]);
     const [follows, setFollows] = useState<{
@@ -58,11 +56,10 @@ export const Dashboard = () => {
             getNotifications({}).then(n => {
                 setNotifications(n ?? []);
             });
-            setNotificationWS(new NotificationWS({
-                socket,
-                response: nr => setNotifications(prev => prev.concat([nr])),
+            notificationService.initialize({
+                response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
-            }));
+            });
         });
         token({ expiresIn: "7d" });
     }, []);
@@ -93,7 +90,6 @@ export const Dashboard = () => {
                         trees={trees}
                         myTrees={myTrees}
                         collabs={collabs}
-                        notificationWS={notificationWS}
                     />
                     <LastTrees
                         lastTrees={lastTrees}
