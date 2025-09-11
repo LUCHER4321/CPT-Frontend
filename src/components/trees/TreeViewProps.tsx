@@ -5,7 +5,7 @@ import { nullableInput } from "../../utils/nullableInput";
 import { AuthField } from "../auth/AuthField";
 import { IconInput } from "../IconInput";
 import { ToggleSwitch } from "../pricing/ToggleSwitch";
-import { circleImage } from "../../data/classNames";
+import { circleImage, aText } from "../../data/classNames";
 
 interface TreeViewPropsProps {
     tree?: PhTreeResponse;
@@ -38,7 +38,7 @@ export const TreeViewProps = ({
         <>
             <h2 className={"font-bold text-xl mb-2"}>{tree?.name}</h2>
             {tree?.image && <img src={tree.image} className={"h-70! w-70! self-center mb-2 " + circleImage} />}
-            <p className="mb-1">By: @{user?.username}</p>
+            <p className="mb-1">By: <a className={aText} href={`/profiles/${user?.id}`}>@{user?.username}</a></p>
             <p className="mb-2">{tree?.description}</p>
             <div className="flex flex-wrap space-x-2 w-full mb-6">
                 {tree?.tags?.map((t, index) => (<div key={index} className="flex flex-row items-center mt-2 px-2 py-1 space-x-1 rounded-full dark:bg-[#1B5E20] bg-[#D8EDD9]">
