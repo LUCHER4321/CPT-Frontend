@@ -134,7 +134,8 @@ export const CommentViewProps = ({
                         setComment?.("");
                         notificationService.emit({
                             fun: NotiFunc.COMMENT,
-                            commentId: c.id
+                            commentId: c.id,
+                            treeId: tree.id
                         });
                     }
                 }) : undefined}
