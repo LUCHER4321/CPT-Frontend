@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { dashboardItems } from "../data/dashboardItems";
 import { Sidebar } from "../components/dashboard/Sidebar";
-import { exampleTrees, exampleUsers } from "../data/example";
 import { getMe, getUser, token } from "../api/user";
 import { Header } from "../components/dashboard/Header";
 import { getMyTrees, myTreesCount } from "../api/phTree";
@@ -18,7 +17,7 @@ import { notificationService } from "../classes/NotificationService";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
-    const [user, setUser] = useState(exampleUsers[0]);
+    const [user, setUser] = useState<UserResponse | undefined>(undefined);
     const [trees, setTrees] = useState<number | undefined>(undefined);
     const [myTrees, setMyTrees] = useState<number | undefined>(undefined);
     const [collabs, setCollabs] = useState<number | undefined>(undefined);
@@ -34,16 +33,16 @@ export const Dashboard = () => {
     useEffect(() => {
         getMe({}).then(u => {
             if(!DESIGN_MODE && !u) history("/");
-            setUser(u ?? exampleUsers[0]);
+            setUser(u);
             document.title = `Life Tree | ${u?.username} Dashboard`;
             if(u) getFollowing({ userId: u.id }).then(fl => getFollowersCount({ userId: u.id }).then(f => setFollows({
                 following: fl,
                 followers: f?.count
             })));
             myTreesCount({}).then(t => {
-                setTrees(t?.total ?? exampleTrees.filter(tr => tr.userId === exampleUsers[0].id || tr.collaborators?.includes(exampleUsers[0].id)).length);
-                setMyTrees(t?.myTrees ?? exampleTrees.filter(tr => tr.userId === exampleUsers[0].id).length);
-                setCollabs(t?.collabs ?? exampleTrees.filter(tr => tr.collaborators?.includes(exampleUsers[0].id)).length);
+                setTrees(t?.total);
+                setMyTrees(t?.myTrees);
+                setCollabs(t?.collabs);
             });
             getMyTrees({
                 limit: 3,
@@ -76,7 +75,8 @@ export const Dashboard = () => {
                 <Header
                     search={search}
                     setSearch={setSearch}
-                    count={notifications.filter(({seen}) => !seen).length}
+                    notifications={notifications}
+                    setNotifications={setNotifications}
                     active={active}
                     setActive={setActive}
                 >
