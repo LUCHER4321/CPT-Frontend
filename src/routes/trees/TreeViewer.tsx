@@ -155,7 +155,8 @@ export const TreeViewer = () => {
                 <Header
                     search={search}
                     setSearch={setSearch}
-                    count={notifications.filter(({seen}) => !seen).length}
+                    notifications={notifications}
+                    setNotifications={setNotifications}
                     active={active}
                     setActive={setActive}
                 >
