@@ -6,7 +6,6 @@ import type { UserResponse, PhTreeResponse } from './types';
 import { searchTrees } from './api/phTree';
 import { Order, TreeCriteria } from './enums';
 import { getMe, getUser, token } from './api/user';
-import { exampleTrees, exampleUsers } from './data/example';
 import { TopTrees } from './components/home/TopTrees';
 
 function App() {
@@ -42,12 +41,6 @@ function App() {
           })) ?? []
         );
       } catch {
-        setTrees(
-          exampleTrees.slice(0, 3).map(t => ({
-            ...t,
-            username: exampleUsers.find(u => u.id === t.userId)?.username ?? ""
-          })) ?? []
-        );
       }
     };
     fetchTrees();
