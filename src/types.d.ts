@@ -212,6 +212,7 @@ export interface CommentResponse {
     content?: string;
     createdAt: Date;
     updatedAt: Date;
+    parentId?: string;
     replies?: CommentResponse[];
 }
 
@@ -312,6 +313,14 @@ export interface SpeciesRequest {
     }, SpeciesResponse>;
 }
 
+export interface NotificationString {
+    author?: string;
+    color: [string, string];
+    icon: string;
+    title: string;
+    body?: string;
+}
+
 export interface NotificationResponse {
     id: string;
     fun: NotiFunc;
@@ -320,6 +329,9 @@ export interface NotificationResponse {
     authorId: string;
     seen: boolean;
     createdAt: Date;
+    userId?: string;
+    treeId?: string;
+    commentId?: string;
 }
 
 export interface NotificationRequest {
