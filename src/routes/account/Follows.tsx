@@ -8,6 +8,7 @@ import { Header } from "../../components/dashboard/Header";
 import { getNotifications } from "../../api/notification";
 import { getFollowers, getFollowing } from "../../api/follow";
 import { notificationService } from "../../classes/NotificationService";
+import { UsersData } from "../../components/dashboard/follows/UsersData";
 
 interface FollowsProps {
     showFollowers?: boolean;
@@ -62,7 +63,16 @@ export const Follows = ({
                         <h2 className={"text-2xl " + title}>{user?.username}'s {showFollowers && showFollowing ? "follows" : showFollowers ? "followers" : showFollowing ? "following" : ""}</h2>
                     </div>
                 </Header>
-                <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 overflow-y-scroll"></div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 overflow-y-scroll">
+                    {showFollowers && followers.length > 0 && <UsersData
+                        titleText="Followers"
+                        users={followers}
+                    />}
+                    {showFollowing && following.length > 0 && <UsersData
+                        titleText="Following"
+                        users={following}
+                    />}
+                </div>
             </main>
         </div>
     </>
