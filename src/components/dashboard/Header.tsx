@@ -42,7 +42,7 @@ export const Header = ({
                     count={notifications?.filter(({seen}) => !seen).length}
                     active={active}
                     setActive={a => {
-                        if(active) Promise.all(notifications?.filter(({seen}) => !seen).map(({ id }) => seeNotification({ id })) ?? []).then(() => setNotifications?.(notifications?.map(n => ({ ...n, seen: true })) ?? []));
+                        if(active) Promise.all(notifications?.filter(({seen}) => !seen).map(({ id }) => seeNotification({ id })) ?? []).then(notis => setNotifications?.(notis.map((n, index) => n ?? notifications?.at(index)).filter(n => n !== undefined)));
                         setActive?.(a);
                     }}
                 >
