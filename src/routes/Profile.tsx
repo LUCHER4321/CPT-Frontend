@@ -7,7 +7,7 @@ import { Header } from "../components/dashboard/Header"
 import { useParams } from "react-router-dom"
 import { getMe, getUser, token, updateMe } from "../api/user"
 import { plans } from "../data/prices"
-import { Plan } from "../enums"
+import { NotiFunc, Plan } from "../enums"
 import { nullableInput } from "../utils/nullableInput"
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter"
 import { dateToString } from "../utils/dateToString"
@@ -69,13 +69,14 @@ export const Profile = ({
                         f1 => {
                             setData({
                                 trees: tc?.total,
-                                followers: f0?.length,
-                                following: f1?.count
+                                followers: f1?.count,
+                                following: f0?.length
                             });
                             searchTrees({ userId: currentUser.id, limit: tc?.total }).then(t => {
                                 Promise.all(t?.trees.map(async (tree) => [tree.id, (await getUser({ id: tree.userId }))?.username ?? ""] as [string, string]) ?? []).then(tu => setTreeUsers(new Map(tu)));
                                 setTrees(t?.trees ?? []);
                             });
+                            nullableInput(user?.id, userId => getFollowing({ userId }))?.then(f => setFollowing(f?.map(({ id }) => id).includes(currentUser.id) ?? false));
                         }
                     )
                 )
@@ -117,6 +118,10 @@ export const Profile = ({
                                             ...prev,
                                             followers: (prev.followers ?? 0) + (following ? -1 : 1)
                                         }));
+                                        if(!following) notificationService.emit({
+                                            fun: NotiFunc.FOLLOW,
+                                            userId: currentUser?.id
+                                        })
                                         setFollowing(!following);
                                     });
                                 }}
