@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import { Sidebar } from "../components/dashboard/Sidebar"
-import { accountContainer, title, unborder } from "../data/classNames"
+import { accountContainer, photoClass, title, unborder } from "../data/classNames"
 import { dashboardItems } from "../data/dashboardItems"
 import type { PhTreeResponse, NotificationResponse, UserResponse } from "../types"
 import { Header } from "../components/dashboard/Header"
 import { useParams } from "react-router-dom"
-import { getMe, getUser, token, updateMe } from "../api/user"
+import { admin, getMe, getUser, token, updateMe } from "../api/user"
 import { plans } from "../data/prices"
-import { NotiFunc, Plan } from "../enums"
+import { NotiFunc, Plan, Role } from "../enums"
 import { nullableInput } from "../utils/nullableInput"
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter"
 import { dateToString } from "../utils/dateToString"
@@ -107,8 +107,9 @@ export const Profile = ({
                     </Header>
                     <div className="w-full px-6 pt-16 pb-6 overflow-y-scroll">
                         <div className="flex flex-row space-x-3 items-center mb-2">
+                            {currentUser?.photo ? <img className={photoClass} src={currentUser?.photo}/> : <i className={photoClass + " fas fa-user dark:text-[#D8EDD9] text-[#1B5E20] text-center text-4xl"}/>}
                             <h2 className={"text-2xl " + title}>{currentUser?.username}</h2>
-                            <span className={"px-3 py-1 rounded-full " + plans.get(currentUser?.plan ?? Plan.FREE)?.button?.light + " " + plans.get(currentUser?.plan ?? Plan.FREE)?.button?.dark}>{nullableInput(currentUser?.plan, capitalizeFirstLetter)}</span>
+                            {currentUser?.plan !== Plan.FREE && <span className={"px-3 py-1 rounded-full " + plans.get(currentUser?.plan ?? Plan.FREE)?.button?.light + " " + plans.get(currentUser?.plan ?? Plan.FREE)?.button?.dark}>{nullableInput(currentUser?.plan, capitalizeFirstLetter)}</span>}
                             {user?.id !== currentUser?.id && <button
                                 className={`${following ? "bg-red-300! dark:bg-red-700! hover:bg-red-400! dark:hover:bg-red-800!": "bg-green-300! dark:bg-green-700! hover:bg-green-400! dark:hover:bg-green-800!"} rounded-full ${unborder}`}
                                 onClick={() => {
@@ -127,6 +128,12 @@ export const Profile = ({
                                 }}
                             >
                                 <i className={`fas ${following ? "fa-user-minus" : "fa-user-plus"}`}/>
+                            </button>}
+                            {(user?.role === Role.BOSS && user.id !== currentUser?.id) && <button
+                                className={`${currentUser?.role !== Role.USER ? "bg-red-300! dark:bg-red-700! hover:bg-red-400! dark:hover:bg-red-800!": "bg-green-300! dark:bg-green-700! hover:bg-green-400! dark:hover:bg-green-800!"} rounded-full ${unborder}`}
+                                onClick={() => admin({ adminId: currentUser?.id ?? "", removeAdmin: currentUser?.role !== Role.USER}).then(setCurrentUser)}
+                            >
+                                <i className={`fas ${currentUser?.role !== Role.USER ? "fa-user-shield" : "fa-user-tag"}`}/>
                             </button>}
                         </div>
                         <div className="flex flex-row space-x-2 items-center mb-2">
