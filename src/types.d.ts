@@ -94,7 +94,9 @@ export interface UserRequest {
         image: File;
     }, UserResponse>;
     deletePhotoMe: RequestFunction<{}, UserResponse>;
-    newApiKey: RequestFunction<{}, string>;
+    newApiKey: RequestFunction<{}, {
+        apiKey: string;
+    }>;
     deleteApiKey: RequestFunction<{
         keyToDelete: string;
     }, UserResponse>;
@@ -319,6 +321,7 @@ export interface NotificationString {
     icon: string;
     title: string;
     body?: string;
+    url: string;
 }
 
 export interface NotificationResponse {
