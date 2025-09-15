@@ -14,6 +14,7 @@ import { nullableInput } from './utils/nullableInput.tsx'
 import { TreeViewer } from './routes/trees/TreeViewer.tsx'
 import { Profile } from './routes/Profile.tsx'
 import { Follows } from './routes/account/Follows.tsx'
+import { Settings } from './routes/account/Settings.tsx'
 
 const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
 const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
@@ -44,6 +45,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="pricing" element={<Pricing/>}/>
         <Route path="account">
           <Route index element={<Dashboard/>}/>
+          <Route path="settings" element={<Settings/>}/>
           <Route path="profile" element={<Profile
             myProfile
           />}/>
