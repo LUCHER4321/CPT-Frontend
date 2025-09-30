@@ -6,7 +6,7 @@ import { deleteApiKey, deleteMe, deletePhotoMe, getMe, newApiKey, photoMe, token
 import { Header } from "../../components/dashboard/Header";
 import { getNotifications } from "../../api/notification";
 import { notificationService } from "../../classes/NotificationService";
-import { title, unborder } from "../../data/classNames";
+import { filledButton, title, unborder } from "../../data/classNames";
 import { SettingsSection } from "../../components/dashboard/settings/SettingsSection";
 import { useDropzone } from "react-dropzone";
 import { ImageProp } from "../../components/dashboard/trees/ImageProp";
@@ -124,6 +124,9 @@ export const Settings = () => {
                                 setUsername(u?.description ?? "");
                             })}
                         />
+                        <a href="/pricing"><button className={filledButton}>
+                            Update Plan
+                        </button></a>
                     </SettingsSection>
                     <SettingsSection
                         icon="fa-shield-alt"
@@ -170,7 +173,7 @@ export const Settings = () => {
                         name="API Keys"
                         className="sm:col-span-2"
                     >
-                        <div className="flex flex-row justify-between mb-6">
+                        <div className="flex flex-col sm:flex-row justify-between mb-6">
                             <div className="flex flex-row mb-[1rem]">
                                 <h3 className={"text-lg mr-2 " + title}>My API Keys</h3>
                                 <button onClick={() => setVisibleKeys(!visibleKeys)} className={"bg-black/0! p-0! flex items-center " + unborder}>
@@ -191,7 +194,7 @@ export const Settings = () => {
                             </button>
                         </div>
                         <div className="grid grid-cols-1 gap-4">
-                            {user?.apiKeys?.map((key, index) => <div key={index} className="w-full flex flex-row justify-between border p-4 rounded items-center">
+                            {user?.apiKeys?.map((key, index) => <div key={index} className="w-full flex flex-col sm:flex-row justify-between border p-4 rounded items-center">
                                 <p>{visibleKeys ? key : key.split("").map(() => "•")}</p>
                                 <button onClick={() => {
                                     if(confirm("Are you sure you want to delete this API Key?")) deleteApiKey({ keyToDelete: key }).then(setUser);
