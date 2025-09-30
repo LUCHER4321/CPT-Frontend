@@ -47,7 +47,7 @@ export const Header = ({
                         setActive?.(a);
                     }}
                 >
-                    <button className={"bg-black/0! fixed top-0 bottom-0 left-0 right-0 rounded-none! " + unborder} onClick={() => setActive?.(false)}/>
+                    <button className={"bg-black/0! fixed top-0 bottom-0 left-0 right-0 rounded-none! cursor-default! p-0! " + unborder} onClick={() => setActive?.(false)}/>
                     <table className="absolute top-full right-1/2 rounded z-10 max-h-96 overflow-y-auto shadow-lg">
                         <tr className="bg-white dark:bg-black">
                             <th colSpan={3} className="p-2 border-b rounded-t-full">Notifications</th>
