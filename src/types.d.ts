@@ -18,6 +18,10 @@ export interface NodeTSX extends ReactElement {
 
 export interface PlanPrice {
     name: string;
+    id?: {
+        month: string;
+        year?: string;
+    };
     color?: ClassColor;
     button?: ClassColor;
     border?: ClassColor;
