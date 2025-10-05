@@ -1,6 +1,6 @@
 import type { PhTreeResponse } from "../../../types";
 import { AuthField } from "../../auth/AuthField";
-import { deleteSpecies, updateSpecies } from "../../../api/species";
+import { deleteSpecies, deleteSpeciesImage, updateSpecies } from "../../../api/species";
 import type { PhTreeWS } from "../../../classes/PhTreeWS";
 import { TimeUnit, TreeChange } from "../../../enums";
 import { Species, type SpeciesJSON } from "chrono-phylo-tree";
@@ -209,7 +209,13 @@ export const NodeProps = ({
             <button
                 className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
                 onClick={() => {
-                    if(tree && species && confirm(`Are you sure you wanna delete the species "${species.name}"${species.descendants.length > 0 ? " (and its descendants)" : ""} permanently?`)) deleteSpecies({ treeId: tree.id, id: species.id?.toString()! }).then(() => {
+                    if(tree && species.id && confirm(`Are you sure you wanna delete the species "${species.name}"'s image?`)) deleteSpeciesImage({ treeId: tree.id, id: species.id.toString()! }).then(() => species.image = undefined)
+                }}
+            >Delete Species' image</button>
+            <button
+                className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
+                onClick={() => {
+                    if(tree && species.id && confirm(`Are you sure you wanna delete the species "${species.name}"${species.descendants.length > 0 ? " (and its descendants)" : ""} permanently?`)) deleteSpecies({ treeId: tree.id, id: species.id.toString()! }).then(() => {
                         const { id, name, duration, descendants, ...sp } = species.toJSON();
                         species.unlinkAncestor();
                         if(id && name && duration !== undefined) treeSocket?.emit({
