@@ -1,5 +1,5 @@
 import type { DropzoneInputProps, DropzoneRootProps } from "react-dropzone";
-import { deleteTree, updateTree } from "../../../api/phTree";
+import { deleteImageTree, deleteTree, updateTree } from "../../../api/phTree";
 import { PhTreeWS } from "../../../classes/PhTreeWS";
 import { TimeUnit, TreeChange } from "../../../enums";
 import type { PhTreeResponse } from "../../../types"
@@ -225,6 +225,15 @@ export const TreeProps = ({
                 isDragActive={isDragActive}
                 text={tree?.image ? "Update Image" : "Upload Image"}
             />
+            <button
+                className={"font-bold mb-6 flex flex-row space-x-2 items-center justify-self-end bg-red-700! text-white hover:bg-white! hover:text-red-700 " + unborder}
+                onClick={() => {
+                    if(tree && confirm(`Are you sure you wanna delete "${tree.name}"'s image?`)) deleteImageTree({ id: tree.id }).then(t => nullableInput(t, t1 => setTree?.(t1)))
+                }}
+            >
+                <i className="fas fa-trash"/>
+                <p>Delete Tree's image</p>
+            </button>
             {false && <ImageProp
                 title="Upload a JSON"
                 getRootProps={getRootPropsJSON}
