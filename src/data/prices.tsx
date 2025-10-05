@@ -1,3 +1,4 @@
+import { INSTI_M, INSTI_Y, PREMIUM_M, PREMIUM_Y, PRO_M, PRO_Y } from "../config"
 import { Plan } from "../enums"
 import type { PlanPrice } from "../types"
 
@@ -18,6 +19,10 @@ const free: PlanPrice = {
 
 const pro: PlanPrice = {
     name: "Pro",
+    id: {
+        month: PRO_M,
+        year: PRO_Y
+    },
     description: "For researchers and educators",
     color: {
         light: "text-[#2196F3]!",
@@ -42,6 +47,10 @@ const pro: PlanPrice = {
 
 const premium: PlanPrice = {
     name: "Premium",
+    id: {
+        month: PREMIUM_M,
+        year: PREMIUM_Y
+    },
     description: "For institutions and research teams",
     color: {
         light: "text-fuchsia-300!",
@@ -65,6 +74,10 @@ const premium: PlanPrice = {
 const institutional: PlanPrice = {
     name: "Institutional",
     description: "For institutions that need premium access for all their members",
+    id: {
+        month: INSTI_M,
+        year: INSTI_Y
+    },
     month: 499,
     year: 4788,
     color: {
