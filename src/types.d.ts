@@ -1,5 +1,5 @@
 import type { Species, SpeciesJSON } from "chrono-phylo-tree";
-import type { Liked, NotiFunc, Order, Plan, Role, TreeCriteria } from "./enums";
+import type { Billing, Liked, NotiFunc, Order, Plan, Role, TreeCriteria } from "./enums";
 import type { StringValue } from "ms";
 import type { ReactElement } from "react";
 
@@ -18,10 +18,7 @@ export interface NodeTSX extends ReactElement {
 
 export interface PlanPrice {
     name: string;
-    id?: {
-        month: string;
-        year?: string;
-    };
+    id?: Map<Billing, string>;
     color?: ClassColor;
     button?: ClassColor;
     border?: ClassColor;
