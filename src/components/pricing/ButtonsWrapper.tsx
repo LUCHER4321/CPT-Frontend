@@ -18,7 +18,7 @@ const onApprove: PayPalButtonOnApprove = async (_, actions) => {
 
 export const ButtonsWrapper = ({
     className,
-    disabled,
+    disabled = false,
     planId,
     children
 }: ButtonsWrapperProps) => {
