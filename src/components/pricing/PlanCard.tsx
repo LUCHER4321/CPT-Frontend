@@ -1,9 +1,11 @@
 import { plans } from "../../data/prices";
 import { Billing, type Plan } from "../../enums";
+import type { UserResponse } from "../../types";
 import { PlanHeader } from "./PlanHeader";
 import { PriceFeatures } from "./PriceFeatures";
 
 interface PlanCardProps {
+    user?: UserResponse;
     plan?: Plan;
     monthly?: boolean;
     children?: string;
@@ -11,6 +13,7 @@ interface PlanCardProps {
 }
 
 export const PlanCard = ({
+    user,
     plan,
     monthly,
     children
@@ -34,7 +37,7 @@ export const PlanCard = ({
             <PriceFeatures
                 plan={plan}
             />
-            <a href={"/auth?register=true&plan=" + plan + (monthly ? "&billing=" + Billing.MONTHLY : "")}>
+            <a href={(user ? "/pricing/paypal?" : "/auth?register=true&") + "plan=" + plan + (monthly ? "&billing=" + Billing.MONTHLY : "")}>
                 <button className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark}`}>
                     {children}
                 </button>
