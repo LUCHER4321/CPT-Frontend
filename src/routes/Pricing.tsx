@@ -45,7 +45,7 @@ export const Pricing = () => {
                     />
                     <PlansGrid
                         monthly={monthly}
-                        currentPlan={user?.plan}
+                        user={user}
                     />
                     <PlansComparision
                         prices={[...plans.values()]}
