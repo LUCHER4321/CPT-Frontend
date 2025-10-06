@@ -2,7 +2,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { PAYPAL_ID } from "../../config";
 
 interface PayPalProviderProps {
-    children: any;
+    children?: any;
 }
 
 export const PayPalProvider = ({
