@@ -36,6 +36,10 @@ const pro: PlanPrice = {
         light: "border-t-[#2196F3]",
         dark: "dark:border-t-blue-600"
     },
+    borderFull: {
+        light: "outline-[#2196F3]",
+        dark: "dark:outline-blue-600"
+    },
     month: 9,
     year: 86.4,
     constraints: {
@@ -64,6 +68,10 @@ const premium: PlanPrice = {
         light: "border-t-fuchsia-300",
         dark: "dark:border-t-fuchsia-700"
     },
+    borderFull: {
+        light: "outline-fuchsia-300",
+        dark: "dark:outline-fuchsia-700"
+    },
     month: 19,
     year: 182.4,
     constraints: {
@@ -90,6 +98,10 @@ const institutional: PlanPrice = {
     border: {
         light: "border-t-orange-600",
         dark: "dark:border-t-orange-400"
+    },
+    borderFull: {
+        light: "outline-orange-600",
+        dark: "dark:outline-orange-400"
     },
     constraints: {
         maxCollaborators: 30,
