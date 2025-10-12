@@ -11,11 +11,20 @@ import { Sidebar } from "../components/dashboard/Sidebar";
 import type { UserResponse } from "../types";
 import { dashboardItems } from "../data/dashboardItems";
 import { title } from "../data/classNames";
+import { Billing, type Plan } from "../enums";
 
-export const Pricing = () => {
+interface PricingProps {
+    plan?: Plan;
+    billing?: Billing;
+}
+
+export const Pricing = ({
+    plan,
+    billing
+}: PricingProps) => {
     const [expanded, setExpanded] = useState(false);
     const [user, setUser] = useState<UserResponse | undefined>(undefined);
-    const [monthly, setMonthly] = useState(false);
+    const [monthly, setMonthly] = useState(billing === Billing.MONTHLY);
     const [faq, setFaq] = useState<number | undefined>(undefined)
 
     useEffect(() => {
@@ -46,6 +55,7 @@ export const Pricing = () => {
                     <PlansGrid
                         monthly={monthly}
                         user={user}
+                        plan={plan}
                     />
                     <PlansComparision
                         prices={[...plans.values()]}
