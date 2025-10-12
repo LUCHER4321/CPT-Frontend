@@ -35,7 +35,11 @@ export const Header = ({
         <header className="p-6 flex flex-col sm:flex-row justify-between items-center w-full shadow-lg">
             {children}
             <div className="flex flex-row-reverse sm:flex-row justify-between w-full sm:w-auto pt-5 sm:pt-0 items-center">
-                <a href="https://discord.gg/s9cJJHcnA4" target="_blank"><i className="fa-brands fa-discord text-black dark:text-white"/></a>
+                <a
+                    href="https://discord.gg/s9cJJHcnA4"
+                    target="_blank"
+                    title="Join to our Discord"
+                ><i className="fa-brands fa-discord text-black dark:text-white hover:text-2xl transition-all duration-300"/></a>
                 <Notifications
                     className={"flex items-center p-0! sm:p-2! bg-black/0! relative mx-6 " + unborder}
                     count={notifications?.filter(({seen}) => !seen).length}
