@@ -42,7 +42,10 @@ createRoot(document.getElementById('root')!).render(
           initialPlan={isEnum(Plan, plan) ? plan as Plan : undefined}
           initialBilling={isEnum(Billing, billing) ? billing as Billing : undefined}
         />}/>
-        <Route path="pricing" element={<Pricing/>}/>
+        <Route path="pricing" element={<Pricing
+          plan={isEnum(Plan, plan) ? plan as Plan : undefined}
+          billing={isEnum(Billing, billing) ? billing as Billing : undefined}
+        />}/>
         <Route path="account">
           <Route index element={<Dashboard/>}/>
           <Route path="settings" element={<Settings/>}/>
