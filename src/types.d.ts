@@ -25,6 +25,7 @@ export interface PlanPrice {
     color?: ClassColor;
     button?: ClassColor;
     border?: ClassColor;
+    borderFull?: ClassColor;
     description: string;
     month: number;
     year: number;
