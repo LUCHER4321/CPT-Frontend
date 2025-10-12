@@ -15,7 +15,6 @@ import { TreeViewer } from './routes/trees/TreeViewer.tsx'
 import { Profile } from './routes/Profile.tsx'
 import { Follows } from './routes/account/Follows.tsx'
 import { Settings } from './routes/account/Settings.tsx'
-import { PayPal } from './routes/pricing/Paypal.tsx'
 
 const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
 const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
@@ -43,13 +42,7 @@ createRoot(document.getElementById('root')!).render(
           initialPlan={isEnum(Plan, plan) ? plan as Plan : undefined}
           initialBilling={isEnum(Billing, billing) ? billing as Billing : undefined}
         />}/>
-        <Route path="pricing">
-          <Route index element={<Pricing/>}/>
-          <Route path="paypal" element={<PayPal
-            plan={isEnum(Plan, plan) ? plan as Plan : undefined}
-            billing={isEnum(Billing, billing) ? billing as Billing : undefined}
-          />}/>
-        </Route>
+        <Route path="pricing" element={<Pricing/>}/>
         <Route path="account">
           <Route index element={<Dashboard/>}/>
           <Route path="settings" element={<Settings/>}/>
