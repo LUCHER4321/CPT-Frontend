@@ -12,6 +12,7 @@ import { PriceFeatures } from "./PriceFeatures";
 interface PlanCardProps {
     user?: UserResponse;
     plan?: Plan;
+    currentPlan?: Plan;
     monthly?: boolean;
     children?: string;
     className?: string;
@@ -20,6 +21,7 @@ interface PlanCardProps {
 export const PlanCard = ({
     user,
     plan,
+    currentPlan,
     monthly,
     children
 }: PlanCardProps) => {
@@ -33,7 +35,7 @@ export const PlanCard = ({
     } = button ?? {};
     const myPlan = user?.plan === plan && monthly === (user?.billing === Billing.MONTHLY);
     return (
-        <div className={`rounded-xl p-6 pb-21 border border-t-4 relative hover:-translate-y-[5px] transition-all duration-300 ${plan ? `${plans.get(plan)?.border?.light ?? ""} ${plans.get(plan)?.border?.dark ?? ""}` : ""}`}>
+        <div id={`${plan}-card`} className={`rounded-xl p-6 pb-21 relative hover:-translate-y-[5px] transition-all duration-300 ${currentPlan === plan ? "outline-6 " + (plan ? `${plans.get(plan)?.borderFull?.light ?? ""} ${plans.get(plan)?.borderFull?.dark ?? ""}` : "") : "border border-t-4 " + (plan ? `${plans.get(plan)?.border?.light ?? ""} ${plans.get(plan)?.border?.dark ?? ""}` : "")}`}>
             <PlanHeader
                 plan={plan}
                 monthly={monthly}
