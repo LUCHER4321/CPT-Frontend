@@ -1,6 +1,11 @@
+import { pauseSubscriptions } from "../../api/payPal";
+import { updateMe } from "../../api/user";
+import { unborder } from "../../data/classNames";
 import { plans } from "../../data/prices";
-import { Billing, type Plan } from "../../enums";
+import { Billing, Plan } from "../../enums";
 import type { UserResponse } from "../../types";
+import { ButtonsWrapper } from "./ButtonsWrapper";
+import { PayPalProvider } from "./PayPalProvider";
 import { PlanHeader } from "./PlanHeader";
 import { PriceFeatures } from "./PriceFeatures";
 
@@ -37,11 +42,38 @@ export const PlanCard = ({
             <PriceFeatures
                 plan={plan}
             />
-            <a href={(user ? "/pricing/paypal?" : "/auth?register=true&") + "plan=" + plan + (monthly ? "&billing=" + Billing.MONTHLY : "")}>
+            {user ? (plan === Plan.FREE ? <button
+                className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder}`}
+                onClick={async () => {
+                    if(user?.billing && user.plan !== Plan.FREE && confirm(`Are you sure you wanna unsubscribe to your ${plans.get(user.plan)?.name} plan?`)){
+                        await pauseSubscriptions(plans.get(user.plan)?.id?.get(user.billing));
+                        await updateMe({
+                            plan: Plan.FREE,
+                            billing: null
+                        });
+                    }
+                }}
+            >
+                {children}
+            </button> : <PayPalProvider>
+                <ButtonsWrapper
+                    className="absolute bottom-6 left-6 right-6"
+                    planId={plans.get(plan ?? Plan.FREE)?.id?.get(monthly ? Billing.MONTHLY : Billing.ANNUAL)}
+                    onApprove={async () => {
+                        if(user?.billing && user.plan !== Plan.FREE) await pauseSubscriptions(plans.get(user.plan)?.id?.get(user.billing));
+                        await updateMe({
+                            plan,
+                            billing: monthly ? Billing.MONTHLY : Billing.ANNUAL
+                        });
+                    }}
+                >
+                    {children}
+                </ButtonsWrapper>
+            </PayPalProvider>) : <a href={"/auth?register=true&plan=" + plan + (monthly ? "&billing=" + Billing.MONTHLY : "")}>
                 <button className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark}`}>
                     {children}
                 </button>
-            </a>
+            </a>}
         </div>
     )
 }
