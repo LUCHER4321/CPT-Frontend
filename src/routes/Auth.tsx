@@ -77,7 +77,7 @@ export const Auth = ({
                         billing={billing}
                         setBilling={setBilling}
                         goToAccount={(u) => {
-                            if(u) history("/account");
+                            if(u) history(plan === Plan.FREE ? "/account" : "/pricing");
                         }}
                     />
                 </div>
