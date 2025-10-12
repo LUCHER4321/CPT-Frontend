@@ -39,6 +39,7 @@ export interface UserResponse {
     username: string;
     photo?: string;
     plan: Plan;
+    billing?: Billing;
     role: Role;
     createdAt: Date;
     lastLogin: Date;
@@ -87,6 +88,7 @@ export interface UserRequest {
         oldPassword?: string;
         password?: string;
         plan?: Plan;
+        billing?: Billing | null;
         description?: string;
         planExpiration?: Date;
     }, UserResponse>;
