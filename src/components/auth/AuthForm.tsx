@@ -59,7 +59,10 @@ export const LoginForm = ({
                         <a className={aText}>Forgot your password?</a>
                     </div>
                 </AuthField>
-                <button type="button" className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""}).then(goToAccount)}>Log In</button>
+                <button type="button" className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""}).then(u => {
+                    if(u?.error) return alert(u.error);
+                    goToAccount?.(u);
+                })}>Log In</button>
                 <div className="w-full text-center mt-[1.5rem]">
                     <p>No account? <a className={aText} onClick={() => setRegister?.(true)}>Register</a></p>
                 </div>
@@ -182,11 +185,18 @@ export const RegisterForm = ({
                     onChange={e => setAccept?.(e.target.checked)}
                     className="mr-1 cursor-pointer"
                 /> Accept <a className={aText}>Terms & Conditions</a></p>
-                <button type="button" className={"w-full " + filledButton} onClick={() => register({
-                    email: email as Email,
-                    password: password!,
-                    username: username!
-                }).then(goToAccount)}>Register</button>
+                <button type="button" className={"w-full " + filledButton} onClick={() => {
+                    if(!accept) return alert("Accept Terms & Conditions");
+                    if(password !== confirmPassword) return alert("Passwords don't match");
+                    register({
+                        email: email as Email,
+                        password: password!,
+                        username: username!
+                    }).then(u => {
+                        if(u?.error) return alert(u.error);
+                        goToAccount?.(u);
+                    });
+                }}>Register</button>
                 <div className="w-full text-center mt-[1.5rem] pb-[1.5rem]">
                     <p>Already have an account? <a className={aText} onClick={() => setRegister?.(false)}>Log In</a></p>
                 </div>
