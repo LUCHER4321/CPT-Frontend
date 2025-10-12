@@ -33,13 +33,14 @@ export const fetchConfig = async <T,>({
                 ...initialConfig(method, body),
                 credentials: "include"
             }
-        ).catch(() => {
-            throw new Error("Connection Failed");
-        });
-        if(!result.ok) throw new Error("Connection Failed");
+        );
+        if(!result.ok) {
+            const errorData = await result.json();
+            throw new Error(errorData.error || "Connection Failed");
+        }
         return await result.json();
-    } catch {
-        return undefined;
+    } catch (error) {
+        return { error: (error as Error).message };
     }
 };
 
