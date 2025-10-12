@@ -3,7 +3,10 @@ import type { Billing, Liked, NotiFunc, Order, Plan, Role, TreeCriteria } from "
 import type { StringValue } from "ms";
 import type { ReactElement } from "react";
 
-type RequestFunction<REQUEST, RESPONSE> = (request: REQUEST) => Promise<RESPONSE & { message?: string; } | undefined>;
+type RequestFunction<REQUEST, RESPONSE> = (request: REQUEST) => Promise<RESPONSE & {
+    message?: string;
+    error?: string;
+} | undefined>;
 
 type Email = `${string}@${string}.${string}`;
 
