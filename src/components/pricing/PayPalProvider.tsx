@@ -14,7 +14,8 @@ export const PayPalProvider = ({
                 clientId: PAYPAL_ID,
                 components: "buttons",
                 currency: "USD",
-                vault: true
+                vault: true,
+                intent: "subscription"
             }}
         >
             {children}
