@@ -5,6 +5,7 @@
 ### Variables
 
 ```
+VITE_PAYPAL_URL
 VITE_API_URL
 VITE_WS_URL
 VITE_PORT
@@ -13,6 +14,14 @@ VITE_PORT
 ### Secrets
 
 ```
+VITE_PRO_M_ID
+VITE_PRO_Y_ID
+VITE_PREMIUM_M_ID
+VITE_PREMIUM_Y_ID
+VITE_INSTI_M_ID
+VITE_INSTI_Y_ID
+VITE_PAYPAL_ID
+VITE_PAYPAL_SECRET
 VITE_API_KEY
 ```
 
@@ -71,6 +80,21 @@ export enum Order {
   ASC = "asc",
   DESC = "desc",
 }
+
+export enum TreeProp {
+  TREE = "tree",
+  NODE = "node",
+  COLLABORATORS = "collaborators",
+  COMMENTS = "comments",
+}
+
+export enum TimeUnit {
+  Y = 1,
+  KY = 1e3,
+  MY = 1e6,
+  BY = 1e9,
+  TY = 1e12,
+}
 ```
 
 ## Plans
@@ -85,7 +109,7 @@ export enum Order {
 
 ### Pro
 
-- US$9/month
+- US$9.00/month
 - US$86.40/year (US$7.20/month)
 - Up to 20 Ph. Trees
 - Up to 150 species per Ph. Tree
@@ -96,12 +120,24 @@ export enum Order {
 
 ### Premium
 
-- US$19/month
+- US$19.00/month
 - US$182.40/year (US$15.20/month)
 - Unlimited Ph. Trees
-- Unlimited Ph. Trees
-- Unlimited per Ph. Tree
+- Unlimited species per Ph. Tree
 - Up to 30 collaborators per Ph. Tree
 - Upload images many formats (jpg, jpeg, png, gif, svg)
 - Professional visualization
 - Access to Ph. Trees created by the community
+
+### Institutional
+
+- $499.00/month
+- $4788.00/year ($399.00/month)
+- Unlimited Ph. Trees
+- Unlimited species per Ph. Tree
+- Up to 30 collaborators per Ph. Tree
+- Upload images many formats (jpg, jpeg, png, gif, svg)
+- Professional visualization
+- Access to Ph. Trees created by the community
+- Premium accounts for all institution members
+- Personalized domain
