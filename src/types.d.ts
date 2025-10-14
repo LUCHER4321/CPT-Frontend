@@ -73,19 +73,19 @@ export interface UserRequest {
     recover: RequestFunction<{
         email: Email;
         url: string;
-    }, void>;
+    }, {}>;
     resetPassword: RequestFunction<{
         token: string;
         password: string;
     }, UserResponse>;
-    logout: RequestFunction<{}, void>;
+    logout: RequestFunction<{}, {}>;
     admin: RequestFunction<{
         adminId: string;
         removeAdmin?: boolean;
     }, UserResponse>;
     token: RequestFunction<{
         expiresIn?: number | StringValue;
-    }, void>;
+    }, {}>;
     getMe: RequestFunction<{}, UserResponse>;
     updateMe: RequestFunction<{
         username?: string;
@@ -96,7 +96,7 @@ export interface UserRequest {
         description?: string;
         planExpiration?: Date;
     }, UserResponse>;
-    deleteMe: RequestFunction<{}, void>;
+    deleteMe: RequestFunction<{}, {}>;
     photoMe: RequestFunction<{
         image: File;
     }, UserResponse>;
@@ -197,7 +197,7 @@ export interface PhTreeRequest {
     }, PhTreeResponse>;
     deleteTree: RequestFunction<{
         id: string;
-    }, void>;
+    }, {}>;
     imageTree: RequestFunction<{
         id: string;
         image: File;
@@ -239,7 +239,7 @@ export interface CommentRequest {
     deleteComment: RequestFunction<{
         treeId: string;
         id: string;
-    }, void>;
+    }, {}>;
     treeComments: RequestFunction<{
         treeId: string;
     }, CommentResponse[]>;
@@ -265,7 +265,7 @@ export interface LikeRequest {
     unlike: RequestFunction<{
         liked: Liked;
         id: string;
-    }, void>;
+    }, {}>;
     likedTrees: RequestFunction<{}, PhTreeResponse[]>;
     likedComments: RequestFunction<{}, CommentResponse[]>;
     getLikes: RequestFunction<{
@@ -303,7 +303,7 @@ export interface SpeciesRequest {
     deleteSpecies: RequestFunction<{
         treeId: string;
         id: string;
-    }, void>;
+    }, {}>;
     speciesImage: RequestFunction<{
         treeId: string;
         id: string;
