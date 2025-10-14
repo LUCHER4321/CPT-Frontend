@@ -15,6 +15,8 @@ import { TreeViewer } from './routes/trees/TreeViewer.tsx'
 import { Profile } from './routes/Profile.tsx'
 import { Follows } from './routes/account/Follows.tsx'
 import { Settings } from './routes/account/Settings.tsx'
+import { ForgotPassword } from './routes/auth/forgotPassword.tsx'
+import { RecoverPassword } from './routes/auth/RecoverPassword.tsx'
 
 const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
 const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
@@ -37,11 +39,17 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route index element={<App/>}/>
-        <Route path="auth" element={<Auth
-          initialRegister={initialRegister === "true"}
-          initialPlan={isEnum(Plan, plan) ? plan as Plan : undefined}
-          initialBilling={isEnum(Billing, billing) ? billing as Billing : undefined}
-        />}/>
+        <Route path="auth">
+          <Route index element={<Auth
+            initialRegister={initialRegister === "true"}
+            initialPlan={isEnum(Plan, plan) ? plan as Plan : undefined}
+            initialBilling={isEnum(Billing, billing) ? billing as Billing : undefined}
+          />}/>
+          <Route path="forgot-password" element={<ForgotPassword/>}/>
+          <Route path="recover-password">
+            <Route path=":token" element={<RecoverPassword/>}/>
+          </Route>
+        </Route>
         <Route path="pricing" element={<Pricing
           plan={isEnum(Plan, plan) ? plan as Plan : undefined}
           billing={isEnum(Billing, billing) ? billing as Billing : undefined}
