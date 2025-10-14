@@ -30,7 +30,7 @@ const userRequest: UserRequest = {
     resetPassword: async ({token, ...body}) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "reser", token]
+        route: [user, "reset", token]
     }),
     logout: async (body) => await fetchConfig({
         method: "POST",
