@@ -77,6 +77,7 @@ export interface UserRequest {
     resetPassword: RequestFunction<{
         token: string;
         password: string;
+        email: Email;
     }, UserResponse>;
     logout: RequestFunction<{}, {}>;
     admin: RequestFunction<{
