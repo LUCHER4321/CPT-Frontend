@@ -26,7 +26,7 @@ export const ForgotForm = ({
                 className={"w-full " + filledButton}
                 onClick={() => recover({
                     email: email as Email,
-                    url: ""
+                    url: `${window.location.origin}/auth/recover-password`
                 }).then(r => alert(r?.message ?? r?.error))}
             >
                 Send recover mail
