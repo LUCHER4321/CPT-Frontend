@@ -56,7 +56,7 @@ export const LoginForm = ({
                     setVisiblePassword={setVisiblePassword}
                 >
                     <div className="w-full text-end mt-[0.5rem]">
-                        <a className={aText}>Forgot your password?</a>
+                        <a className={aText} href="/auth/forgot-password">Forgot your password?</a>
                     </div>
                 </AuthField>
                 <button type="button" className={"w-full " + filledButton} onClick={() => login({email: email as Email, password: password ?? ""}).then(u => {
