@@ -1,8 +1,11 @@
 import { resetPassword } from "../../api/user";
 import { filledButton } from "../../data/classNames";
+import type { Email } from "../../types";
 import { AuthField } from "./AuthField";
 
 interface RecoverFormProps {
+    email?: string;
+    setEmail?: (s: string) => void;
     password?: string;
     setPassword?: (s: string) => void;
     visiblePassword?: boolean;
@@ -14,6 +17,8 @@ interface RecoverFormProps {
 }
 
 export const RecoverForm = ({
+    email,
+    setEmail,
     password,
     setPassword,
     visiblePassword,
@@ -25,6 +30,14 @@ export const RecoverForm = ({
 }: RecoverFormProps) => {
     return (
         <>
+            <AuthField
+                name="Email"
+                type="email"
+                id="recover-email"
+                placeholder="your@email.com"
+                value={email}
+                setValue={setEmail}
+            />
             <AuthField
                 name="New Password"
                 type={visiblePassword ? "text" : "password"}
@@ -48,14 +61,15 @@ export const RecoverForm = ({
             <button
                 className={"w-full " + filledButton}
                 onClick={() => {
-                    if(!token || !password?.length || !confirmPassword?.length) return;
+                    if(!token || !password?.length || !confirmPassword?.length || !email?.length) return;
                     if(password !== confirmPassword) return alert("Passwords don't match");
                     resetPassword({
                         token,
-                        password
+                        password,
+                        email: email as Email
                     }).then(u => {
                         if(u?.error) return alert(u.error);
-                        if(u?.message) goToAuth?.();
+                        goToAuth?.();
                     });
                 }}
             >
