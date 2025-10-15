@@ -9,6 +9,7 @@ import { getNotifications } from "../../api/notification";
 import { getFollowers, getFollowing } from "../../api/follow";
 import { notificationService } from "../../classes/NotificationService";
 import { UsersData } from "../../components/dashboard/follows/UsersData";
+import { Footer } from "../../components/Footer";
 
 interface FollowsProps {
     showFollowers?: boolean;
@@ -26,6 +27,9 @@ export const Follows = ({
     const [search, setSearch] = useState("");
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [active, setActive] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
     useEffect(() => {
         getMe({}).then(u => {
             setUser(u);
@@ -63,15 +67,26 @@ export const Follows = ({
                         <h2 className={"text-2xl " + title}>{user?.username}'s {showFollowers && showFollowing ? "follows" : showFollowers ? "followers" : showFollowing ? "following" : ""}</h2>
                     </div>
                 </Header>
-                <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 overflow-y-scroll">
-                    {showFollowers && followers.length > 0 && <UsersData
-                        titleText="Followers"
-                        users={followers}
-                    />}
-                    {showFollowing && following.length > 0 && <UsersData
-                        titleText="Following"
-                        users={following}
-                    />}
+                <div className="overflow-y-scroll">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 min-h-full">
+                        {showFollowers && followers.length > 0 && <UsersData
+                            titleText="Followers"
+                            users={followers}
+                        />}
+                        {showFollowing && following.length > 0 && <UsersData
+                            titleText="Following"
+                            users={following}
+                        />}
+                    </div>
+                    <Footer
+                        id="footer"
+                        name={name}
+                        setName={setName}
+                        email={email}
+                        setEmail={setEmail}
+                        message={message}
+                        setMessage={setMessage}
+                    />
                 </div>
             </main>
         </div>
