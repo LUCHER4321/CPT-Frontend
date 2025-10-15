@@ -14,6 +14,7 @@ import { DESIGN_MODE } from "../config";
 import { useNavigate } from "react-router-dom";
 import { getFollowersCount, getFollowing } from "../api/follow";
 import { notificationService } from "../classes/NotificationService";
+import { Footer } from "../components/Footer";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
@@ -28,7 +29,10 @@ export const Dashboard = () => {
     const [follows, setFollows] = useState<{
         following?: UserResponse[];
         followers?: number;
-    }>({})
+    }>({});
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
     const history = useNavigate();
     useEffect(() => {
         getMe({}).then(u => {
@@ -85,14 +89,25 @@ export const Dashboard = () => {
                         <p className={"block font-bold " + title}><a href="/account/follows/following" className={aText}>{follows.following?.length} Following</a>, <a href="/account/follows/followers" className={aText}>{follows.followers} Followers</a></p>
                     </div>
                 </Header>
-                <div className="w-full h-full grid grid-cols-1 sm:grid-cols-3 gap-5 p-10 sm:gap-10 overflow-y-scroll">
-                    <TreesData
-                        trees={trees}
-                        myTrees={myTrees}
-                        collabs={collabs}
-                    />
-                    <LastTrees
-                        lastTrees={lastTrees}
+                <div className="w-full h-full overflow-y-scroll">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 p-10 sm:gap-10 min-h-full">
+                        <TreesData
+                            trees={trees}
+                            myTrees={myTrees}
+                            collabs={collabs}
+                        />
+                        <LastTrees
+                            lastTrees={lastTrees}
+                        />
+                    </div>
+                    <Footer
+                        id="footer"
+                        name={name}
+                        setName={setName}
+                        email={email}
+                        setEmail={setEmail}
+                        message={message}
+                        setMessage={setMessage}
                     />
                 </div>
             </main>
