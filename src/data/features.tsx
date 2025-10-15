@@ -39,11 +39,11 @@ export const features: {
     },
     {
         name: "Monthly Cost",
-        fun: p => `$${p.month.toFixed(2)}`
+        fun: p => Number.isNaN(p.month) ? "Contact Us" : `$${p.month.toFixed(2)}`
     },
     {
         name: "Annual Cost",
-        fun: p => `$${p.year.toFixed(2)}`
+        fun: p => Number.isNaN(p.year) ? "Contact Us" : `$${p.year.toFixed(2)}`
     }
 ];
 
