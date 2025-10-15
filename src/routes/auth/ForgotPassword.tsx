@@ -3,11 +3,15 @@ import { HomeNavBar } from "../../components/home/HomeNavBar";
 import { AuthBanner } from "../../components/auth/AuthBanner";
 import { title } from "../../data/classNames";
 import { ForgotForm } from "../../components/auth/ForgotForm";
+import { Footer } from "../../components/Footer";
 
 export const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
+    const [name, setName] = useState("");
+    const [emailC, setEmailC] = useState("");
+    const [message, setMessage] = useState("");
     return (
         <>
             <HomeNavBar
@@ -26,6 +30,15 @@ export const ForgotPassword = () => {
                 </div>
                 <AuthBanner/>
             </div>
+            <Footer
+                id="footer"
+                name={name}
+                setName={setName}
+                email={emailC}
+                setEmail={setEmailC}
+                message={message}
+                setMessage={setMessage}
+            />
         </>
     )
 }
