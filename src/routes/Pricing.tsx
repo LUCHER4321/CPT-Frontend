@@ -12,6 +12,7 @@ import type { UserResponse } from "../types";
 import { dashboardItems } from "../data/dashboardItems";
 import { title } from "../data/classNames";
 import { Billing, type Plan } from "../enums";
+import { Footer } from "../components/Footer";
 
 interface PricingProps {
     plan?: Plan;
@@ -25,7 +26,10 @@ export const Pricing = ({
     const [expanded, setExpanded] = useState(false);
     const [user, setUser] = useState<UserResponse | undefined>(undefined);
     const [monthly, setMonthly] = useState(billing === Billing.MONTHLY);
-    const [faq, setFaq] = useState<number | undefined>(undefined)
+    const [faq, setFaq] = useState<number | undefined>(undefined);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         document.title = "Life Tree | Pricing";
@@ -47,7 +51,7 @@ export const Pricing = ({
                 <Header>
                     <h1 className={"block text-[2em]! font-bold " + title}>Plans & Prices</h1>
                 </Header>
-                <div className="p-10 w-full flex flex-col items-center overflow-y-scroll">
+                <div className="pt-10 w-full flex flex-col items-center overflow-y-scroll">
                     <BillingToggle
                         monthly={monthly}
                         setMonthly={setMonthly}
@@ -56,15 +60,26 @@ export const Pricing = ({
                         monthly={monthly}
                         user={user}
                         plan={plan}
+                        className="px-10"
                     />
                     <PlansComparision
                         prices={[...plans.values()]}
                         features={features}
+                        className="px-10"
                     />
                     <PricingFAQs
                         active={faq}
                         onClick={changeFaq}
                         faqs={faqs}
+                    />
+                    <Footer
+                        id="footer"
+                        name={name}
+                        setName={setName}
+                        email={email}
+                        setEmail={setEmail}
+                        message={message}
+                        setMessage={setMessage}
                     />
                 </div>
             </main>
