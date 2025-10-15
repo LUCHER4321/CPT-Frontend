@@ -5,6 +5,7 @@ import { AuthField } from "./auth/AuthField";
 
 interface FooterProps {
     id?: string;
+    className?: string;
     name?: string;
     setName?: (s: string) => void;
     email?: string;
@@ -21,6 +22,7 @@ interface LiLinkProps {
 
 export const Footer = ({
     id,
+    className,
     name,
     setName,
     email,
@@ -30,7 +32,7 @@ export const Footer = ({
 }: FooterProps) => {
     const LiLink = ({ href, blank, children }: LiLinkProps) => <li><a href={href} target={blank ? "_blank" : undefined} className={aText}>{children}</a></li>
     return (
-        <footer id={id} className="bg-[#D8EDD9] dark:bg-[#1B5E20] px-4 sm:px-28 py-8">
+        <footer id={id} className={"bg-[#D8EDD9] dark:bg-[#1B5E20] px-4 sm:px-28 py-8 " + className}>
             <div className="grid grid-cols-1 sm:grid-cols-3 pb-6 gap-4">
                 <div>
                     <h2 className={"text-lg mb-4 " + title}>
@@ -48,7 +50,7 @@ export const Footer = ({
                         <LiLink href="/">Home</LiLink>
                         <LiLink href="/pricing">Pricing</LiLink>
                         <LiLink href="/trees">Search Trees</LiLink>
-                        <LiLink href="https://discord.gg/s9cJJHcnA4" blank>Discord</LiLink>
+                        <LiLink href="https://discord.gg/s9cJJHcnA4" blank>Discord Server</LiLink>
                     </ul>
                 </div>
                 <div>
