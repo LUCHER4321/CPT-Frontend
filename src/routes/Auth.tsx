@@ -4,6 +4,7 @@ import { AuthBanner } from "../components/auth/AuthBanner";
 import { HomeNavBar } from "../components/home/HomeNavBar";
 import { Billing, Plan } from "../enums";
 import { useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer";
 
 interface AuthProps {
     initialRegister?: boolean;
@@ -30,6 +31,9 @@ export const Auth = ({
     const [search, setSearch] = useState("");
     const [plan, setPlan] = useState(initialPlan);
     const [billing, setBilling] = useState(initialBilling);
+    const [name, setName] = useState("");
+    const [emailC, setEmailC] = useState("");
+    const [message, setMessage] = useState("");
     const history = useNavigate();
     useEffect(() => {
         document.title = `Life Tree | ${register ? "Register" : "Log In"}`;
@@ -83,6 +87,15 @@ export const Auth = ({
                 </div>
                 <AuthBanner/>
             </div>
+            <Footer
+                id="footer"
+                name={name}
+                setName={setName}
+                email={emailC}
+                setEmail={setEmailC}
+                message={message}
+                setMessage={setMessage}
+            />
         </>
     )
 }
