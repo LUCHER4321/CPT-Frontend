@@ -7,7 +7,8 @@ interface PlansComparisionProps {
     features?: ({
         name: string;
         fun: (p: PlanPrice) => any
-    })[]
+    })[];
+    className?: string;
 }
 
 const row = "even:bg-neutral-100 dark:even:bg-neutral-900";
@@ -16,10 +17,11 @@ const cell = "border p-[1rem]";
 export const PlansComparision = ({
     id,
     prices,
-    features
+    features,
+    className
 }: PlansComparisionProps) => {
     return (
-        <section id={id} className="mb-12 w-full">
+        <section id={id} className={"mb-12 w-full " + className}>
             <h2 className={"mb-6 text-2xl text-center " + title}>Detailed Plans Comparision</h2>
             <table className="w-full text-center overflow-x-auto border-collapse mb-[1rem]">
                 <tr className={row}>
