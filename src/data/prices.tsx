@@ -86,8 +86,8 @@ const institutional: PlanPrice = {
         [Billing.MONTHLY, INSTI_M],
         [Billing.ANNUAL, INSTI_Y],
     ]),
-    month: 499,
-    year: 4788,
+    month: NaN,
+    year: NaN,
     color: {
         light: "text-orange-600!",
     },
