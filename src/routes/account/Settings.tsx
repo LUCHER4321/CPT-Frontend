@@ -12,9 +12,11 @@ import { useDropzone } from "react-dropzone";
 import { ImageProp } from "../../components/dashboard/trees/ImageProp";
 import { nullableInput } from "../../utils/nullableInput";
 import { AuthField } from "../../components/auth/AuthField";
-import { Role } from "../../enums";
+import { Billing, Role } from "../../enums";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/Footer";
+import { pauseSubscriptions } from "../../api/payPal";
+import { plans } from "../../data/prices";
 
 export const Settings = () => {
     const [expanded, setExpanded] = useState(false);
@@ -218,7 +220,7 @@ export const Settings = () => {
                             <h3 className="text-lg mr-2 font-bold text-red-400 dark:text-red-600">Dangerous Zone</h3>
                             <p className="mb-6">These actions cannot be undone. Please proceed with caution.</p>
                             <button onClick={() => {
-                                if(confirm("This action will permanently delete your account and all your data. Are you sure?")) deleteMe({}).then(() => history("/"));
+                                if(confirm("This action will permanently delete your account and all your data. Are you sure?")) pauseSubscriptions(nullableInput(user, u => plans.get(u.plan)?.id?.get(u.billing ?? Billing.ANNUAL))).then(() => deleteMe({}).then(() => history("/")));
                             }} className={"bg-red-400! dark:bg-red-600! hover:bg-red-500! " + unborder}>
                                 <i className="fas fa-trash"/> Delete your account permanently
                             </button>
