@@ -27,7 +27,8 @@ export const PlanCard = ({
 }: PlanCardProps) => {
     const {
         description,
-        button
+        button,
+        month
     } = plan ? plans.get(plan) ?? {} : {};
     const {
         light,
@@ -45,7 +46,7 @@ export const PlanCard = ({
             <PriceFeatures
                 plan={plan}
             />
-            {user ? ((plan === Plan.FREE || myPlan) ? <button
+            {!Number.isNaN(month) ? (user ? ((plan === Plan.FREE || myPlan) ? <button
                 className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder} ${myPlan ? "cursor-not-allowed!" : ""}`}
                 onClick={async () => {
                     if(user?.billing && user.plan !== Plan.FREE && confirm(`Are you sure you wanna unsubscribe to your ${plans.get(user.plan)?.name} plan?`)){
@@ -73,7 +74,11 @@ export const PlanCard = ({
                     {children}
                 </ButtonsWrapper>
             </PayPalProvider>) : <a href={"/auth?register=true&plan=" + plan + (monthly ? "&billing=" + Billing.MONTHLY : "")}>
-                <button className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark}`}>
+                <button className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder}`}>
+                    {children}
+                </button>
+            </a>) : <a href="#footer">
+                <button className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder}`}>
                     {children}
                 </button>
             </a>}
