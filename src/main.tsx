@@ -15,8 +15,8 @@ import { TreeViewer } from './routes/trees/TreeViewer.tsx'
 import { Profile } from './routes/Profile.tsx'
 import { Follows } from './routes/account/Follows.tsx'
 import { Settings } from './routes/account/Settings.tsx'
-import { ForgotPassword } from './routes/auth/forgotPassword.tsx'
 import { RecoverPassword } from './routes/auth/RecoverPassword.tsx'
+import { ForgotPassword } from './routes/auth/ForgotPassword.tsx'
 
 const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
 const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
