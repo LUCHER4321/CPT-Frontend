@@ -355,3 +355,11 @@ export interface NotificationRequest {
         id: string;
     }, NotificationResponse>;
 }
+
+export interface ContactRequest {
+    contact: RequestFunction<Partial<{
+        name: string;
+        email: Email;
+        message: string;
+    }>, {}>;
+}
