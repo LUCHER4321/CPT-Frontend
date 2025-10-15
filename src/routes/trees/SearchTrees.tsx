@@ -14,6 +14,7 @@ import { likedTrees } from "../../api/like";
 import { Card } from "../../components/home/Card";
 import { newPhTree } from "../../utils/newPhTree";
 import { notificationService } from "../../classes/NotificationService";
+import { Footer } from "../../components/Footer";
 
 interface SearchTreesProps extends SearchProps {
     myTrees?: boolean;
@@ -36,6 +37,9 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
     const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
     const [active, setActive] = useState(false);
     const [sProps, setSProps] = useState(searchProps);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
     const location = useLocation().pathname;
     const history = useNavigate();
     const searchFunction = myTrees ? getMyTrees : searchTrees;
@@ -98,20 +102,31 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                         setSearchProps={setSearchProps}
                         treesCount={trees?.count}
                     />}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 overflow-y-scroll">
-                        {myTrees && <Card
-                            fa="fa-plus"
-                            description="New Tree"
-                            onClick={newPhTree(history)}
-                        />}
-                        {trees?.trees.map((tree, index) => <TreeCard
-                            key={index}
-                            tree={{
-                                ...tree,
-                                username: treeUsers.get(tree.id) ?? ""
-                            }}
-                            edit={myTrees}
-                        />)}
+                    <div className="overflow-y-scroll">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 min-h-full">
+                            {myTrees && <Card
+                                fa="fa-plus"
+                                description="New Tree"
+                                onClick={newPhTree(history)}
+                            />}
+                            {trees?.trees.map((tree, index) => <TreeCard
+                                key={index}
+                                tree={{
+                                    ...tree,
+                                    username: treeUsers.get(tree.id) ?? ""
+                                }}
+                                edit={myTrees}
+                            />)}
+                        </div>
+                        <Footer
+                            id="footer"
+                            name={name}
+                            setName={setName}
+                            email={email}
+                            setEmail={setEmail}
+                            message={message}
+                            setMessage={setMessage}
+                        />
                     </div>
                 </main>
             </div>
