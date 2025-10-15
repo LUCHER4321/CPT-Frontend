@@ -34,7 +34,12 @@ export const SideFooter = ({
                     {username && <p className="block font-medium line-clamp-1">@{username}</p>}
                     {plan && <p className="block text-xs line-clamp-1">{plans.get(plan)?.name} Plan</p>}
                 </div>}
-                {expanded && <button onClick={() => logout({}).then(() => nullableInput(href, hr => history(hr)))} className={"dark:text-[#D8EDD9]! text-[#1B5E20]! flex justify-end p-0! bg-black/0! " + unborder}>
+                {expanded && <button
+                    onClick={() => {
+                        if(confirm("Are you sure you wanna log out?")) logout({}).then(() => nullableInput(href, hr => history(hr)));
+                    }}
+                    className={"dark:text-[#D8EDD9]! text-[#1B5E20]! flex justify-end p-0! bg-black/0! " + unborder}
+                >
                     <i className="fas fa-sign-out-alt"/>
                 </button>}
             </div>
