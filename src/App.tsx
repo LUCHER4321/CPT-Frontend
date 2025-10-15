@@ -7,12 +7,16 @@ import { searchTrees } from './api/phTree';
 import { Order, TreeCriteria } from './enums';
 import { getMe, getUser, token } from './api/user';
 import { TopTrees } from './components/home/TopTrees';
+import { Footer } from './components/Footer';
 
 function App() {
   const [open, setOpen] = useState(false);
   const [trees, setTrees] = useState<(PhTreeResponse & { username: string })[]>([]);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState<UserResponse | undefined>();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     document.title = "Life Tree | Create Phylogenetic Trees";
@@ -63,6 +67,15 @@ function App() {
       <TopTrees
         id="top-trees"
         trees={trees}
+      />
+      <Footer
+        id="footer"
+        name={name}
+        setName={setName}
+        email={email}
+        setEmail={setEmail}
+        message={message}
+        setMessage={setMessage}
       />
     </>
   )
