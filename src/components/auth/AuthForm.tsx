@@ -184,7 +184,7 @@ export const RegisterForm = ({
                     checked={accept}
                     onChange={e => setAccept?.(e.target.checked)}
                     className="mr-1 cursor-pointer"
-                /> Accept <a className={aText}>Terms & Conditions</a></p>
+                /> Accept <a className={aText} href="/terms-and-conditions" target="_blank">Terms & Conditions</a> and <a className={aText} href="/privacy-policy" target="_blank">Privacy Policy</a></p>
                 <button type="button" className={"w-full " + filledButton} onClick={() => {
                     if(!accept) return alert("Accept Terms & Conditions");
                     if(password !== confirmPassword) return alert("Passwords don't match");
