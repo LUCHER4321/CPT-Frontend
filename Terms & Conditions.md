@@ -82,7 +82,7 @@ You may not use the Service for:
 
 ### 7.1. Data Protection
 
-Our use of your personal data is governed by our [Privacy Policy](/Terms%20&%20Conditions.md), which forms an integral part of these terms.
+Our use of your personal data is governed by our [Privacy Policy](/Privacy%20Policy.md), which forms an integral part of these terms.
 
 ### 7.2. Scientific Data
 
