@@ -17,6 +17,8 @@ import { Follows } from './routes/account/Follows.tsx'
 import { Settings } from './routes/account/Settings.tsx'
 import { RecoverPassword } from './routes/auth/RecoverPassword.tsx'
 import { ForgotPassword } from './routes/auth/ForgotPassword.tsx'
+import { TermsAndConditions } from './routes/TermsAndConditions.tsx'
+import { PrivacyPolicy } from './routes/PrivacyPolicy.tsx'
 
 const param = (p: string) => new URLSearchParams(window.location.search).get(p) ?? undefined;
 const numberParam = (p: string) => nullableInput(param(p), p1 => +p1);
@@ -39,6 +41,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route index element={<App/>}/>
+        <Route path="terms-and-conditions" element={<TermsAndConditions/>}/>
+        <Route path="privacy-policy" element={<PrivacyPolicy/>}/>
         <Route path="auth">
           <Route index element={<Auth
             initialRegister={initialRegister === "true"}
