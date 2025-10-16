@@ -10,3 +10,6 @@ export const unselectedBilling = "font-medium text-lg transition-all duration-50
 export const photoClass = "rounded-full aspect-square w-10! h-10! flex justify-center object-cover";
 export const circleImage = "object-cover rounded-full";
 export const accountContainer = "w-screen! flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start overflow-hidden relative";
+export const h2 = "text-[1.5em] my-[0.83em] font-bold border-b";
+export const h3 = "text-[1.17em] py-[1em] font-bold";
+export const ul = "list-disc pl-10 space-y-3 my-3";
