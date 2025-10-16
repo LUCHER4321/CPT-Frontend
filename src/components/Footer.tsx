@@ -59,9 +59,9 @@ export const Footer = ({
                     </h2>
                     <form>
                         <AuthField
-                            name="Institution"
+                            name="Name or Institution"
                             type="text"
-                            placeholder="Your institution name"
+                            placeholder="Your name or your institution's name"
                             value={name}
                             setValue={setName}
                         />
