@@ -9,7 +9,7 @@ export const newPhTree = (history = useNavigate()) => async () => {
     const { myTrees } = await myTreesCount({}) ?? {};
     const { plan } = await getMe({}) ?? {};
     if(!plan || myTrees === undefined) return;
-    if(myTrees >= (plans.get(plan)?.constraints.maxTrees ?? Number.MAX_SAFE_INTEGER)) throw new Error("Maximum number of Phylogenetic Trees");
+    if(myTrees >= (plans.get(plan)?.constraints.maxTrees ?? Number.MAX_SAFE_INTEGER)) return alert("Maximum number of Phylogenetic Trees");
     const name = prompt("Enter the name of your new Phylogenetic Tree", "Untitled Phylogenetic Tree");
     if (!name) return;
     const { id } = await createTree({
