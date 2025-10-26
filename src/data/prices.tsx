@@ -1,4 +1,4 @@
-import { INSTI_M, INSTI_Y, PREMIUM_M, PREMIUM_Y, PRO_M, PRO_Y } from "../config"
+import { PREMIUM_M, PREMIUM_Y, PRO_M, PRO_Y } from "../config"
 import { Billing, Plan } from "../enums"
 import type { PlanPrice } from "../types"
 
@@ -82,10 +82,6 @@ const premium: PlanPrice = {
 const institutional: PlanPrice = {
     name: "Institutional",
     description: "For institutions that need premium access for all their members",
-    id: new Map([
-        [Billing.MONTHLY, INSTI_M],
-        [Billing.ANNUAL, INSTI_Y],
-    ]),
     month: NaN,
     year: NaN,
     color: {
