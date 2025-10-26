@@ -17,7 +17,7 @@ export const BurgerMenu = ({
             <div className="hidden sm:flex flex-row">
                 {children}
             </div>
-            <button className={open ? "sm:hidden fixed top-0 bottom-0 left-0 right-0 bg-black/10! rounded-0!" : "hidden"} onClick={onClick}/>
+            {false && <button className={open ? "sm:hidden fixed top-0 bottom-0 left-0 right-0 bg-black/10! rounded-0!" : "hidden"} onClick={onClick}/>}
             <div className={"sm:hidden fixed top-20 left-1/2 right-0 flex flex-col justify-center text-center bg-[#D8EDD9] dark:bg-[#1B5E20] -z-1 transition-[max-height] duration-300 " + (open ? "p-5! max-h-[50vh]" : "max-h-0! overflow-hidden")}>
                 {children}
             </div>

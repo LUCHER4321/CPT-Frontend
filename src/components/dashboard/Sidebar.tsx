@@ -24,7 +24,7 @@ export const Sidebar = ({
 }: SidebarProps) => {
     return (
         <aside
-            className={`flex flex-row sm:flex-col w-full sm:h-screen! justify-between shadow-lg transition-all duration-300 ${expanded ? "sm:w-62.5" : "sm:w-20"} z-10 sm:z-auto dark:bg-neutral-800 bg-white`}
+            className={`sm:relative fixed bottom-0 flex flex-row sm:flex-col w-full sm:h-screen! overflow-x-scroll sm:overflow-x-hidden justify-between shadow-lg transition-all duration-300 ${expanded ? "sm:w-62.5" : "sm:w-20"} z-10 sm:z-auto dark:bg-neutral-800 bg-white`}
             onMouseEnter={() => setExpanded?.(true)}
             onMouseLeave={() => setExpanded?.(false)}
         >
@@ -50,7 +50,7 @@ export const Sidebar = ({
             <SideFooter
                 user={user}
                 expanded={expanded}
-                className="hidden sm:block"
+                className="ml-4 sm:mt-auto"
                 href="/auth"
             />
         </aside>
