@@ -15,6 +15,7 @@ import { Card } from "../../components/home/Card";
 import { newPhTree } from "../../utils/newPhTree";
 import { notificationService } from "../../classes/NotificationService";
 import { Footer } from "../../components/Footer";
+import { AsideDiv } from "../../components/AsideDiv";
 
 interface SearchTreesProps extends SearchProps {
     myTrees?: boolean;
@@ -127,7 +128,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                             message={message}
                             setMessage={setMessage}
                         />
-                        <div className="sm:hidden h-18"/>
+                        <AsideDiv/>
                     </div>
                 </main>
             </div>

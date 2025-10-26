@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { getFollowersCount, getFollowing } from "../api/follow";
 import { notificationService } from "../classes/NotificationService";
 import { Footer } from "../components/Footer";
+import { AsideDiv } from "../components/AsideDiv";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
@@ -109,7 +110,7 @@ export const Dashboard = () => {
                         message={message}
                         setMessage={setMessage}
                     />
-                    <div className="sm:hidden h-18"/>
+                    <AsideDiv/>
                 </div>
             </main>
         </div>

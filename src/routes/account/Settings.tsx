@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/Footer";
 import { pauseSubscriptions } from "../../api/payPal";
 import { plans } from "../../data/prices";
+import { AsideDiv } from "../../components/AsideDiv";
 
 export const Settings = () => {
     const [expanded, setExpanded] = useState(false);
@@ -235,7 +236,7 @@ export const Settings = () => {
                         message={message}
                         setMessage={setMessage}
                     />
-                    <div className="sm:hidden h-18"/>
+                    <AsideDiv/>
                 </div>
             </main>
         </div>

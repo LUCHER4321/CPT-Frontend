@@ -13,6 +13,7 @@ import { dashboardItems } from "../data/dashboardItems";
 import { title } from "../data/classNames";
 import { Billing, type Plan } from "../enums";
 import { Footer } from "../components/Footer";
+import { AsideDiv } from "../components/AsideDiv";
 
 interface PricingProps {
     plan?: Plan;
@@ -81,7 +82,7 @@ export const Pricing = ({
                         message={message}
                         setMessage={setMessage}
                     />
-                    <div className="sm:hidden h-18"/>
+                    <AsideDiv/>
                 </div>
             </main>
         </div>
