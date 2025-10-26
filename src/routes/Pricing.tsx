@@ -49,7 +49,7 @@ export const Pricing = ({
             />}
             <main className="flex flex-col w-full h-full top-0 absolute sm:relative">
                 <Header>
-                    <h1 className={"block text-[2em]! font-bold " + title}>Plans & Prices</h1>
+                    <h1 className={"block text-[1.5em]! sm:text-[2em]! font-bold " + title}>Plans & Prices</h1>
                 </Header>
                 <div className="pt-10 w-full flex flex-col items-center overflow-y-scroll">
                     <BillingToggle
