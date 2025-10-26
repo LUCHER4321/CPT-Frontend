@@ -34,7 +34,7 @@ export const Header = ({
     return (
         <header className="p-6 flex flex-col sm:flex-row justify-between items-center w-full shadow-lg">
             {children}
-            <div className="flex flex-row-reverse sm:flex-row justify-between w-full sm:w-auto pt-5 sm:pt-0 items-center">
+            <div className="flex flex-row justify-between w-full sm:w-auto pt-5 sm:pt-0 items-center">
                 <a
                     href="https://discord.gg/s9cJJHcnA4"
                     target="_blank"
