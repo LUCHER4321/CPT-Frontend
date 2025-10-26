@@ -87,6 +87,7 @@ export const Follows = ({
                         message={message}
                         setMessage={setMessage}
                     />
+                    <div className="sm:hidden h-18"/>
                 </div>
             </main>
         </div>

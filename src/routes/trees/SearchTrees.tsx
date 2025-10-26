@@ -127,6 +127,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                             message={message}
                             setMessage={setMessage}
                         />
+                        <div className="sm:hidden h-18"/>
                     </div>
                 </main>
             </div>
