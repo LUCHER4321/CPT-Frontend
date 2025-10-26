@@ -95,7 +95,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                         active={active}
                         setActive={setActive}
                     >
-                        <h1 className={"block text-[2em]! font-bold " + title}>{liked ? "Liked Trees" : myTrees ? `${user?.username}'s ${owner !== false ? "Trees" : "Collabs"}` : "Tree Search"}</h1>
+                        <h1 className={"block text-[1.5em]! sm:text-[2em]! font-bold " + title}>{liked ? "Liked Trees" : myTrees ? `${user?.username}'s ${owner !== false ? "Trees" : "Collabs"}` : "Tree Search"}</h1>
                     </Header>
                     {!liked && <SearchHeader
                         sProps={sProps}
