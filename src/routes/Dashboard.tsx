@@ -85,7 +85,7 @@ export const Dashboard = () => {
                     setActive={setActive}
                 >
                     <div className="flex flex-col">
-                        <h1 className={"block text-[2em]! font-bold " + title}>Welcome back, {user?.username}</h1>
+                        <h1 className={"block text-[1.5em]! sm:text-[2em]! font-bold " + title}>Welcome back, {user?.username}</h1>
                         <p className={"block font-bold " + title}><a href="/account/follows/following" className={aText}>{follows.following?.length} Following</a>, <a href="/account/follows/followers" className={aText}>{follows.followers} Followers</a></p>
                     </div>
                 </Header>
