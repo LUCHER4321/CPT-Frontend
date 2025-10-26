@@ -10,6 +10,7 @@ import { getFollowers, getFollowing } from "../../api/follow";
 import { notificationService } from "../../classes/NotificationService";
 import { UsersData } from "../../components/dashboard/follows/UsersData";
 import { Footer } from "../../components/Footer";
+import { AsideDiv } from "../../components/AsideDiv";
 
 interface FollowsProps {
     showFollowers?: boolean;
@@ -87,7 +88,7 @@ export const Follows = ({
                         message={message}
                         setMessage={setMessage}
                     />
-                    <div className="sm:hidden h-18"/>
+                    <AsideDiv/>
                 </div>
             </main>
         </div>
