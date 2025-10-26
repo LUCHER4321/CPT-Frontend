@@ -32,7 +32,7 @@ export const Footer = ({
 }: FooterProps) => {
     const LiLink = ({ href, blank, children }: LiLinkProps) => <li><a href={href} target={blank ? "_blank" : undefined} className={aText}>{children}</a></li>
     return (
-        <footer id={id} className={"bg-[#D8EDD9] dark:bg-[#1B5E20] px-4 sm:px-28 py-8 " + className}>
+        <footer id={id} className={"bg-[#D8EDD9] dark:bg-[#1B5E20] px-4 sm:px-28 py-8 border-b border-b-[#D8EDD9] dark:border-b-[#1B5E20] " + className}>
             <div className="grid grid-cols-1 sm:grid-cols-3 pb-6 gap-4">
                 <div>
                     <h2 className={"text-lg mb-4 " + title}>
