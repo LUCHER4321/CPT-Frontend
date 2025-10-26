@@ -77,7 +77,7 @@ export const Settings = () => {
                     active={active}
                     setActive={setActive}
                 >
-                    <h1 className={"block text-[2em]! font-bold " + title}>Settings</h1>
+                    <h1 className={"block text-[1.5em]! sm:text-[2em]! font-bold " + title}>Settings</h1>
                 </Header>
                 <div className="w-full h-full overflow-y-scroll">
                     <div className="grid grid-cols-1 sm:grid-cols-2 p-10 sm:gap-10 min-h-full">
