@@ -21,7 +21,7 @@ export const Notification = ({
         <tr className={`border-b ${seen ? "bg-white dark:bg-black" : "bg-[#1B5E20] dark:bg-[#D8EDD9] border-l-4 border-[#D8EDD9] dark:border-[#1B5E20]"}`}>
             <a href={url} className={`${seen ? "text-black! dark:text-white!" : "text-[#D8EDD9] dark:text-[#1B5E20]"}`}>
             <td>
-                <div className={`w-10 h-10 my-4 ml-4 rounded-full flex items-center justify-center text-lg ${bg} ${text}`}>
+                <div className={`w-10 h-10 my-4 ml-4 rounded flex items-center justify-center text-lg ${bg} ${text}`}>
                     <i className={`fas ${icon}`}/>
                 </div>
             </td>
