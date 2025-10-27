@@ -129,8 +129,6 @@ export enum TimeUnit {
 
 ### Institutional
 
-- $499.00/month
-- $4788.00/year ($399.00/month)
 - Unlimited Ph. Trees
 - Unlimited species per Ph. Tree
 - Up to 30 collaborators per Ph. Tree
