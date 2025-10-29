@@ -7,6 +7,7 @@ import { PlanCard } from "./PlanCard";
 interface PlansGridProps {
     monthly?: boolean;
     user?: UserResponse;
+    setUser?: (user?: UserResponse) => void;
     plan?: Plan;
     className?: string;
 }
@@ -14,6 +15,7 @@ interface PlansGridProps {
 export const PlansGrid = ({
     monthly,
     user,
+    setUser,
     plan,
     className
 }: PlansGridProps) => {
@@ -21,6 +23,7 @@ export const PlansGrid = ({
         <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-12 " + className}>
             {[...plans.keys()].map((p, index) => <PlanCard
                 user={user}
+                setUser={setUser}
                 plan={p}
                 currentPlan={plan}
                 monthly={monthly}
