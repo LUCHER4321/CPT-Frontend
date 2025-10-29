@@ -88,7 +88,7 @@ export const Profile = ({
     return (
         <>
             <div className={accountContainer}>
-                {user && <Sidebar
+                {user?.id && <Sidebar
                     expanded={expanded}
                     setExpanded={setExpanded}
                     items={dashboardItems}
