@@ -60,6 +60,7 @@ export const Pricing = ({
                     <PlansGrid
                         monthly={monthly}
                         user={user}
+                        setUser={setUser}
                         plan={plan}
                         className="px-10"
                     />
