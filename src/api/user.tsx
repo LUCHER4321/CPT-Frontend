@@ -1,5 +1,7 @@
-import type { UserRequest } from "../types";
+import { Plan, Role } from "../enums";
+import type { UserRequest, UserResponse } from "../types";
 import { fetchConfig, fetchImage } from "../utils/forAPI";
+import { checkSubscription, pauseSubscriptions } from "./payPal";
 
 const user = "user";
 const userMe = ["user", "me"];
@@ -47,9 +49,19 @@ const userRequest: UserRequest = {
         body,
         route: [user, "token"]
     }),
-    getMe: async () => await fetchConfig({
-        route: userMe
-    }),
+    getMe: async () => {
+        const user: UserResponse = await fetchConfig({
+            route: userMe
+        });
+        if(user.role === Role.USER && user.plan !== Plan.FREE) {
+            if(!await checkSubscription(user.subId)) await pauseSubscriptions(user.subId).then(({ completed }) => completed ? updateMe({
+                plan: Plan.FREE,
+                billing: null,
+                subId: null
+            }) : undefined);
+        }
+        return user;
+    },
     updateMe: async (body) => await fetchConfig({
         method: "PATCH",
         body,
