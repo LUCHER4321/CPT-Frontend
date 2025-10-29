@@ -51,6 +51,7 @@ export const Footer = ({
                         <LiLink href="/pricing">Pricing</LiLink>
                         <LiLink href="/trees">Search Trees</LiLink>
                         <LiLink href="https://discord.gg/s9cJJHcnA4" blank>Discord Server</LiLink>
+                        <LiLink href="https://lucher4321.github.io/Portafolio/" blank>Programmer's Portfolio</LiLink>
                     </ul>
                 </div>
                 <div>
