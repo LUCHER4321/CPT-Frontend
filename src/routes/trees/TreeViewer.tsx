@@ -144,7 +144,7 @@ export const TreeViewer = () => {
     const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).length ?? 1;
     return(
         <div className={accountContainer}>
-            {user && <Sidebar
+            {user?.id && <Sidebar
                 expanded={expanded}
                 setExpanded={setExpanded}
                 items={dashboardItems}
@@ -175,7 +175,7 @@ export const TreeViewer = () => {
                         <button
                             className={"flex flex-row items-center space-x-1 py-2! px-4! " + (liked ? filledButton : borderButton)}
                             onClick={() => {
-                                if(user && id) {
+                                if(user?.id && id) {
                                     const likeFun = liked ? unlike : like;
                                     likeFun({ liked: Liked.TREE, id }).then(() => {
                                         if(tree){
