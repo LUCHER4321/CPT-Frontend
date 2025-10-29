@@ -59,6 +59,7 @@ const userRequest: UserRequest = {
                 billing: null,
                 subId: null
             }) : undefined);
+            return await getMe({});
         }
         return user;
     },
