@@ -15,7 +15,7 @@ interface PlanCardProps {
     plan?: Plan;
     currentPlan?: Plan;
     monthly?: boolean;
-    children?: string;
+    children?: any;
     className?: string;
 }
 
@@ -48,7 +48,7 @@ export const PlanCard = ({
             <PriceFeatures
                 plan={plan}
             />
-            {!Number.isNaN(month) ? (user ? ((plan === Plan.FREE || myPlan) ? <button
+            {!Number.isNaN(month) ? (user?.id ? ((plan === Plan.FREE || myPlan) ? <button
                 className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder} ${myPlan ? "cursor-not-allowed!" : ""}`}
                 onClick={async () => {
                     if(user?.billing && user.plan !== Plan.FREE && confirm(`Are you sure you wanna unsubscribe to your ${plans.get(user.plan)?.name} plan?`)){
