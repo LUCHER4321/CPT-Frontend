@@ -1,5 +1,5 @@
 import { plans } from "../../data/prices";
-import type { Plan } from "../../enums";
+import { Billing, type Plan } from "../../enums";
 import type { UserResponse } from "../../types";
 import { nullableInput } from "../../utils/nullableInput";
 import { PlanCard } from "./PlanCard";
@@ -29,7 +29,15 @@ export const PlansGrid = ({
                 monthly={monthly}
                 key={index}
             >
-                {!Number.isNaN(nullableInput(p, p1 => plans.get(p1))?.month) ? user ? user.plan === p ? "Your current plan" : `${index > [...plans.keys()].indexOf(user.plan) ? "Up" : "Down"}grade to ${plans.get(p)?.name}` : `Start with ${plans.get(p)?.name} Plan` : "Contact Us"}
+                {(() => {
+                    if(Number.isNaN(nullableInput(p, p1 => plans.get(p1))?.month)) return "Contact Us";
+                    if(!user?.id) return `Start with ${plans.get(p)?.name} Plan`;
+                    if(user.plan === p) {
+                        if((user.billing === Billing.MONTHLY) === monthly) return "Your current plan";
+                        return `Switch to ${monthly ? Billing.MONTHLY : Billing.ANNUAL} billing`;
+                    }
+                    return `${index > [...plans.keys()].indexOf(user.plan) ? "Up" : "Down"}grade to ${plans.get(p)?.name}`;
+                })()}
             </PlanCard>)}
         </div>
     )
