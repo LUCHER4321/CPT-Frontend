@@ -35,7 +35,6 @@ export class NotificationWS {
 
     emit = (data: NotificationEmit) => {
         socket.emit("set-notification-client", data);
-        console.log({ data })
     }
 
     private setupListeners = (response: (nr: NotificationResponse) => void, userId: string) => {
