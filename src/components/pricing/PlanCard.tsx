@@ -11,6 +11,7 @@ import { PriceFeatures } from "./PriceFeatures";
 
 interface PlanCardProps {
     user?: UserResponse;
+    setUser?: (user?: UserResponse) => void;
     plan?: Plan;
     currentPlan?: Plan;
     monthly?: boolean;
@@ -20,6 +21,7 @@ interface PlanCardProps {
 
 export const PlanCard = ({
     user,
+    setUser,
     plan,
     currentPlan,
     monthly,
@@ -36,7 +38,7 @@ export const PlanCard = ({
     } = button ?? {};
     const myPlan = user?.plan === plan && monthly === (user?.billing === Billing.MONTHLY);
     return (
-        <div id={`${plan}-card`} className={`rounded-xl p-6 pb-21 relative hover:-translate-y-[5px] transition-all duration-300 ${currentPlan === plan ? "outline-6 " + (plan ? `${plans.get(plan)?.borderFull?.light ?? ""} ${plans.get(plan)?.borderFull?.dark ?? ""}` : "") : "border border-t-4 " + (plan ? `${plans.get(plan)?.border?.light ?? ""} ${plans.get(plan)?.border?.dark ?? ""}` : "")}`}>
+        <div id={`${plan}-card`} className={`rounded-xl p-6 pb-40 relative hover:-translate-y-[5px] transition-all duration-300 ${currentPlan === plan ? "outline-6 " + (plan ? `${plans.get(plan)?.borderFull?.light ?? ""} ${plans.get(plan)?.borderFull?.dark ?? ""}` : "") : "border border-t-4 " + (plan ? `${plans.get(plan)?.border?.light ?? ""} ${plans.get(plan)?.border?.dark ?? ""}` : "")}`}>
             <PlanHeader
                 plan={plan}
                 monthly={monthly}
@@ -51,11 +53,12 @@ export const PlanCard = ({
                 onClick={async () => {
                     if(user?.billing && user.plan !== Plan.FREE && confirm(`Are you sure you wanna unsubscribe to your ${plans.get(user.plan)?.name} plan?`)){
                         await pauseSubscriptions(user.subId);
-                        await updateMe({
+                        const newUser = await updateMe({
                             plan: Plan.FREE,
                             billing: null,
                             subId: null,
                         });
+                        setUser?.(newUser);
                     }
                 }}
             >
@@ -69,6 +72,7 @@ export const PlanCard = ({
                         billing: monthly ? Billing.MONTHLY : Billing.ANNUAL,
                         subId
                     }).then(() => pauseSubscriptions(user.subId))}
+                    className="absolute bottom-6 left-0 right-0"
                 />
             </PayPalProvider>) : <a href={"/auth?register=true&plan=" + plan + (monthly ? "&billing=" + Billing.MONTHLY : "")}>
                 <button className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder}`}>
