@@ -42,7 +42,7 @@ export const Pricing = ({
 
     return (
         <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start relative">
-            {user && <Sidebar
+            {user?.id && <Sidebar
                 expanded={expanded}
                 setExpanded={setExpanded}
                 items={dashboardItems}
@@ -60,6 +60,7 @@ export const Pricing = ({
                     <PlansGrid
                         monthly={monthly}
                         user={user}
+                        setUser={setUser}
                         plan={plan}
                         className="px-10"
                     />

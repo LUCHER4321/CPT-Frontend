@@ -23,6 +23,7 @@ export const PricingFAQs = ({
             <div className="mx-auto max-w-200">
                 {faqs?.map((faq, index) =>
                     <PricingQuestion
+                        key={index}
                         active={active === index}
                         onClick={() => onClick?.(index)}
                         question={faq.question}

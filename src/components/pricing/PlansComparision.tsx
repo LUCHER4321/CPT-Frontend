@@ -23,18 +23,22 @@ export const PlansComparision = ({
     return (
         <section id={id} className={"mb-12 w-full " + className}>
             <h2 className={"mb-6 text-2xl text-center " + title}>Detailed Plans Comparision</h2>
-            <table className="w-full text-center overflow-x-auto border-collapse mb-[1rem]">
-                <tr className={row}>
-                    <th className={cell}>Feature</th>
-                    {prices?.map((p, index) => <th key={index} className={cell}>{p.name}</th>)}
-                </tr>
-                {features?.map((f, index) =>
-                <tr key={index} className={row}>
-                    <td className={cell}>{f.name}</td>
-                    {prices?.map((p, i) => <td key={i} className={cell}>{f.fun(p)}</td>)}
-                </tr>
-                )}
-            </table>
+            <div className="overflow-x-scroll sm:overflow-x-auto">
+                <table className="w-full text-center border-collapse mb-[1rem]">
+                    <tbody>
+                        <tr className={row}>
+                            <th className={cell}>Feature</th>
+                            {prices?.map((p, index) => <th key={index} className={cell}>{p.name}</th>)}
+                        </tr>
+                        {features?.map((f, index) =>
+                        <tr key={index} className={row}>
+                            <td className={cell}>{f.name}</td>
+                            {prices?.map((p, i) => <td key={i} className={cell}>{f.fun(p)}</td>)}
+                        </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </section>
     )
 }

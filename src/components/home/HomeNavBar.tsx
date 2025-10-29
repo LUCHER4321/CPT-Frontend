@@ -44,7 +44,7 @@ export const HomeNavBar = ({
                         <LinkButton href="/pricing" className={"m-1 " + blankButton}>Pricing</LinkButton>
                         <LinkButton href="#footer" className={"m-1 " + blankButton}>Contact Us</LinkButton>
                         <LinkButton href={user ? "/account" : "/auth"} className={"m-1 " + borderButton}>Log In</LinkButton>
-                        {!user && <LinkButton href="/auth?register=true" className={"m-1 " + filledButton}>Register</LinkButton>}
+                        {!user?.id && <LinkButton href="/auth?register=true" className={"m-1 " + filledButton}>Register</LinkButton>}
                     </BurgerMenu>
                 </div>
             </NavBar>

@@ -80,7 +80,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
     return (
         <>
             <div className={accountContainer}>
-                {user && <Sidebar
+                {user?.id && <Sidebar
                     expanded={expanded}
                     setExpanded={setExpanded}
                     items={dashboardItems}

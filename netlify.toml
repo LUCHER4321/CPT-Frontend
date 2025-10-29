@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "VITE_API_KEY,VITE_PREMIUM_Y_ID,VITE_PREMIUM_M_ID,VITE_PAYPAL_ID,VITE_PAYPAL_SECRET,VITE_PRO_M_ID,VITE_PRO_Y_ID"

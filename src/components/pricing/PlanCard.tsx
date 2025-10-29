@@ -4,13 +4,14 @@ import { unborder } from "../../data/classNames";
 import { plans } from "../../data/prices";
 import { Billing, Plan } from "../../enums";
 import type { UserResponse } from "../../types";
-import { ButtonsWrapper } from "./ButtonsWrapper";
 import { PayPalProvider } from "./PayPalProvider";
+import { PayPalSubscriptionButton } from "./PayPalSubscribeButton";
 import { PlanHeader } from "./PlanHeader";
 import { PriceFeatures } from "./PriceFeatures";
 
 interface PlanCardProps {
     user?: UserResponse;
+    setUser?: (user?: UserResponse) => void;
     plan?: Plan;
     currentPlan?: Plan;
     monthly?: boolean;
@@ -20,6 +21,7 @@ interface PlanCardProps {
 
 export const PlanCard = ({
     user,
+    setUser,
     plan,
     currentPlan,
     monthly,
@@ -36,7 +38,7 @@ export const PlanCard = ({
     } = button ?? {};
     const myPlan = user?.plan === plan && monthly === (user?.billing === Billing.MONTHLY);
     return (
-        <div id={`${plan}-card`} className={`rounded-xl p-6 pb-21 relative hover:-translate-y-[5px] transition-all duration-300 ${currentPlan === plan ? "outline-6 " + (plan ? `${plans.get(plan)?.borderFull?.light ?? ""} ${plans.get(plan)?.borderFull?.dark ?? ""}` : "") : "border border-t-4 " + (plan ? `${plans.get(plan)?.border?.light ?? ""} ${plans.get(plan)?.border?.dark ?? ""}` : "")}`}>
+        <div id={`${plan}-card`} className={`rounded-xl p-6 pb-40 relative hover:-translate-y-[5px] transition-all duration-300 ${currentPlan === plan ? "outline-6 " + (plan ? `${plans.get(plan)?.borderFull?.light ?? ""} ${plans.get(plan)?.borderFull?.dark ?? ""}` : "") : "border border-t-4 " + (plan ? `${plans.get(plan)?.border?.light ?? ""} ${plans.get(plan)?.border?.dark ?? ""}` : "")}`}>
             <PlanHeader
                 plan={plan}
                 monthly={monthly}
@@ -50,29 +52,28 @@ export const PlanCard = ({
                 className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder} ${myPlan ? "cursor-not-allowed!" : ""}`}
                 onClick={async () => {
                     if(user?.billing && user.plan !== Plan.FREE && confirm(`Are you sure you wanna unsubscribe to your ${plans.get(user.plan)?.name} plan?`)){
-                        await pauseSubscriptions(plans.get(user.plan)?.id?.get(user.billing));
-                        await updateMe({
+                        await pauseSubscriptions(user.subId);
+                        const newUser = await updateMe({
                             plan: Plan.FREE,
-                            billing: null
+                            billing: null,
+                            subId: null,
                         });
+                        setUser?.(newUser);
                     }
                 }}
             >
                 {children}
             </button> : <PayPalProvider>
-                <ButtonsWrapper
-                    className="absolute bottom-6 left-6 right-6"
-                    planId={plans.get(plan ?? Plan.FREE)?.id?.get(monthly ? Billing.MONTHLY : Billing.ANNUAL)}
-                    onApprove={async () => {
-                        if(user?.billing && user.plan !== Plan.FREE) await pauseSubscriptions(plans.get(user.plan)?.id?.get(user.billing));
-                        await updateMe({
-                            plan,
-                            billing: monthly ? Billing.MONTHLY : Billing.ANNUAL
-                        });
-                    }}
-                >
-                    {children}
-                </ButtonsWrapper>
+                <PayPalSubscriptionButton
+                    plan={plan}
+                    billing={monthly ? Billing.MONTHLY : Billing.ANNUAL}
+                    onApprove={async ({ subscriptionID: subId }) => await updateMe({
+                        plan,
+                        billing: monthly ? Billing.MONTHLY : Billing.ANNUAL,
+                        subId
+                    }).then(() => pauseSubscriptions(user.subId))}
+                    className="absolute bottom-6 left-0 right-0"
+                />
             </PayPalProvider>) : <a href={"/auth?register=true&plan=" + plan + (monthly ? "&billing=" + Billing.MONTHLY : "")}>
                 <button className={`absolute bottom-6 left-6 right-6 text-black dark:text-white ${light} ${dark} ${unborder}`}>
                     {children}
