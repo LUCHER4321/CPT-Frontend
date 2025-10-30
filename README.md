@@ -129,8 +129,6 @@ export enum TimeUnit {
 
 ### Institutional
 
-- $499.00/month
-- $4788.00/year ($399.00/month)
 - Unlimited Ph. Trees
 - Unlimited species per Ph. Tree
 - Up to 30 collaborators per Ph. Tree
@@ -139,3 +137,23 @@ export enum TimeUnit {
 - Access to Ph. Trees created by the community
 - Premium accounts for all institution members
 - Personalized domain
+
+## Licenses and Attributions
+
+This project uses the following open-source libraries:
+
+### Dependencies
+
+- **React & React DOM** - MIT License
+- **Tailwind CSS** - MIT License
+- **PayPal SDK** - Apache-2.0 License
+- **Chrono-Phylo-Tree** - MIT License
+- **Socket.io Client** - MIT License
+
+### Development Dependencies
+
+- **TypeScript** - Apache-2.0 License
+- **Vite** - MIT License
+- **ESLint & plugins** - MIT License
+
+Full license texts are available in the `LICENSES/` directory.
