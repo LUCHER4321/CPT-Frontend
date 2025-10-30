@@ -52,10 +52,10 @@ const userRequest: UserRequest = {
         route: [user, "token"]
     }),
     getMe: async () => {
-        const user: UserResponse = await fetchConfig({
+        const user: UserResponse | undefined = await fetchConfig({
             route: userMe
         });
-        if(user.role === Role.USER && user.plan !== Plan.FREE) {
+        if(user?.role === Role.USER && user.plan !== Plan.FREE) {
             if(!await checkSubscription(user.subId)) await pauseSubscriptions(user.subId).then(({ completed }) => completed ? updateMe({
                 plan: Plan.FREE,
                 billing: null,
