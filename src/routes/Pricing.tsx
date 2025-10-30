@@ -34,8 +34,10 @@ export const Pricing = ({
 
     useEffect(() => {
         document.title = "Life Tree | Pricing";
-        getMe({}).then(setUser);
-        token({ expiresIn: "7d" });
+        getMe({}).then(u => {
+            setUser(u);
+            if(u?.id) token({ expiresIn: "7d" });
+        });
     }, []);
 
     const changeFaq = (n: number) => setFaq(faq === n ? undefined : n);
