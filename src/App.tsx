@@ -22,7 +22,7 @@ function App() {
     document.title = "Life Tree | Create Phylogenetic Trees";
     getMe({}).then(u => {
       setUser(u);
-      token({ expiresIn: "7d" });
+      if(u?.id) token({ expiresIn: "7d" });
     });
     const fetchTrees = async () => {
       try {
