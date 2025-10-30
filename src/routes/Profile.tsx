@@ -56,7 +56,7 @@ export const Profile = ({
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
-            token({ expiresIn: "7d" });
+            if(u?.id) token({ expiresIn: "7d" });
         });
     }, []);
 
