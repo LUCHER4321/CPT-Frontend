@@ -7,7 +7,7 @@ import { dashboardItems } from "../../data/dashboardItems";
 import { getMe, getUser, token } from "../../api/user";
 import { Header } from "../../components/dashboard/Header";
 import { getNotifications } from "../../api/notification";
-import { accountContainer, title } from "../../data/classNames";
+import { accountContainer, title, unborder } from "../../data/classNames";
 import { SearchHeader } from "../../components/trees/SearchHeader";
 import { TreeCard } from "../../components/home/TreeCard";
 import { likedTrees } from "../../api/like";
@@ -41,6 +41,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [open, setOpen] = useState(false);
     const location = useLocation().pathname;
     const history = useNavigate();
     const searchFunction = myTrees ? getMyTrees : searchTrees;
@@ -87,24 +88,36 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                     currentPage={liked ? "/liked" : myTrees ? `/trees${owner ? "/me" : owner === false ? "/collabs" : ""}` : undefined}
                     user={user}
                 />}
-                <main className="flex flex-col w-full">
-                    <Header
-                        search={search}
-                        setSearch={setSearch}
-                        notifications={notifications}
-                        setNotifications={setNotifications}
-                        active={active}
-                        setActive={setActive}
-                    >
-                        <h1 className={"block text-[1.5em]! sm:text-[2em]! font-bold " + title}>{liked ? "Liked Trees" : myTrees ? `${user?.username}'s ${owner !== false ? "Trees" : "Collabs"}` : "Tree Search"}</h1>
-                    </Header>
-                    {!liked && <SearchHeader
-                        sProps={sProps}
-                        setSearchProps={setSearchProps}
-                        treesCount={trees?.count}
-                    />}
-                    <div className="overflow-y-scroll">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 min-h-full">
+                <main className="flex flex-col w-full min-h-screen">
+                    <div className="sticky top-0 z-50 shadow-lg">
+                        <Header
+                            search={search}
+                            setSearch={setSearch}
+                            notifications={notifications}
+                            setNotifications={setNotifications}
+                            active={active}
+                            setActive={setActive}
+                        >
+                            <div className="flex flex-row items-center space-x-3">
+                                <h1 className={"block text-[1.5em]! sm:text-[2em]! font-bold " + title}>{liked ? "Liked Trees" : myTrees ? `${user?.username}'s ${owner !== false ? "Trees" : "Collabs"}` : "Tree Search"}</h1>
+                                <div className="block sm:hidden">
+                                    <button className={"none flex sm:hidden h-full items-center bg-black/0! p-0! " + unborder} onClick={() => setOpen(!open)}>
+                                        <i className={"fas " + (open ? "fa-times" : "fa-bars")}/>
+                                    </button>
+                                </div>
+                            </div>
+                        </Header>
+                        {!liked && <div className="px-4 pb-2">
+                            <SearchHeader
+                                sProps={sProps}
+                                setSearchProps={setSearchProps}
+                                treesCount={trees?.count}
+                                open={open}
+                            />
+                        </div>}
+                    </div>
+                    <div className="flex-1 overflow-y-scroll">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 p-4 gap-4">
                             {myTrees && <Card
                                 fa="fa-plus"
                                 description="New Tree"
