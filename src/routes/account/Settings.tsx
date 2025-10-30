@@ -192,7 +192,7 @@ export const Settings = () => {
                                     onClick={() => newApiKey({}).then(key => {
                                         const { apiKey } = key ?? {};
                                         if(!apiKey) return;
-                                        if(!user) return;
+                                        if(!user?.id) return;
                                         const { apiKeys, ...u } = user;
                                         setUser({ ...u, apiKeys: [apiKey, ...apiKeys ?? []] });
                                     })}
