@@ -64,8 +64,8 @@ export const Dashboard = () => {
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
+            if(u?.id) token({ expiresIn: "7d" });
         });
-        token({ expiresIn: "7d" });
     }, []);
     return (
         <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start relative">
