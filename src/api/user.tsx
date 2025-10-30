@@ -10,12 +10,14 @@ const userRequest: UserRequest = {
     register: async (body) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "register"]
+        route: [user, "register"],
+        containsError: true
     }),
     login: async (body) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "login"]
+        route: [user, "login"],
+        containsError: true
     }),
     search: async (queries) => await fetchConfig({
         route: [user, "search"],
