@@ -17,13 +17,15 @@ interface FetchConfigProps<T> {
     body?: T;
     route?: string[];
     queries?: any;
+    containsError?: boolean;
 }
 
 export const fetchConfig = async <T,>({
     method = "GET",
     body,
     route = [],
-    queries = {}
+    queries = {},
+    containsError = false
 }: FetchConfigProps<T>) => {
     try {
         if(DESIGN_MODE) throw new Error("Design Mode");
@@ -40,7 +42,7 @@ export const fetchConfig = async <T,>({
         }
         return await result.json();
     } catch (error) {
-        return { error: (error as Error).message };
+        return containsError ? { error: (error as Error).message } : undefined;
     }
 };
 
