@@ -53,7 +53,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
-            token({ expiresIn: "7d" });
+            if(u?.id) token({ expiresIn: "7d" });
             document.title = `Life Tree | ${liked ? "Liked Trees" : myTrees ? (owner || owner === undefined) ? `${u?.username}'s Trees` : `${u?.username}'s Collabs` : "Search Trees"}`;
         });
     }, []);
