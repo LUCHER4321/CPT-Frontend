@@ -29,12 +29,14 @@ const userRequest: UserRequest = {
     recover: async (body) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "recover"]
+        route: [user, "recover"],
+        containsError: true
     }),
     resetPassword: async ({token, ...body}) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "reset", token]
+        route: [user, "reset", token],
+        containsError: true
     }),
     logout: async (body) => await fetchConfig({
         method: "POST",
@@ -68,7 +70,8 @@ const userRequest: UserRequest = {
     updateMe: async (body) => await fetchConfig({
         method: "PATCH",
         body,
-        route: userMe
+        route: userMe,
+        containsError: true
     }),
     deleteMe: async () => await fetchConfig({
         method: "DELETE",
