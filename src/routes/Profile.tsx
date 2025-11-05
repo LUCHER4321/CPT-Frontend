@@ -139,8 +139,9 @@ export const Profile = ({
                         <div className="flex flex-row space-x-2 items-center mb-2">
                             {user?.id === currentUser?.id && <i className="fas fa-edit cursor-pointer" onClick={() => {
                                 if(editing) updateMe({ description }).then(u => {
-                                    setCurrentUser(u);
-                                    setUser(u);
+                                    const newUser = u?.id ? u : undefined;
+                                    setCurrentUser(newUser);
+                                    setUser(newUser);
                                 });
                                 setEditing(!editing);
                             }}/>}
