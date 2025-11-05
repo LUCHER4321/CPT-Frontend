@@ -58,7 +58,7 @@ export const PlanCard = ({
                             billing: null,
                             subId: null,
                         });
-                        setUser?.(newUser);
+                        if(newUser?.id) setUser?.(newUser);
                     }
                 }}
             >
