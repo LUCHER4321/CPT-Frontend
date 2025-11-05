@@ -127,8 +127,9 @@ export const Settings = () => {
                                 setIcon
                                 icon="fa-save"
                                 onClick={() => updateMe({ description }).then(u => {
-                                    setUser(u);
-                                    setUsername(u?.description ?? "");
+                                    const newUser = u?.id ? u : undefined;
+                                    setUser(newUser);
+                                    setDescription(newUser?.description ?? "");
                                 })}
                             />
                             <a href="/pricing"><button className={filledButton}>
@@ -170,7 +171,10 @@ export const Settings = () => {
                                 setVisiblePassword={setVisiblePassword}
                             />
                             <button onClick={() => {
-                                if (password === confirmPassword && confirm("Are you sure you want to change your password?")) updateMe({ oldPassword, password }).then(setUser);
+                                if (password === confirmPassword && confirm("Are you sure you want to change your password?")) updateMe({ oldPassword, password }).then(u => {
+                                    const newUser = u?.id ? u : undefined;
+                                    setUser(newUser);
+                                });
                             }} className={"mb-8 bg-green-400! dark:bg-green-600! hover:bg-green-500! " + unborder}>
                                 <i className="fas fa-key"/> Change Password
                             </button>
