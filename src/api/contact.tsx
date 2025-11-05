@@ -5,7 +5,8 @@ const contactRequest: ContactRequest = {
     contact: async (body) => await fetchConfig({
         method: "POST",
         route: ["contact"],
-        body
+        body,
+        containsError: true
     })
 };
 
