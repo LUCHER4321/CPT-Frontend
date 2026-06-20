@@ -1,4 +1,4 @@
-import { borderButton, filledButton, title } from "../../data/classNames";
+import { borderButton, filledButton, linkButton, title } from "../../data/classNames";
 import { LinkButton } from "../LinkButton";
 
 interface HeroProps {
@@ -19,9 +19,15 @@ export const Hero = ({
                 <p className="text-center sm:text-start my-3">
                     Visualize different species' evolution or create your own speculative evolution projects
                 </p>
-                <div className="flex flex-row mt-3">
+                <div className="flex flex-row mt-3 items-center">
                     <LinkButton className={"mr-4 " + filledButton} href={hrefStart}>Start Now</LinkButton>
                     <LinkButton className={borderButton} href={hrefInfo}>More Info</LinkButton>
+                    <a className={linkButton + " ml-4"} href="https://github.com/LUCHER4321/CPT-Frontend" target="_blank" title="GitHub Repository">
+                        <i className="fa-brands fa-github text-5xl"/>
+                    </a>
+                    <a className={linkButton + " ml-4"} href="https://discord.gg/s9cJJHcnA4" target="_blank" title="Discord Server">
+                        <i className="fa-brands fa-discord text-5xl"/>
+                    </a>
                 </div>
             </div>
             <div className="sm:w-1/2 w-full flex justify-center items-center">
