@@ -50,6 +50,7 @@ export const Footer = ({
                         <LiLink href="/">Home</LiLink>
                         <LiLink href="/pricing">Pricing</LiLink>
                         <LiLink href="/trees">Search Trees</LiLink>
+                        <LiLink href="https://github.com/LUCHER4321/CPT-Frontend" blank>GitHub Repository</LiLink>
                         <LiLink href="https://discord.gg/s9cJJHcnA4" blank>Discord Server</LiLink>
                         <LiLink href="https://lucher4321.github.io/Portafolio/" blank>Programmer's Portfolio</LiLink>
                     </ul>
