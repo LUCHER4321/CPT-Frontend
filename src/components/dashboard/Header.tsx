@@ -36,39 +36,44 @@ export const Header = ({
             {children}
             <div className="flex flex-row-reverse sm:flex-row justify-between w-full sm:w-auto pt-5 sm:pt-0 items-center">
                 <div className="flex flex-row items-center">
-                <a
-                    href="https://discord.gg/s9cJJHcnA4"
-                    target="_blank"
-                    title="Join to our Discord"
-                ><i className="fa-brands fa-discord text-black dark:text-white hover:text-2xl transition-all duration-300"/></a>
-                <Notifications
-                    className={"flex items-center p-0! sm:p-2! bg-black/0! relative ml-2 sm:mx-6 " + unborder}
-                    count={notifications?.filter(({seen}) => !seen).length}
-                    active={active}
-                    setActive={async (a) => {
-                        if(!a) {
-                            const see = (n: NotificationResponse) : Promise<NotificationResponse> => n.seen ? new Promise(() => n) : seeNotification({ id: n.id }).then(() => ({ ...n, seen: true }));
-                            Promise.all(notifications?.map(see) ?? []).then(setNotifications)
-                        }
-                        setActive?.(a);
-                    }}
-                >
-                    <button className={"bg-black/0! fixed top-0 bottom-0 left-0 right-0 rounded-none! cursor-default! p-0! " + unborder} onClick={() => setActive?.(false)}/>
-                    <table className="absolute top-full right-1/2 rounded z-10 max-h-96 overflow-y-auto shadow-lg">
-                        <tr className="bg-white dark:bg-black">
-                            <th colSpan={3} className="p-2 border-b rounded-t">Notifications</th>
-                        </tr>
-                        {[...notis.entries()].map(([notification, notiString], index) => <Notification
-                            key={index}
-                            notification={notification}
-                            notiString={notiString}
-                            now={now}
-                        />)}
-                        <tr className="bg-white dark:bg-black">
-                            <th colSpan={3} className="p-2 rounded-b"> </th>
-                        </tr>
-                    </table>
-                </Notifications>
+                    <a
+                        href="https://github.com/LUCHER4321/CPT-Frontend"
+                        target="_blank"
+                        title="GitHub Repository"
+                    ><i className="fa-brands fa-github text-black dark:text-white hover:text-2xl transition-all duration-300 mx-2 sm:mx-6"/></a>
+                    <a
+                        href="https://discord.gg/s9cJJHcnA4"
+                        target="_blank"
+                        title="Join to our Discord"
+                    ><i className="fa-brands fa-discord text-black dark:text-white hover:text-2xl transition-all duration-300"/></a>
+                    <Notifications
+                        className={"flex items-center p-0! sm:p-2! bg-black/0! relative ml-2 sm:mx-6 " + unborder}
+                        count={notifications?.filter(({seen}) => !seen).length}
+                        active={active}
+                        setActive={async (a) => {
+                            if(!a) {
+                                const see = (n: NotificationResponse) : Promise<NotificationResponse> => n.seen ? new Promise(() => n) : seeNotification({ id: n.id }).then(() => ({ ...n, seen: true }));
+                                Promise.all(notifications?.map(see) ?? []).then(setNotifications)
+                            }
+                            setActive?.(a);
+                        }}
+                    >
+                        <button className={"bg-black/0! fixed top-0 bottom-0 left-0 right-0 rounded-none! cursor-default! p-0! " + unborder} onClick={() => setActive?.(false)}/>
+                        <table className="absolute top-full right-1/2 rounded z-10 max-h-96 overflow-y-auto shadow-lg">
+                            <tr className="bg-white dark:bg-black">
+                                <th colSpan={3} className="p-2 border-b rounded-t">Notifications</th>
+                            </tr>
+                            {[...notis.entries()].map(([notification, notiString], index) => <Notification
+                                key={index}
+                                notification={notification}
+                                notiString={notiString}
+                                now={now}
+                            />)}
+                            <tr className="bg-white dark:bg-black">
+                                <th colSpan={3} className="p-2 rounded-b"> </th>
+                            </tr>
+                        </table>
+                    </Notifications>
                 </div>
                 <SearchInput
                     search={search}
