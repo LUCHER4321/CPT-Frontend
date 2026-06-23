@@ -48,6 +48,8 @@ jobs:
           VITE_API_URL: ${{ vars.VITE_API_URL }}
           VITE_WS_URL: ${{ vars.VITE_WS_URL }}
           VITE_PORT: ${{ vars.VITE_PORT }}
+          VITE_DISCORD: ${{ vars.VITE_DISCORD }}
+          VITE_GITHUB: ${{ vars.VITE_GITHUB }}
           
           # Environment Secrets
           VITE_PRO_M_ID: ${{ secrets.VITE_PRO_M_ID }}
