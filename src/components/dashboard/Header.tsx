@@ -6,6 +6,7 @@ import { Notifications } from "./Notifications";
 import { SearchInput } from "./SearchInput";
 import { seeNotification } from "../../api/notification";
 import { Notification } from "./Notification";
+import { DISCORD, GITHUB } from "../../config";
 
 interface HeaderProps {
     search?: string;
@@ -37,12 +38,12 @@ export const Header = ({
             <div className="flex flex-row-reverse sm:flex-row justify-between w-full sm:w-auto pt-5 sm:pt-0 items-center">
                 <div className="flex flex-row items-center">
                     <a
-                        href="https://github.com/LUCHER4321/CPT-Frontend"
+                        href={GITHUB}
                         target="_blank"
                         title="GitHub Repository"
                     ><i className="fa-brands fa-github text-black dark:text-white hover:text-2xl transition-all duration-300 mx-2 sm:mx-6"/></a>
                     <a
-                        href="https://discord.gg/s9cJJHcnA4"
+                        href={DISCORD}
                         target="_blank"
                         title="Join to our Discord"
                     ><i className="fa-brands fa-discord text-black dark:text-white hover:text-2xl transition-all duration-300"/></a>
