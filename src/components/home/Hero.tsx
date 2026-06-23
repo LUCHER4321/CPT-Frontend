@@ -1,3 +1,4 @@
+import { DISCORD, GITHUB } from "../../config";
 import { borderButton, filledButton, linkButton, title } from "../../data/classNames";
 import { LinkButton } from "../LinkButton";
 
@@ -22,10 +23,10 @@ export const Hero = ({
                 <div className="flex flex-row mt-3 items-center">
                     <LinkButton className={"mr-4 " + filledButton} href={hrefStart}>Start Now</LinkButton>
                     <LinkButton className={borderButton} href={hrefInfo}>More Info</LinkButton>
-                    <a className={linkButton + " ml-4"} href="https://github.com/LUCHER4321/CPT-Frontend" target="_blank" title="GitHub Repository">
+                    <a className={linkButton + " ml-4"} href={GITHUB} target="_blank" title="GitHub Repository">
                         <i className="fa-brands fa-github text-5xl"/>
                     </a>
-                    <a className={linkButton + " ml-4"} href="https://discord.gg/s9cJJHcnA4" target="_blank" title="Discord Server">
+                    <a className={linkButton + " ml-4"} href={DISCORD} target="_blank" title="Discord Server">
                         <i className="fa-brands fa-discord text-5xl"/>
                     </a>
                 </div>
