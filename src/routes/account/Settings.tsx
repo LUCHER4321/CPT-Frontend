@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/Footer";
 import { pauseSubscriptions } from "../../api/payPal";
 import { AsideDiv } from "../../components/AsideDiv";
+import { AdBanner } from "../../components/AdBanner";
 
 export const Settings = () => {
     const [expanded, setExpanded] = useState(false);
@@ -242,6 +243,10 @@ export const Settings = () => {
                     <AsideDiv/>
                 </div>
             </main>
+            <AdBanner
+                user={user}
+                className="fixed bottom-0 left-0 right-0 z-50"
+            />
         </div>
     )
 }
