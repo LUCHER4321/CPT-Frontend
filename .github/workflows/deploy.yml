@@ -60,6 +60,7 @@ jobs:
           VITE_PAYPAL_SECRET: ${{ secrets.VITE_PAYPAL_SECRET }}
           VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
           VITE_GOOGLE_ADSENSE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_ADSENSE_CLIENT_ID }}
+          VITE_GOOGLE_ADSENSE_TXT: ${{ secrets.VITE_GOOGLE_ADSENSE_TXT }}
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
