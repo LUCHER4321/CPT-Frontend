@@ -11,6 +11,7 @@ import { notificationService } from "../../classes/NotificationService";
 import { UsersData } from "../../components/dashboard/follows/UsersData";
 import { Footer } from "../../components/Footer";
 import { AsideDiv } from "../../components/AsideDiv";
+import { AdBanner } from "../../components/AdBanner";
 
 interface FollowsProps {
     showFollowers?: boolean;
@@ -92,5 +93,9 @@ export const Follows = ({
                 </div>
             </main>
         </div>
+        <AdBanner
+            user={user}
+            className="fixed bottom-0 left-0 right-0 z-50"
+        />
     </>
 }
