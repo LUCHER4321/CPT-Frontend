@@ -8,6 +8,7 @@ import { Order, TreeCriteria } from './enums';
 import { getMe, getUser, token } from './api/user';
 import { TopTrees } from './components/home/TopTrees';
 import { Footer } from './components/Footer';
+import { AdBanner } from './components/AdBanner';
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -76,6 +77,10 @@ function App() {
         setEmail={setEmail}
         message={message}
         setMessage={setMessage}
+      />
+      <AdBanner
+        user={user}
+        className="fixed bottom-0 left-0 right-0 z-50"
       />
     </>
   )
