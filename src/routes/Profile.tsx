@@ -18,6 +18,7 @@ import { DataDisplay } from "../components/profile/DataDisplay"
 import { AuthField } from "../components/auth/AuthField"
 import { TreeCard } from "../components/home/TreeCard"
 import { notificationService } from "../classes/NotificationService"
+import { AdBanner } from "../components/AdBanner"
 
 interface ProfileProps {
     myProfile?: boolean
@@ -188,6 +189,10 @@ export const Profile = ({
                     </div>
                 </main>
             </div>
+            <AdBanner
+                user={user}
+                className="fixed bottom-0 left-0 right-0 z-50"
+            />
         </>
     )
 }
