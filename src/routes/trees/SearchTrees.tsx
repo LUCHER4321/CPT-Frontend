@@ -16,6 +16,7 @@ import { newPhTree } from "../../utils/newPhTree";
 import { notificationService } from "../../classes/NotificationService";
 import { Footer } from "../../components/Footer";
 import { AsideDiv } from "../../components/AsideDiv";
+import { AdBanner } from "../../components/AdBanner";
 
 interface SearchTreesProps extends SearchProps {
     myTrees?: boolean;
@@ -145,6 +146,10 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                     </div>
                 </main>
             </div>
+            <AdBanner
+                user={user}
+                className="fixed bottom-0 left-0 right-0 z-50"
+            />
         </>
     )
 }
