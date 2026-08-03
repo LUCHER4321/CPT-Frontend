@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client'
+import { hydrateRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -37,7 +37,8 @@ const searchProps: SearchProps = {
   to: nullableInput(param("to"), p => new Date(p))
 };
 
-createRoot(document.getElementById('root')!).render(
+hydrateRoot(
+    document.getElementById('root')!,
     <BrowserRouter>
       <Routes>
         <Route index element={<App/>}/>
