@@ -8,19 +8,22 @@ interface SearchHeaderProps {
     sProps?: SearchProps;
     setSearchProps?: (sp: SearchProps) => void;
     treesCount?: number;
+    open?: boolean;
 }
 
 export const SearchHeader = ({
     sProps,
     setSearchProps,
-    treesCount = 0
+    treesCount = 0,
+    open
 }: SearchHeaderProps) => {
     const pages = Math.max(Math.ceil(treesCount / (sProps?.limit ?? 10)), 1);
     return (
-        <div className="flex flex-wrap p-3 space-x-3 w-full justify-between">
+        <div className={"flex flex-wrap space-x-3 w-full justify-between transition-[max-height] duration-500 overflow-hidden " + (open ? "p-3 max-h-full" : "max-h-0 sm:max-h-full p-0 sm:p-3")}>
+            <div className="flex flex-row justify-between items-center w-full sm:w-auto">
+            <p className="font-bold mb-6">Sort By:</p>
             <AuthField
-                name="Sort by:"
-                className="space-x-3 items-center"
+                className="space-x-3 items-center flex-col sm:flex-row space-y-6 sm:space-y-0"
                 selected={sProps?.criteria ?? TreeCriteria.UPDATED_AT}
                 options={Object.values(TreeCriteria)}
                 optionsDisplay={tc => {
@@ -37,10 +40,9 @@ export const SearchHeader = ({
                         ...sp
                     });
                 }}
-                row
             >
                 <IconInput
-                    className="px-[1rem] py-[0.8rem] border rounded w-full"
+                    className="px-[1rem] py-[0.8rem] border rounded w-full sm:w-auto"
                     selected={sProps?.order ?? Order.DESC}
                     options={Object.values(Order)}
                     optionsDisplay={o => {
@@ -58,11 +60,12 @@ export const SearchHeader = ({
                     }}
                 />
             </AuthField>
+            </div>
             <div className="flex flex-wrap space-x-3">
                 <AuthField
                     row
                     name="Since:"
-                    className="space-x-3 items-center justify-between"
+                    className="space-x-3 items-center justify-between w-full sm:w-auto"
                     type="date"
                     value={sProps?.from?.toDateString()}
                     setValue={f => {
@@ -76,7 +79,7 @@ export const SearchHeader = ({
                 <AuthField
                     row
                     name="Until:"
-                    className="space-x-3 items-center justify-between"
+                    className="space-x-3 items-center justify-between w-full sm:w-auto"
                     type="date"
                     value={sProps?.to?.toDateString()}
                     setValue={t => {

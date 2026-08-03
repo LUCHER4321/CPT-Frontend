@@ -16,6 +16,7 @@ import { getFollowersCount, getFollowing } from "../api/follow";
 import { notificationService } from "../classes/NotificationService";
 import { Footer } from "../components/Footer";
 import { AsideDiv } from "../components/AsideDiv";
+import { AdBanner } from "../components/AdBanner";
 
 export const Dashboard = () => {
     const [expanded, setExpanded] = useState(false);
@@ -64,8 +65,8 @@ export const Dashboard = () => {
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
+            if(u?.id) token({ expiresIn: "7d" });
         });
-        token({ expiresIn: "7d" });
     }, []);
     return (
         <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start relative">
@@ -113,6 +114,10 @@ export const Dashboard = () => {
                     <AsideDiv/>
                 </div>
             </main>
+            <AdBanner
+                user={user}
+                className="fixed bottom-0 left-0 right-0 z-50"
+            />
         </div>
     )
 };

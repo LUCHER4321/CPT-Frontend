@@ -4,7 +4,7 @@ import { dashboardItems } from "../../data/dashboardItems";
 import type { CommentResponse, NotificationResponse, PhTreeResponse, UserResponse } from "../../types";
 import { useParams } from "react-router-dom";
 import { getMe, getUser, token } from "../../api/user";
-import { getTree } from "../../api/phTree";
+import { getTree, viewTree } from "../../api/phTree";
 import { getNotifications } from "../../api/notification";
 import { Header } from "../../components/dashboard/Header";
 import { accountContainer, aText, borderButton, filledButton, title, unborder } from "../../data/classNames";
@@ -86,7 +86,8 @@ export const TreeViewer = () => {
                 treeSpecies({ treeId: id }).then(sl => sl?.map(s => Species.fromJSON(s)) ?? []).then(setCommonAncestors);
                 getUser({ id: t?.userId ?? "" }).then(setCreator);
                 getLikes({ liked: Liked.TREE, id }).then(t => setLiked(t?.myLike ?? false));
-                treeComments({ treeId: id }).then(setComments)
+                treeComments({ treeId: id }).then(setComments);
+                viewTree({ id });
             });
             getNotifications({}).then(n => {
                 setNotifications(n ?? []);
@@ -95,7 +96,7 @@ export const TreeViewer = () => {
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
-            token({ expiresIn: "7d" });
+            if(u?.id) token({ expiresIn: "7d" });
         });
         const handleResize = () => {
             if (ref.current) {

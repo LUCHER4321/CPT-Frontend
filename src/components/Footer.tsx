@@ -1,4 +1,5 @@
 import { contact } from "../api/contact";
+import { DISCORD, GITHUB } from "../config";
 import { aText, filledButton, title } from "../data/classNames"
 import type { Email } from "../types";
 import { AuthField } from "./auth/AuthField";
@@ -50,7 +51,9 @@ export const Footer = ({
                         <LiLink href="/">Home</LiLink>
                         <LiLink href="/pricing">Pricing</LiLink>
                         <LiLink href="/trees">Search Trees</LiLink>
-                        <LiLink href="https://discord.gg/s9cJJHcnA4" blank>Discord Server</LiLink>
+                        <LiLink href={GITHUB} blank>GitHub Repository</LiLink>
+                        <LiLink href={DISCORD} blank>Discord Server</LiLink>
+                        <LiLink href="https://lucher4321.github.io/Portafolio/" blank>Programmer's Portfolio</LiLink>
                     </ul>
                 </div>
                 <div>

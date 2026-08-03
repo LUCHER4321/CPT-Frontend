@@ -18,6 +18,7 @@ import { DataDisplay } from "../components/profile/DataDisplay"
 import { AuthField } from "../components/auth/AuthField"
 import { TreeCard } from "../components/home/TreeCard"
 import { notificationService } from "../classes/NotificationService"
+import { AdBanner } from "../components/AdBanner"
 
 interface ProfileProps {
     myProfile?: boolean
@@ -56,7 +57,7 @@ export const Profile = ({
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
-            token({ expiresIn: "7d" });
+            if(u?.id) token({ expiresIn: "7d" });
         });
     }, []);
 
@@ -139,8 +140,9 @@ export const Profile = ({
                         <div className="flex flex-row space-x-2 items-center mb-2">
                             {user?.id === currentUser?.id && <i className="fas fa-edit cursor-pointer" onClick={() => {
                                 if(editing) updateMe({ description }).then(u => {
-                                    setCurrentUser(u);
-                                    setUser(u);
+                                    const newUser = u?.id ? u : undefined;
+                                    setCurrentUser(newUser);
+                                    setUser(newUser);
                                 });
                                 setEditing(!editing);
                             }}/>}
@@ -187,6 +189,10 @@ export const Profile = ({
                     </div>
                 </main>
             </div>
+            <AdBanner
+                user={user}
+                className="fixed bottom-0 left-0 right-0 z-50"
+            />
         </>
     )
 }

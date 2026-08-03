@@ -186,7 +186,7 @@ export const TreeEditor = () => {
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
-            token({ expiresIn: "7d" });
+            if(u?.id) token({ expiresIn: "7d" });
         });
         const handleResize = () => {
             if (ref.current) {

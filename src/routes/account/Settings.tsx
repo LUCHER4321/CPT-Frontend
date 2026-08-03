@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/Footer";
 import { pauseSubscriptions } from "../../api/payPal";
 import { AsideDiv } from "../../components/AsideDiv";
+import { AdBanner } from "../../components/AdBanner";
 
 export const Settings = () => {
     const [expanded, setExpanded] = useState(false);
@@ -56,8 +57,8 @@ export const Settings = () => {
                 response: nr => setNotifications([nr, ...notifications]),
                 userId: u?.id ?? ""
             });
+            if(u?.id) token({ expiresIn: "7d" });
         });
-        token({ expiresIn: "7d" });
     }, []);
     return (
         <div className="size-full flex flex-col-reverse sm:flex-row justify-between h-screen sm:justify-start relative overflow-hidden">
@@ -127,8 +128,9 @@ export const Settings = () => {
                                 setIcon
                                 icon="fa-save"
                                 onClick={() => updateMe({ description }).then(u => {
-                                    setUser(u);
-                                    setUsername(u?.description ?? "");
+                                    const newUser = u?.id ? u : undefined;
+                                    setUser(newUser);
+                                    setDescription(newUser?.description ?? "");
                                 })}
                             />
                             <a href="/pricing"><button className={filledButton}>
@@ -170,7 +172,10 @@ export const Settings = () => {
                                 setVisiblePassword={setVisiblePassword}
                             />
                             <button onClick={() => {
-                                if (password === confirmPassword && confirm("Are you sure you want to change your password?")) updateMe({ oldPassword, password }).then(setUser);
+                                if (password === confirmPassword && confirm("Are you sure you want to change your password?")) updateMe({ oldPassword, password }).then(u => {
+                                    const newUser = u?.id ? u : undefined;
+                                    setUser(newUser);
+                                });
                             }} className={"mb-8 bg-green-400! dark:bg-green-600! hover:bg-green-500! " + unborder}>
                                 <i className="fas fa-key"/> Change Password
                             </button>
@@ -192,7 +197,7 @@ export const Settings = () => {
                                     onClick={() => newApiKey({}).then(key => {
                                         const { apiKey } = key ?? {};
                                         if(!apiKey) return;
-                                        if(!user) return;
+                                        if(!user?.id) return;
                                         const { apiKeys, ...u } = user;
                                         setUser({ ...u, apiKeys: [apiKey, ...apiKeys ?? []] });
                                     })}
@@ -238,6 +243,10 @@ export const Settings = () => {
                     <AsideDiv/>
                 </div>
             </main>
+            <AdBanner
+                user={user}
+                className="fixed bottom-0 left-0 right-0 z-50"
+            />
         </div>
     )
 }

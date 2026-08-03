@@ -10,12 +10,14 @@ const userRequest: UserRequest = {
     register: async (body) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "register"]
+        route: [user, "register"],
+        containsError: true
     }),
     login: async (body) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "login"]
+        route: [user, "login"],
+        containsError: true
     }),
     search: async (queries) => await fetchConfig({
         route: [user, "search"],
@@ -27,12 +29,14 @@ const userRequest: UserRequest = {
     recover: async (body) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "recover"]
+        route: [user, "recover"],
+        containsError: true
     }),
     resetPassword: async ({token, ...body}) => await fetchConfig({
         method: "POST",
         body,
-        route: [user, "reset", token]
+        route: [user, "reset", token],
+        containsError: true
     }),
     logout: async (body) => await fetchConfig({
         method: "POST",
@@ -50,10 +54,10 @@ const userRequest: UserRequest = {
         route: [user, "token"]
     }),
     getMe: async () => {
-        const user: UserResponse = await fetchConfig({
+        const user: UserResponse | undefined = await fetchConfig({
             route: userMe
         });
-        if(user.role === Role.USER && user.plan !== Plan.FREE) {
+        if(user?.role === Role.USER && user.plan !== Plan.FREE) {
             if(!await checkSubscription(user.subId)) await pauseSubscriptions(user.subId).then(({ completed }) => completed ? updateMe({
                 plan: Plan.FREE,
                 billing: null,
@@ -66,7 +70,8 @@ const userRequest: UserRequest = {
     updateMe: async (body) => await fetchConfig({
         method: "PATCH",
         body,
-        route: userMe
+        route: userMe,
+        containsError: true
     }),
     deleteMe: async () => await fetchConfig({
         method: "DELETE",
