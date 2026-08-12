@@ -11,7 +11,8 @@
     "postbuild": "react-snap"
   },
   "reactSnap": {
-    "include": ["/", "/pricing", "/privacy-policy", "/terms-and-conditions"]
+    "include": ["/", "/pricing", "/privacy-policy", "/terms-and-conditions"],
+    "source": "dist"
   },
   "dependencies": {
     "@paypal/paypal-js": "9.0.1",
