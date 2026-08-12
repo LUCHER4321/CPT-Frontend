@@ -102,7 +102,7 @@ export const TreeEditor = () => {
             case TreeProp.COLLABORATORS:
                 break;
         }
-    }, []);
+    }, [id, prop, species]);
 
     const onDropJSON = useCallback((files?: File[]) => {
         const [file] = files ?? [undefined];
@@ -110,7 +110,7 @@ export const TreeEditor = () => {
             file,
             setJSON
         });
-    }, []);
+    }, [tree]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
     const { getRootProps: grp, getInputProps: gip, isDragActive: ida } = useDropzone({ onDrop: onDropJSON });
