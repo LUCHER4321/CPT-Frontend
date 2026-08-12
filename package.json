@@ -13,13 +13,7 @@
   "reactSnap": {
     "include": ["/", "/pricing", "/privacy-policy", "/terms-and-conditions"],
     "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
-    "puppeteer": {
-      "cache_dir": "./node_modules/puppeteer/.local-chromium"
-    },
-    "puppeteerExecutablePath": "/usr/bin/chromium-browser",
-    "skipThirdPartyRequests": true,
-    "inlineCss": true,
-    "headless": true,
+    "fallback": "404.html",
     "source": "dist"
   },
   "dependencies": {
