@@ -91,13 +91,25 @@ export const TreeEditor = () => {
 
     const onDrop = useCallback((files?: File[]) => {
         const [image] = files ?? [undefined];
+        if(image && image.size > 10485760) {
+            alert("File size exceeds 10MB limit");
+            return;
+        }
         if(id && image) switch(prop) {
             case TreeProp.TREE: imageTree({ id, image }).then(t => {
-                    if(t) setTree(t);
+                if (t) {
+                    setTree(t);
+                    alert(`${t?.name}'s image updated successfully`);
+                }
                     setProp(TreeProp.TREE);
-                });
+                }).catch(e => alert(`Error updating tree image: ${(e as Error).message}`));
                 break;
-            case TreeProp.NODE: if(species?.id) speciesImage({ treeId: id, id: species.id.toString(), image });
+            case TreeProp.NODE: if(species?.id) speciesImage({ treeId: id, id: species.id.toString(), image }).then(s => {
+                if (s) {
+                    setSpecies(Species.fromJSON(s));
+                    alert(`${s.name}'s image updated successfully`);
+                }
+            }).catch(e => alert(`Error updating species image: ${(e as Error).message}`));
                 break;
             case TreeProp.COLLABORATORS:
                 break;
