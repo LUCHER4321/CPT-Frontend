@@ -37,6 +37,9 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       port: Number(PORT) ?? 5173
+    },
+    build: {
+      target: "es2019"
     }
   }
 })
