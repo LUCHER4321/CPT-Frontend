@@ -12,6 +12,7 @@
   },
   "reactSnap": {
     "include": ["/", "/pricing", "/privacy-policy", "/terms-and-conditions"],
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
     "source": "dist"
   },
   "dependencies": {
