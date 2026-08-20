@@ -243,13 +243,15 @@ export const TreeEditor = () => {
         if(ref.current && commonAncestors) {
             if(species){
                 const ad = commonAncestors.flatMap(ca => ca.allDescendants());
-                const d = chronoScale ? Math.max(...commonAncestors.map(ca => ca.absoluteExtinction())) - Math.min(...commonAncestors.map(ca => ca.apparition)) : Math.max(...ad.map(sp => sp.firstAncestor().stepsUntil(sp) ?? 0));
+                const firstApparition = Math.min(...commonAncestors.map(ca => ca.apparition));
+                const d = chronoScale ? Math.max(...commonAncestors.map(ca => ca.absoluteExtinction())) - firstApparition : Math.max(...ad.map(sp => sp.firstAncestor().stepsUntil(sp) ?? 0));
                 const i = Math.min(...ad.map((s, index) => s.id === species.id ? index : Number.MAX_SAFE_INTEGER));
                 const { scrollHeight, scrollWidth } = ref.current;
                 const { width, height } = dimensions;
                 const st = (x = 0, s = 1) => scrollHeight * (x + s) / ad.length;
+                const relativeX = chronoScale ? species.extinction() - firstApparition : (species.firstAncestor().stepsUntil(species) ?? 0);
                 ref.current.scrollTop = st(i, 1 / 2) - height / 2;
-                ref.current.scrollLeft = scrollWidth * (chronoScale ? species.extinction() : species.firstAncestor().stepsUntil(species) ?? 0) / d - width / 2 - st();
+                ref.current.scrollLeft = (scrollWidth * (relativeX / (d || 1))) - (width / 2);
             }
             else {
                 const fa = Math.min(...commonAncestors.map(ca => ca.apparition) ?? []);
