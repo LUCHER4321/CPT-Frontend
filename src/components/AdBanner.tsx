@@ -17,6 +17,22 @@ export const AdBanner = ({
     className = ""
 }: AdBannerProps) => {
     useEffect(() => {
+        if (!GOOGLE_ID || (user && user.plan !== Plan.FREE)) return;
+        let metaTag = document.querySelector('meta[name="google-adsense-account"]');
+        if (!metaTag) {
+            metaTag = document.createElement('meta');
+            metaTag.setAttribute('name', 'google-adsense-account');
+            metaTag.setAttribute('content', GOOGLE_ID);
+            document.head.appendChild(metaTag);
+        }
+        let scriptTag = document.querySelector('script[src*="adsbygoogle.js"]');
+        if (!scriptTag) {
+            scriptTag = document.createElement('script');
+            scriptTag.setAttribute('async', 'true');
+            scriptTag.setAttribute('src', `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_ID}`);
+            scriptTag.setAttribute('crossorigin', 'anonymous');
+            document.head.appendChild(scriptTag);
+        }
         try {
             // @ts-ignore
             (window.adsbygoogle = window.adsbygoogle || []).push({});
