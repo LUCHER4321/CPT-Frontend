@@ -16,3 +16,5 @@ export const {
     VITE_GOOGLE_ADSENSE_TXT: GOOGLE_TXT,
     VITE_GOOGLE_ADSENSE_SLOT: GOOGLE_SLOT
 } = import.meta.env;
+
+export const META_DESC = "Professional tool for visualizing and editing phylogenetic or hierarchical trees. Create your account, subscribe, and manage your projects."
