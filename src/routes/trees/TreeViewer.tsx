@@ -21,6 +21,7 @@ import { NodeViewProps } from "../../components/trees/NodeViewProps";
 import { CommentViewProps } from "../../components/trees/CommentViewProps";
 import { treeComments } from "../../api/comment";
 import { notificationService } from "../../classes/NotificationService";
+import { updateMeta } from "../../utils/updateMeta";
 
 export const TreeViewer = () => {
     const [expanded, setExpanded] = useState(false);
@@ -110,6 +111,11 @@ export const TreeViewer = () => {
 
     useEffect(() => {
         document.title = `Life Tree | View "${tree?.name}"`
+        updateMeta({
+            title: `Life Tree | View "${tree?.name}"`,
+            description: tree?.description,
+            image: tree?.image
+        });
     }, [tree]);
 
     useEffect(() => {
