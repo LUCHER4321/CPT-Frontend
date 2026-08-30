@@ -24,6 +24,7 @@ import { readFileAsJson } from "../../utils/readFileAsJson";
 import { nullableInput } from "../../utils/nullableInput";
 import { plans } from "../../data/prices";
 import { notificationService } from "../../classes/NotificationService";
+import { updateMeta } from "../../utils/updateMeta";
 
 export const TreeEditor = () => {
     const [expanded, setExpanded] = useState(false);
@@ -212,6 +213,11 @@ export const TreeEditor = () => {
 
     useEffect(() => {
         document.title = `Life Tree | Edit "${tree?.name}"`
+        updateMeta({
+            title: `Life Tree | Edit "${tree?.name}"`,
+            description: tree?.description,
+            image: tree?.image
+        });
     }, [tree]);
 
     useEffect(() => {
