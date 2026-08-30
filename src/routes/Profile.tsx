@@ -19,6 +19,7 @@ import { AuthField } from "../components/auth/AuthField"
 import { TreeCard } from "../components/home/TreeCard"
 import { notificationService } from "../classes/NotificationService"
 import { AdBanner } from "../components/AdBanner"
+import { updateMeta } from "../utils/updateMeta"
 
 interface ProfileProps {
     myProfile?: boolean
@@ -63,6 +64,11 @@ export const Profile = ({
 
     useEffect(() => {
         document.title = `Life Tree | ${currentUser?.username}'s profile`;
+        if (!myProfile) updateMeta({
+            title: `Life Tree | ${currentUser?.username}'s profile`,
+            description: currentUser?.description,
+            image: currentUser?.photo
+        });
         if(currentUser) {
             treesCount({ userId: currentUser.id }).then(
                 tc => getFollowing({ userId: currentUser.id }).then(
