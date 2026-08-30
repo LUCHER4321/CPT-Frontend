@@ -17,6 +17,7 @@ import { notificationService } from "../../classes/NotificationService";
 import { Footer } from "../../components/Footer";
 import { AsideDiv } from "../../components/AsideDiv";
 import { AdBanner } from "../../components/AdBanner";
+import { updateMeta } from "../../utils/updateMeta";
 
 interface SearchTreesProps extends SearchProps {
     myTrees?: boolean;
@@ -57,6 +58,10 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
             });
             if(u?.id) token({ expiresIn: "7d" });
             document.title = `Life Tree | ${liked ? "Liked Trees" : myTrees ? (owner || owner === undefined) ? `${u?.username}'s Trees` : `${u?.username}'s Collabs` : "Search Trees"}`;
+            if (!liked && !myTrees && !owner) updateMeta({
+                title: "Life Tree | Search Trees",
+                description: sProps.search
+            });
         });
     }, []);
     useEffect(() => {
