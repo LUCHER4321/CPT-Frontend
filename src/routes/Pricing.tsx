@@ -14,6 +14,7 @@ import { title } from "../data/classNames";
 import { Billing, type Plan } from "../enums";
 import { Footer } from "../components/Footer";
 import { AsideDiv } from "../components/AsideDiv";
+import { updateMeta } from "../utils/updateMeta";
 
 interface PricingProps {
     plan?: Plan;
@@ -34,6 +35,7 @@ export const Pricing = ({
 
     useEffect(() => {
         document.title = "Life Tree | Pricing";
+        updateMeta({ title: "Life Tree | Pricing" });
         getMe({}).then(u => {
             setUser(u);
             if(u?.id) token({ expiresIn: "7d" });
