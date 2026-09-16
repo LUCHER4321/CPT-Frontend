@@ -1,6 +1,6 @@
 import type { PhTreeResponse } from "../../../types";
 import { AuthField } from "../../auth/AuthField";
-import { deleteSpecies, deleteSpeciesImage, updateSpecies } from "../../../api/species";
+import { deleteSpecies, deleteSpeciesImage, treeSpecies, updateSpecies } from "../../../api/species";
 import type { PhTreeWS } from "../../../classes/PhTreeWS";
 import { TimeUnit, TreeChange } from "../../../enums";
 import { Species, type SpeciesJSON } from "chrono-phylo-tree";
@@ -97,16 +97,24 @@ export const NodeProps = ({
             <AuthField
                 name="Ancestor"
                 selected={species?.ancestor?.id ?? ""}
-                options={ancestors.map(a => a?.id ?? "")}
-                optionsDisplay={id => ancestors.find(a => a?.id === id)?.name ?? "None (root)"}
+                options={ancestors.filter(a => a?.id !== species?.id && !species.allDescendants().map(d => d.id).includes(a?.id)).map(a => a?.id ?? "")}
+                optionsDisplay={id => ancestors.find(a => a?.id?.toString() === id.toString())?.name ?? "None (root)"}
                 setSelected={updateProp(id => {
-                    if(species) {
-                        if(id === undefined) setCommonAncestors?.([...commonAncestors ?? [], ...species.unlinkAncestor() ?? []]);
-                        else {
-                            if(!species.ancestor) setCommonAncestors?.(commonAncestors?.filter(ca => ca.id !== species.id) ?? [])
-                            nullableInput(ancestors.find(a => a?.id === id), species.linkAncestor);
-                        }
-                    }
+                    if (!species) return;
+                    const ancestor = ancestors.find(a => a?.id?.toString() === id.toString());
+                    if (species.ancestor?.id === ancestor?.id) return;
+                    updateSpecies({
+                        treeId: tree?.id ?? "",
+                        id: species.id?.toString() ?? "",
+                        ancestorId: ancestor?.id?.toString() ?? null
+                    }).then(sp => treeSpecies({ treeId: tree?.id ?? "" }).then(spl => {
+                        setCommonAncestors?.(spl?.map(s => Species.fromJSON(s)) ?? []);
+                        treeSocket?.emit({
+                            type: TreeChange.EDIT,
+                            species: sp
+                        });
+                        setSpecies?.([...spl?.flatMap(s => Species.fromJSON(s).allDescendants()) ?? []].find(s => s.id === species.id));
+                    }));
                 }, id => ({
                     ancestorId: id?.toString() ?? null
                 }))}
