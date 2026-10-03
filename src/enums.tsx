@@ -65,3 +65,8 @@ export enum TimeUnit {
     BY = 1e9,
     TY = 1e12
 }
+
+export enum AdMethod {
+    GOOGLE_ADSENSE = "google-adsense",
+    ADSTERRA = "adsterra"
+}
