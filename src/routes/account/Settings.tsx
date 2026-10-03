@@ -231,6 +231,7 @@ export const Settings = () => {
                             </button>
                         </SettingsSection>
                     </div>
+                    <AdBanner user={user} />
                     <Footer
                         id="footer"
                         name={name}
@@ -243,10 +244,6 @@ export const Settings = () => {
                     <AsideDiv/>
                 </div>
             </main>
-            <AdBanner
-                user={user}
-                className="fixed bottom-0 left-0 right-0 z-50"
-            />
         </div>
     )
 }
