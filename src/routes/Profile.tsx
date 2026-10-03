@@ -20,6 +20,7 @@ import { TreeCard } from "../components/home/TreeCard"
 import { notificationService } from "../classes/NotificationService"
 import { AdBanner } from "../components/AdBanner"
 import { updateMeta } from "../utils/updateMeta"
+import { Footer } from "../components/Footer"
 
 interface ProfileProps {
     myProfile?: boolean
@@ -44,6 +45,9 @@ export const Profile = ({
         following?: number;
         followers?: number;
     }>({});
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
     const { id } = useParams();
 
     useEffect(() => {
@@ -112,8 +116,8 @@ export const Profile = ({
                     >
                         <h2 className={"text-2xl " + title}>{currentUser?.username}'s Profile</h2>
                     </Header>
-                    <div className="w-full px-6 pt-16 pb-6 overflow-y-scroll">
-                        <div className="flex flex-row space-x-3 items-center mb-2">
+                    <div className="w-full pt-16 overflow-y-scroll">
+                        <div className="flex flex-row space-x-3 items-center mb-2 mx-6">
                             {currentUser?.photo ? <img className={photoClass} src={currentUser?.photo}/> : <i className={photoClass + " fas fa-user dark:text-[#D8EDD9] text-[#1B5E20] text-center text-4xl"}/>}
                             <h2 className={"text-2xl " + title}>{currentUser?.username}</h2>
                             {currentUser?.plan !== Plan.FREE && <span className={"px-3 py-1 rounded-full " + plans.get(currentUser?.plan ?? Plan.FREE)?.button?.light + " " + plans.get(currentUser?.plan ?? Plan.FREE)?.button?.dark}>{nullableInput(currentUser?.plan, capitalizeFirstLetter)}</span>}
@@ -143,7 +147,7 @@ export const Profile = ({
                                 <i className={`fas ${currentUser?.role !== Role.USER ? "fa-user-shield" : "fa-user-tag"}`}/>
                             </button>}
                         </div>
-                        <div className="flex flex-row space-x-2 items-center mb-2">
+                        <div className="flex flex-row space-x-2 items-center mb-2 mx-6">
                             {user?.id === currentUser?.id && <i className="fas fa-edit cursor-pointer" onClick={() => {
                                 if(editing) updateMe({ description }).then(u => {
                                     const newUser = u?.id ? u : undefined;
@@ -160,15 +164,15 @@ export const Profile = ({
                                 setValue={setDescription}
                             /> : <p className="w-full">{currentUser?.description}</p>}
                         </div>
-                        <div className="flex flex-row space-x-2 items-center mb-2">
+                        <div className="flex flex-row space-x-2 items-center mb-2 mx-6">
                             <i className="fas fa-envelope"/>
                             <p>{currentUser?.email}</p>
                         </div>
-                        <div className="flex flex-row space-x-2 items-center mb-2">
+                        <div className="flex flex-row space-x-2 items-center mb-2 mx-6">
                             <i className="fas fa-calendar-alt"/>
                             <p>Member since: {dateToString("MMn YYYY", currentUser?.createdAt)}</p>
                         </div>
-                        <div className="flex flex-row space-x-6 my-6 py-4 border-y">
+                        <div className="flex flex-row space-x-6 my-6 py-4 border-y mx-6">
                             <DataDisplay
                                 data={data.trees}
                                 title="Trees"
@@ -182,7 +186,7 @@ export const Profile = ({
                                 title="Following"
                             />
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 p-10 gap-5 mx-6">
                             <h2 className={"col-span-full text-3xl " + title}>{currentUser?.username}'s trees</h2>
                             {trees.map((t, index) => <TreeCard
                                 key={index}
@@ -192,13 +196,19 @@ export const Profile = ({
                                 }}
                             />)}
                         </div>
+                        <AdBanner user={user} />
+                        <Footer
+                            id="footer"
+                            name={name}
+                            setName={setName}
+                            email={email}
+                            setEmail={setEmail}
+                            message={message}
+                            setMessage={setMessage}
+                        />
                     </div>
                 </main>
             </div>
-            <AdBanner
-                user={user}
-                className="fixed bottom-0 left-0 right-0 z-50"
-            />
         </>
     )
 }
