@@ -15,6 +15,7 @@ import { Billing, type Plan } from "../enums";
 import { Footer } from "../components/Footer";
 import { AsideDiv } from "../components/AsideDiv";
 import { updateMeta } from "../utils/updateMeta";
+import { AdBanner } from "../components/AdBanner";
 
 interface PricingProps {
     plan?: Plan;
@@ -78,6 +79,7 @@ export const Pricing = ({
                         onClick={changeFaq}
                         faqs={faqs}
                     />
+                    <AdBanner user={user} />
                     <Footer
                         id="footer"
                         name={name}
