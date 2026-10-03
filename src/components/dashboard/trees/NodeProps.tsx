@@ -196,11 +196,6 @@ export const NodeProps = ({
                     if(species) {
                         setDescription?.(d);
                         species.description = d;
-                        updateSpecies({
-                            treeId: tree?.id ?? "",
-                            id: species.id?.toString() ?? "",
-                            description: d
-                        });
                     }
                 }, d => ({
                     description: d
