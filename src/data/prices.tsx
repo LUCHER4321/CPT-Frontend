@@ -7,6 +7,7 @@ const free: PlanPrice = {
     description: "Ideal for starting to explore phylogenetics",
     month: 0,
     year: 0,
+    ads: true,
     border: {
         light: "border-t-[#BDBDBD]",
         dark: "dark:border-t-neutral-600"
