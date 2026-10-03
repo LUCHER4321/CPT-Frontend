@@ -138,6 +138,7 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                                 edit={myTrees}
                             />)}
                         </div>
+                        <AdBanner user={user} />
                         <Footer
                             id="footer"
                             name={name}
@@ -151,10 +152,6 @@ export const SearchTrees = ({myTrees, owner, liked, ...searchProps}: SearchTrees
                     </div>
                 </main>
             </div>
-            <AdBanner
-                user={user}
-                className="fixed bottom-0 left-0 right-0 z-50"
-            />
         </>
     )
 }
