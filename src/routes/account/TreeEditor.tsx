@@ -66,6 +66,7 @@ export const TreeEditor = () => {
     const minZoom = 0.1;
     const minHeight = 100;
     const minWidth = 175;
+    const maxWidth = 100000;
     const [zoom, setZoom] = useState(baseZoom);
     const { id } = useParams();
     const history = useNavigate();
@@ -269,7 +270,7 @@ export const TreeEditor = () => {
         }
     }, [species, commonAncestors, ref.current, chronoScale]);
     
-    const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).length ?? 1;
+    const total = commonAncestors?.flatMap(ca => ca.allDescendants(false)).filter(s => (present && presentTime !== undefined && chronoScale) ? s.apparition < presentTime : true).length ?? 1;
 
     return (
     <div className={accountContainer}>
@@ -340,15 +341,17 @@ export const TreeEditor = () => {
                         height={dimensions.height}
                         unit={unit}
                         chronoScale={chronoScale}
+                        presentTime={presentTime}
                         minHeight={minHeight}
                         minWidth={minWidth}
+                        maxWidth={maxWidth}
                         grids={grids}
                         svgId="tree-canvas"
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
                     >
-                        {commonAncestors?.flatMap(ca => ca.allDescendants()).filter(s => (present && presentTime !== undefined && chronoScale) ? s.extinction() <= presentTime : true).map(s => SpNode({ species: s, diameter: Math.max(dimensions.height / total, minHeight ?? 0) * zoom, setSpecies, showNames, selection }))}
+                        {commonAncestors?.flatMap(ca => ca.allDescendants()).filter(s => (present && presentTime !== undefined && chronoScale) ? s.apparition < presentTime : true).map(s => SpNode({ species: s, diameter: Math.max(dimensions.height / total, minHeight ?? 0) * zoom, setSpecies, showNames, selection }))}
                     </TreeCanvas>
                 </TreeVisualization>
                 <TreeProperties
