@@ -18,6 +18,10 @@ export const features: {
         fun: p => p.constraints.maxCollaborators ?? <i className="fas fa-times text-red-600"/>
     },
     {
+        name: "Blocked Ads",
+        fun: (p) => !p.ads ? <i className="fas fa-check text-green-600"/> : <i className="fas fa-times text-red-600"/>
+    },
+    {
         name: "Images Export",
         fun: () => <i className="fas fa-check text-green-600"/>
     },
