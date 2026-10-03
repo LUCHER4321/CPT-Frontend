@@ -16,8 +16,10 @@ interface TreeCanvasProps {
     height?: number;
     unit?: TimeUnit;
     chronoScale?: boolean;
+    presentTime?: number;
     minHeight?: number;
     minWidth?: number;
+    maxWidth?: number;
     grids?: boolean;
     svgId?: string;
     scrollLeft?: number;
@@ -38,8 +40,10 @@ export const TreeCanvas = ({
     width = 1,
     height = 1,
     chronoScale,
+    presentTime = Number.MAX_VALUE,
     minHeight = 0,
     minWidth = 0,
+    maxWidth = Number.MAX_VALUE,
     grids,
     svgId,
     scrollLeft = 0,
@@ -56,16 +60,24 @@ export const TreeCanvas = ({
     const HEIGHT = height * zoom;
     const MIN_HEIGHT = minHeight * zoom;
     const MIN_WIDTH = minWidth * zoom;
+    const MAX_WIDTH = maxWidth * zoom;
     const nodes = nullableInput(children, c => Array.isArray(c) ? c : [c]);
     const diameter = nullableInput(nodes?.length, l => Math.max(HEIGHT / l, MIN_HEIGHT)) ?? 0;
     const FINAL_HEIGHT = diameter * (nodes?.length ?? 0);
-    const minDuration = chronoScale ? order(percentile(0.1, ...nodes?.map(({ species }) => species?.duration) ?? [])) : 1;
-    const kx = Math.max(MIN_WIDTH / minDuration, (WIDTH - dMult * diameter) / Math.max(...nodes?.map(({ species }) => (chronoScale ? species?.absoluteDuration() : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []));
-    const FINAL_WIDTH = Math.max(WIDTH, dMult * diameter + kx * Math.max(...nodes?.map(({ species }) => (chronoScale ? nullableInput(species, sp => sp.extinction() - sp.firstAncestor().apparition) : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []));
     const firstApparition =  Math.min(...nodes?.map(({ species }) => species?.apparition).filter(a => a !== undefined) ?? []);
+    const minDuration = chronoScale ? order(percentile(0.1, ...nodes?.map(({ species }) => nullableInput(species, s => Math.min(s.extinction(), presentTime) - s.apparition)) ?? [])) : 1;
+    const maxDuration = Math.max(...nodes?.map(({ species }) => (chronoScale ? nullableInput(species?.absoluteDuration(), ad => Math.min(ad, presentTime - firstApparition)) : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []);
+    const kx0 = Math.max(MIN_WIDTH / minDuration, (WIDTH - dMult * diameter) / maxDuration);
+    const kx = Math.min(kx0, MAX_WIDTH / maxDuration);
+    const FINAL_WIDTH = Math.max(WIDTH, dMult * diameter + kx * Math.max(...nodes?.map(({ species }) => (chronoScale ? nullableInput(species, sp => Math.min(sp.extinction(), presentTime) - sp.firstAncestor().apparition) : species?.firstAncestor().stepsUntil(species)) ?? 1) ?? []));
     const x1 = (species: Species) => (chronoScale ? species.apparition - firstApparition : (species.firstAncestor().stepsUntil(species) ?? 0)) * kx;
-    const x2 = (species: Species) => (chronoScale ? species.extinction() - firstApparition : ((species.firstAncestor().stepsUntil(species) ?? 0) + 1)) * kx;
+    const x2 = (species: Species) => (chronoScale ? Math.min(species.extinction(), presentTime) - firstApparition : ((species.firstAncestor().stepsUntil(species) ?? 0) + 1)) * kx;
     const y = (index: number) => (index + 1 / 2) * diameter;
+    const gridArray = (measure: number) => {try {
+        return [...Array(Math.ceil(measure / MIN_WIDTH) * mult).keys()];
+    } catch {
+        return [];
+    }};
 
     return (
         <div
@@ -86,8 +98,8 @@ export const TreeCanvas = ({
                 height={FINAL_HEIGHT}
                 className="flex-shrink-0"
             >
-                {grids && [...Array(Math.ceil(FINAL_WIDTH / MIN_WIDTH) * mult).keys()].map(n => {
-                    const xn = (chronoScale ? (n + Math.ceil(firstApparition * mult / minDuration)) * minDuration / mult - firstApparition : (n / mult)) * kx;
+                {grids && gridArray(FINAL_WIDTH).map(n => {
+                    const xn = (chronoScale ? (n + Math.ceil(firstApparition * mult / minDuration)) * minDuration / mult - firstApparition : (n / mult)) * kx0;
                     return <line
                         key={n}
                         y1={0}
@@ -97,8 +109,8 @@ export const TreeCanvas = ({
                         stroke="#7F7F7F"
                     />
                 })}
-                {grids && [...Array(Math.ceil(FINAL_HEIGHT / MIN_WIDTH) * mult).keys()].map(n => {
-                    const yn = n * minDuration * kx / mult;
+                {grids && gridArray(FINAL_HEIGHT).map(n => {
+                    const yn = n * minDuration * kx0 / mult;
                     return <line
                         key={n}
                         y1={yn}
@@ -151,7 +163,7 @@ export const TreeCanvas = ({
                     >
                         <div className="w-full flex flex-row justify-between">
                             <p>{timeRep(species.apparition)}</p>
-                            <p>{timeRep(species.extinction())}</p>
+                            <p>{timeRep(Math.min(species.extinction(), presentTime))}</p>
                         </div>
                     </foreignObject>}
                     <foreignObject
