@@ -21,6 +21,7 @@ export const PriceFeatures = ({
             {`${maxTrees ? `Up to ${maxTrees}` : "Unlimited"} phylogenetic trees
             ${maxSpecies ? `Up to ${maxSpecies}` : "Unlimited"} species per tree
             ${maxCollaborators ? `Up to ${maxCollaborators} collaborators per tree` : ""}
+            ${plans.get(plan)?.ads ? "Ads will be displayed" : "No ads"}
             Upload images many formats (jpg, jpeg, png, gif, svg)
             Professional visualization
             Access to phylogenetic trees created by the community
