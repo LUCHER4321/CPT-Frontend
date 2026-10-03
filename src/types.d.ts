@@ -29,6 +29,7 @@ export interface PlanPrice {
     description: string;
     month: number;
     year: number;
+    ads?: boolean;
     constraints: {
         maxTrees?: number;
         maxSpecies?: number;
