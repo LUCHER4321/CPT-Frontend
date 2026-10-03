@@ -80,6 +80,7 @@ export const Follows = ({
                             users={following}
                         />}
                     </div>
+                    <AdBanner user={user} />
                     <Footer
                         id="footer"
                         name={name}
@@ -93,9 +94,5 @@ export const Follows = ({
                 </div>
             </main>
         </div>
-        <AdBanner
-            user={user}
-            className="fixed bottom-0 left-0 right-0 z-50"
-        />
     </>
 }
