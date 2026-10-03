@@ -69,6 +69,7 @@ function App() {
         id="top-trees"
         trees={trees}
       />
+      <AdBanner user={user} />
       <Footer
         id="footer"
         name={name}
@@ -77,10 +78,6 @@ function App() {
         setEmail={setEmail}
         message={message}
         setMessage={setMessage}
-      />
-      <AdBanner
-        user={user}
-        className="fixed bottom-0 left-0 right-0 z-50"
       />
     </>
   )
