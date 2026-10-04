@@ -158,7 +158,7 @@ export const TreeCanvas = ({
                     {chronoScale && <foreignObject
                         x={x1(species)}
                         y={y(index)}
-                        width={(chronoScale ? species.duration : 1) * kx}
+                        width={(chronoScale ? Math.min(species.extinction(), presentTime) - species.apparition : 1) * kx}
                         height={diameter / 2}
                     >
                         <div className="w-full flex flex-row justify-between">
