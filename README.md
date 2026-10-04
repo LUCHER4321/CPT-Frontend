@@ -9,6 +9,10 @@ VITE_PAYPAL_URL
 VITE_API_URL
 VITE_WS_URL
 VITE_PORT
+VITE_DISCORD
+VITE_GITHUB
+VITE_META_DESC
+VITE_META_URL
 ```
 
 ### Secrets
@@ -21,6 +25,11 @@ VITE_PREMIUM_Y_ID
 VITE_PAYPAL_ID
 VITE_PAYPAL_SECRET
 VITE_API_KEY
+VITE_GOOGLE_ADSENSE_CLIENT_ID
+VITE_GOOGLE_ADSENSE_TXT
+VITE_GOOGLE_ADSENSE_SLOT
+VITE_ADSTERRA_SRC
+VITE_ADSTERRA_CONTAINER_ID
 ```
 
 ## Enums
@@ -93,6 +102,11 @@ export enum TimeUnit {
   BY = 1e9,
   TY = 1e12,
 }
+
+export enum AdMethod {
+  GOOGLE_ADSENSE = "google-adsense",
+  ADSTERRA = "adsterra",
+}
 ```
 
 ## Plans
@@ -101,6 +115,7 @@ export enum TimeUnit {
 
 - Up to 5 Ph. Trees
 - Up to 30 species per Ph. Tree
+- Ads will be displayed
 - Upload images many formats (jpg, jpeg, png, gif, svg)
 - Professional visualization
 - Access to Ph. Trees created by the community
@@ -112,6 +127,7 @@ export enum TimeUnit {
 - Up to 20 Ph. Trees
 - Up to 150 species per Ph. Tree
 - Up to 10 collaborators per Ph. Tree
+- No ads
 - Upload images many formats (jpg, jpeg, png, gif, svg)
 - Professional visualization
 - Access to Ph. Trees created by the community
@@ -123,6 +139,7 @@ export enum TimeUnit {
 - Unlimited Ph. Trees
 - Unlimited species per Ph. Tree
 - Up to 30 collaborators per Ph. Tree
+- No ads
 - Upload images many formats (jpg, jpeg, png, gif, svg)
 - Professional visualization
 - Access to Ph. Trees created by the community
@@ -132,6 +149,7 @@ export enum TimeUnit {
 - Unlimited Ph. Trees
 - Unlimited species per Ph. Tree
 - Up to 30 collaborators per Ph. Tree
+- No ads
 - Upload images many formats (jpg, jpeg, png, gif, svg)
 - Professional visualization
 - Access to Ph. Trees created by the community
