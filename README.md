@@ -42,4 +42,4 @@ The application relies on several core TypeScript enums to handle state & data c
 
 ## License
 
-This project utilizes open-source libraries licensed under the MIT License (React, Tailwind CSS, Vite, Socket.io, ESLint, chrono-phylo-tree) & the Apache-2.0 License (TypeScript, PayPal SDK). Full texts can be found in the `LICENSES/` directory.
+This project utilizes open-source libraries licensed under the MIT License (React, Tailwind CSS, Vite, Socket.io, ESLint, chrono-phylo-tree) & the Apache-2.0 License (TypeScript, PayPal SDK). Full texts can be found in the [`LICENSES/`](/LICENSES/) directory.
