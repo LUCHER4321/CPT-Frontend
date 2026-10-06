@@ -1,177 +1,45 @@
 # Life Tree Website
 
-## Environment
+The Life Tree is a frontend web application designed for creating, sharing & visualizing phylogenetic trees (Ph. Trees). It features a tiered subscription model, real-time collaboration capabilities & a community-driven platform for exploring evolutionary data.
 
-### Variables
+## Tech Stack
 
-```
-VITE_PAYPAL_URL
-VITE_API_URL
-VITE_WS_URL
-VITE_PORT
-VITE_DISCORD
-VITE_GITHUB
-VITE_META_DESC
-VITE_META_URL
-```
+- **Framework & Language**: React & React DOM initialized via Vite, utilizing TypeScript
+- **Styling**: Tailwind CSS
+- **Core Functionality**: chrono-phylo-tree for phylogenetic visualizations
+- **Real-time Collaboration**: Socket.io Client for live multi-user interactions
+- **Payments & Monetization**: PayPal SDK for subscription management
+- **Code Quality**: ESLint
 
-### Secrets
+## Pricing & Plans
 
-```
-VITE_PRO_M_ID
-VITE_PRO_Y_ID
-VITE_PREMIUM_M_ID
-VITE_PREMIUM_Y_ID
-VITE_PAYPAL_ID
-VITE_PAYPAL_SECRET
-VITE_API_KEY
-VITE_GOOGLE_ADSENSE_CLIENT_ID
-VITE_GOOGLE_ADSENSE_TXT
-VITE_GOOGLE_ADSENSE_SLOT
-VITE_ADSTERRA_SRC
-VITE_ADSTERRA_CONTAINER_ID
-```
+All plans include professional visualization tools, access to community-created Ph. Trees & the ability to upload images in multiple formats (jpg, jpeg, png, gif, svg).
 
-## Enums
+- **Free Plan**: Create up to 5 Ph. Trees with a maximum of 30 species per tree, this tier includes advertisements
+- **Pro Plan ($9.00/month or $86.40/year)**: Create up to 20 Ph. Trees with up to 150 species per tree, supports up to 10 collaborators per tree & removes all ads
+- **Premium Plan ($19.00/month or $182.40/year)**: Create unlimited Ph. Trees with unlimited species, supports up to 30 collaborators per tree & removes all ads
+- **Institutional Plan**: Includes unlimited Ph. Trees & species, up to 30 collaborators per tree & an ad-free experience, it also provides premium accounts for all institution members & a personalized domain
 
-```typescript
-export enum Billing {
-  MONTHLY = "monthly",
-  ANNUAL = "annual",
-}
+## Environment Setup
 
-export enum Liked {
-  TREE = "ph-tree",
-  COMMENT = "comment",
-}
+To run this project locally, configure the following variables & secrets in your environment:
 
-export enum NotiFunc {
-  FOLLOW = "follow",
-  TREE = "tree",
-  COMMENT = "comment",
-  LIKE = "like",
-  COLLABORATE = "collaborate",
-}
+- **API & Networking**: `VITE_API_URL`, `VITE_WS_URL`, `VITE_PORT`, `VITE_API_KEY`
+- **SEO & Social**: `VITE_META_DESC`, `VITE_META_URL`, `VITE_DISCORD`, `VITE_GITHUB`
+- **Payments (PayPal)**: `VITE_PAYPAL_URL`, `VITE_PAYPAL_ID`, `VITE_PAYPAL_SECRET`
+- **Subscription IDs**: `VITE_PRO_M_ID`, `VITE_PRO_Y_ID`, `VITE_PREMIUM_M_ID`, `VITE_PREMIUM_Y_ID`
+- **Advertising Integration**: `VITE_GOOGLE_ADSENSE_CLIENT_ID`, `VITE_GOOGLE_ADSENSE_TXT`, `VITE_GOOGLE_ADSENSE_SLOT`, `VITE_ADSTERRA_SRC`, `VITE_ADSTERRA_CONTAINER_ID`
 
-export enum Role {
-  ADMIN = "admin",
-  USER = "user",
-  BOSS = "boss",
-}
+## System Architecture (Enums)
 
-export enum Plan {
-  FREE = "free",
-  PRO = "pro",
-  PREMIUM = "premium",
-  INSTITUTIONAL = "institutional",
-}
+The application relies on several core TypeScript enums to handle state & data categorization:
 
-export enum TreeCriteria {
-  CREATED_AT = "createdAt",
-  UPDATED_AT = "updatedAt",
-  LIKES = "likes",
-  COMMENTS = "comments",
-  VIEWS = "views",
-  NAME = "name",
-  POPULARITY = "popularity",
-}
+- **Account Management**: `Plan` (Free, Pro, Premium, Institutional), `Billing` (Monthly, Annual) & `Role` (Admin, User, Boss)
+- **Social & Notifications**: `Liked` (Tree, Comment) & `NotiFunc` (Follow, Tree, Comment, Like, Collaborate)
+- **Tree Operations**: `TreeProp` (Tree, Node, Collaborators, Comments) & `TreeChange` (New, Edit, Delete, Tree)
+- **Filtering & Sorting**: `TreeCriteria` (CreatedAt, UpdatedAt, Likes, Comments, Views, Name, Popularity) & `Order` (Asc, Desc)
+- **Metrics & Ads**: `TimeUnit` (Y, KY, MY, BY, TY) & `AdMethod` (Google Adsense, Adsterra)
 
-export enum TreeChange {
-  NEW = "new",
-  EDIT = "edit",
-  DELETE = "delete",
-  TREE = "tree",
-}
+## License
 
-export enum Order {
-  ASC = "asc",
-  DESC = "desc",
-}
-
-export enum TreeProp {
-  TREE = "tree",
-  NODE = "node",
-  COLLABORATORS = "collaborators",
-  COMMENTS = "comments",
-}
-
-export enum TimeUnit {
-  Y = 1,
-  KY = 1e3,
-  MY = 1e6,
-  BY = 1e9,
-  TY = 1e12,
-}
-
-export enum AdMethod {
-  GOOGLE_ADSENSE = "google-adsense",
-  ADSTERRA = "adsterra",
-}
-```
-
-## Plans
-
-### Free
-
-- Up to 5 Ph. Trees
-- Up to 30 species per Ph. Tree
-- Ads will be displayed
-- Upload images many formats (jpg, jpeg, png, gif, svg)
-- Professional visualization
-- Access to Ph. Trees created by the community
-
-### Pro
-
-- US$9.00/month
-- US$86.40/year (US$7.20/month)
-- Up to 20 Ph. Trees
-- Up to 150 species per Ph. Tree
-- Up to 10 collaborators per Ph. Tree
-- No ads
-- Upload images many formats (jpg, jpeg, png, gif, svg)
-- Professional visualization
-- Access to Ph. Trees created by the community
-
-### Premium
-
-- US$19.00/month
-- US$182.40/year (US$15.20/month)
-- Unlimited Ph. Trees
-- Unlimited species per Ph. Tree
-- Up to 30 collaborators per Ph. Tree
-- No ads
-- Upload images many formats (jpg, jpeg, png, gif, svg)
-- Professional visualization
-- Access to Ph. Trees created by the community
-
-### Institutional
-
-- Unlimited Ph. Trees
-- Unlimited species per Ph. Tree
-- Up to 30 collaborators per Ph. Tree
-- No ads
-- Upload images many formats (jpg, jpeg, png, gif, svg)
-- Professional visualization
-- Access to Ph. Trees created by the community
-- Premium accounts for all institution members
-- Personalized domain
-
-## Licenses and Attributions
-
-This project uses the following open-source libraries:
-
-### Dependencies
-
-- **React & React DOM** - MIT License
-- **Tailwind CSS** - MIT License
-- **PayPal SDK** - Apache-2.0 License
-- **Chrono-Phylo-Tree** - MIT License
-- **Socket.io Client** - MIT License
-
-### Development Dependencies
-
-- **TypeScript** - Apache-2.0 License
-- **Vite** - MIT License
-- **ESLint & plugins** - MIT License
-
-Full license texts are available in the `LICENSES/` directory.
+This project utilizes open-source libraries licensed under the MIT License (React, Tailwind CSS, Vite, Socket.io, ESLint, chrono-phylo-tree) & the Apache-2.0 License (TypeScript, PayPal SDK). Full texts can be found in the `LICENSES/` directory.
